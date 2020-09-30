@@ -1,0 +1,30 @@
+{
+  "name": "scenario-generator",
+  "version": "1.0.0",
+  "description": "V2018 Scenario Generator",
+  "scripts": {
+    "cleandist": "lerna run cleandist",
+    "test": "echo \"Error: no test specified \" && exit 1",
+    "build": "lerna run build",
+    "build-docker": "docker build -t gitlab-dv.tno.nl:4567/V2018/scenario-generator .",
+    "dev": "lerna run dev --parallel",
+    "pkg": "lerna run pkg",
+    "postinstall": "lerna bootstrap",
+    "tscversion": "lerna run tscversion"
+  },
+  "keywords": [
+    "V2018", "Scenario"
+  ],
+  "author": "R.W. Bruining",
+  "license": "MIT",
+  "dependencies": {
+    "lerna": "^3.22.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}

@@ -1,0 +1,76 @@
+.full-height {
+  height: 100%;
+}
+
+.splitpanes__splitter {
+  margin: 6px 6px !important;
+}
+
+.splitpanes--horizontal>.splitpanes__splitter:before {
+  top: -6px;
+  bottom: -6px;
+}
+
+#table-1 text {
+  font-size: 1.4em;
+}
+
+.cardcontent {
+  border: black solid 1px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  font-size: small;
+}
+
+text.shadow {
+  stroke: black;
+  stroke-width: 4px;
+  opacity: 0.8;
+}
+
+.splitpanes__pane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splitpanes__pane>div {
+  width: 100%;
+  height: 100%;
+}
+
+.splitpanes__splitter {
+  opacity: 0.5;
+}
+
+.day-title {
+  color: black !important;
+}
+
+.theme--light rect.day {
+  fill: #cacaca;
+}
+
+.theme--dark rect.day {
+  fill: #eaeaea;
+}
+
+.theme--light .overline {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.theme--dark .overline {
+  color: white;
+}
+
+rect.event {
+  stroke-width: 0.5px;
+  stroke: #333333;
+}
+
+rect.event.hover {
+  stroke-width: 2px;
+  stroke: rgb(255, 115, 0);
+  cursor: pointer;
+}

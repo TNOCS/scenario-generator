@@ -1,0 +1,31 @@
+{
+  "include": [
+    "./src/"
+  ],
+  "exclude": [
+    "./dist"
+  ],
+  "compilerOptions": {
+    /* Basic Options */
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "./src/",
+    "lib": [
+      "es2016",
+      "esnext.asynciterable"
+    ],
+    "outDir": "./dist/" /* Redirect output structure to the directory. */,
+    // Always include these settings
+    "skipDefaultLibCheck": true,
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    // These settings are totally up to you
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
+    "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
+  }
+}

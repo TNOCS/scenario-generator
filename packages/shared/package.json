@@ -1,0 +1,22 @@
+{
+  "name": "@v2018/shared",
+  "version": "1.0.0",
+  "description": "Shared models",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "cleandist": "rm -r ./dist",
+    "build": "tsc",
+    "dev": "tsc -w",
+    "builddist": "tsc -p .",
+    "build-pack": "yarn pack --filename indtool-shared.tgz",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "R.W. Bruining",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+  }
+}

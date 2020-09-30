@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  indtool:
+    image: gitlab-dv.tno.nl:4567/V2018/scenario-generator:latest
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - V2018_DATABASE_FILE=./database/db1.db
+      - V2018_SERVER=0.0.0.0
+      - V2018_PORT=3005
+      - V2018_ENABLE_CORS=true
+    volumes:
+      - ./packages/server/database:/packages/server/database

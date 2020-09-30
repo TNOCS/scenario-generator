@@ -1,0 +1,70 @@
+image: node:14
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+  CONTAINER_NAME: gitlab-dv.tno.nl/V2018/scenario-generator
+  CI_DEBUG_TRACE: "false"
+
+stages:
+  - build
+
+before_script:
+  - echo "Before script section"
+  - ls
+
+after_script:
+  - echo "After script section"
+  - echo "Done"
+
+build-and-deploy:
+  stage: build
+  script:
+    - yarn
+    - node --version
+    - yarn tscversion
+    - yarn build
+    - yarn pkg
+    - cd packages/db-importer
+    - yarn generate
+    - cd ../..
+    - mkdir -p ./output/dashboard
+    - mkdir -p ./output/database
+    - mkdir -p ./output/images
+    - cp packages/server/indtool.exe ./output/indtool.exe
+    - cp -r packages/server/database/ ./output/
+    - cp -r packages/server/images/ ./output/
+    - cp packages/server/scripts/start-server.bat ./output/start-server.bat
+    - cp packages/server/scripts/node_sqlite3.node ./output/node_sqlite3.node
+    - cp -r packages/client/dist/. ./output/dashboard
+    - ls -lah ./output
+  artifacts:
+    paths:
+      - ./output/
+    expire_in: 1 month
+  only:
+    refs:
+      - master
+    changes:
+      - packages/**/*
+      - package.json
+      - yarn.lock
+      - .gitlab-ci.yml
+  except:
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /nobuild/i
+
+build-only:
+  stage: build
+  script:
+    - yarn
+    - node --version
+    - yarn tscversion
+    - yarn build
+    - yarn pkg
+  except:
+    refs:
+      - master
+    variables:
+      - $CI_COMMIT_MESSAGE =~ /nobuild/i
