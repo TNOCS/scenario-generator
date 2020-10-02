@@ -3,13 +3,14 @@
     <div class="overline px-2 py-0">{{ title }} - {{ formattedTime() }}</div>
     <v-divider />
     <v-card-text class="text-description">
-      Text
+      <v-btn @click="addActor">Add actor</v-btn>
     </v-card-text>
   </v-card>
 </template>
 
 <script lang="ts">
 import { lightFormat } from "date-fns";
+import { v4 as uuidv4 } from "uuid";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 
 @Component({
@@ -35,6 +36,10 @@ export default class ChartCard extends Vue {
 
   private formattedTime(): string {
     return lightFormat(this.time, "yyyy-MM-dd '@' HH:mm:ss");
+  }
+
+  private addActor(): void {
+    this.$store.actions.actors.save({ id: uuidv4(), name: { en: "Terrorist", nl: "Terrorist" }, type: 'Actor' });
   }
 
   destroyed() {

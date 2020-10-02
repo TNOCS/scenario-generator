@@ -23,18 +23,14 @@ import { Route } from "vue-router";
 export default class App extends Vue {
   @Watch("$route")
   routeUpdated(to: Route, from: Route) {
-    if (`/${this.$store.state.activeRoute}` !== to.path) {
-      this.$store.dispatch("setRoute", to.path.substring(1));
+    if (`/${this.$store.states().app.route}` !== to.path) {
+      this.$store.actions.changePage(to.path);
     }
   }
 
-  @Watch("$store.state.activeRoute")
-  public route(activeRoute: string) {
-    if (typeof activeRoute !== "string" || this.$route.path == `/${activeRoute}`) return;
-    this.$router.push(activeRoute);
+  public mounted() {
+    
   }
-
-  public mounted() {}
 }
 </script>
 

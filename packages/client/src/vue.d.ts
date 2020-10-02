@@ -1,10 +1,8 @@
 import { IState } from "./api/interfaces";
-import * as d3 from "d3";
-import { Store } from 'vuex';
+import { IActions, IAppModel } from "./services/meiosis";
 
-declare module 'vue/types/vue' {
-    interface Vue {
-        $d3: d3;
-        $store: Store<IState>;
-    }
+declare module "vue/types/vue" {
+  interface Vue {
+    $store: { states: flyd.Stream<IAppModel>; actions: IActions };
+  }
 }

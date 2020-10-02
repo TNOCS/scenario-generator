@@ -8,7 +8,7 @@
           </pane>
           <pane min-size="10" size="50">
             <DescriptionCard
-              html="<h3>Hello world 2</h3><br/><a href='https://www.kmar.nl' target='_blank'>TensorFlow</a>"
+              html="<h3>Hello world 2</h3><br/><a href='https://www.defensie.nl/' target='_blank'>Defensie</a>"
             ></DescriptionCard>
           </pane>
         </splitpanes>
