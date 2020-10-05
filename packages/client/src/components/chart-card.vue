@@ -3,7 +3,7 @@
     <div class="overline px-2 py-0">{{ title }} - {{ formattedTime() }}</div>
     <v-divider />
     <v-card-text class="text-description">
-      <v-btn @click="addActor">Add actor</v-btn>
+      <v-btn @click="addActor">{{ $t("APP.ADD", { item: $tc("APP.ACTOR") }) }}</v-btn>
     </v-card-text>
   </v-card>
 </template>
@@ -39,7 +39,7 @@ export default class ChartCard extends Vue {
   }
 
   private addActor(): void {
-    this.$store.actions.actors.save({ id: uuidv4(), name: { en: "Terrorist", nl: "Terrorist" }, type: 'Actor' });
+    this.$store.actions.actors.save({ id: uuidv4(), name: "Hannibal", type: "Actor" });
   }
 
   destroyed() {

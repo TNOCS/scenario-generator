@@ -5,6 +5,7 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import router from "./router";
 import { store } from "./services/meiosis";
+import { i18n } from './i18n'
 import "./assets/v2018.css";
 
 Vue.config.productionTip = false;
@@ -27,5 +28,6 @@ const vuetify = new Vuetify({
 export default new Vue({
   vuetify: vuetify,
   router,
+  i18n,
   render: (h) => h(App),
 }).$mount("#app");

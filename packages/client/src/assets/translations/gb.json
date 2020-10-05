@@ -1,0 +1,12 @@
+{
+    "gb": {
+        "APP": {
+            "LANGUAGE": "language",
+            "ACTOR": "actor | actors",
+            "LOCATION": "location | locations",
+            "MOTIVATION": "motivation | motivations",
+            "WEAPON": "weapon | weapons",
+            "ADD": "Add {item}"
+        }
+    }
+}

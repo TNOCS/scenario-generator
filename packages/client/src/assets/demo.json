@@ -1,0 +1,5 @@
+{
+    "actors": ["Hannibal", "Murdock", "B.A. Baracus"],
+    "locations": ["Washington", "Vietnam", "NYC"],
+    "motivations": ["Money", "Justice", "Revenge"]
+}

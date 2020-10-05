@@ -1,11 +1,21 @@
 import { IContent } from "../models";
+import demo from "../assets/demo.json";
+import { v4 as uuidv4 } from "uuid";
+import { CollectionNames } from "./meiosis";
 
 const log = console.log;
 const error = console.error;
 
 const createLocalStorageFactory = () => {
   return <T extends IContent>(listKey: string) => {
-    log(`Start LocalStorageFactory`);
+    log(`Start LocalStorageFactory ${listKey}...`);
+    if (!localStorage.getItem(listKey)) {
+      log(`Loading example keys for ${listKey}...`);
+      const items: T[] = (demo[listKey as CollectionNames] as string[]).map((name) => {
+        return { id: uuidv4(), name: name, type: listKey } as IContent;
+      });
+      localStorage.setItem(listKey, JSON.stringify(items));
+    }
 
     const create = async (item: Partial<T>) => {
       try {

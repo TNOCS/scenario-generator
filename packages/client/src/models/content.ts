@@ -2,7 +2,7 @@ import { I18NString } from ".";
 
 export interface IBasicContent {
   id: string;
-  name: I18NString;
+  name: string;
   type: string;
 }
 

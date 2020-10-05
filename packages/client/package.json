@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.11.5",
+    "@dzangolab/vue-country-flag-icon": "^0.2.0",
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
     "flyd": "^0.2.8",
@@ -25,6 +26,7 @@
     "uuid": "^8.3.0",
     "vue": "^2.6.12",
     "vue-class-component": "^7.2.6",
+    "vue-i18n": "^8.21.1",
     "vue-property-decorator": "^9.0.0",
     "vue-router": "^3.4.5",
     "vuetify": "^2.3.12"

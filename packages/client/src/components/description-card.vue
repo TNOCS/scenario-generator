@@ -10,7 +10,7 @@
       <v-divider class="my-6"></v-divider>
       <v-list-item v-for="a in actors" :key="a.id" @click="delActor(a)">
         <v-list-item-content>
-          <v-list-item-title>{{ a.name.en }}</v-list-item-title>
+          <v-list-item-title>{{ a.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ a.id }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
