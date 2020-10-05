@@ -9,9 +9,10 @@ const error = console.error;
 const createLocalStorageFactory = () => {
   return <T extends IContent>(listKey: string) => {
     log(`Start LocalStorageFactory ${listKey}...`);
+    
     if (!localStorage.getItem(listKey)) {
       log(`Loading example keys for ${listKey}...`);
-      const items: T[] = (demo[listKey as CollectionNames] as string[]).map((name) => {
+      const items: IContent[] = (demo[listKey as CollectionNames] as string[]).map((name) => {
         return { id: uuidv4(), name: name, type: listKey } as IContent;
       });
       localStorage.setItem(listKey, JSON.stringify(items));
