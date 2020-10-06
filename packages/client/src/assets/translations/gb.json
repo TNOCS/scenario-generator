@@ -2,6 +2,7 @@
     "gb": {
         "APP": {
             "ACTOR": "actor | actors",
+            "COMPONENT": "component | components",
             "ADD": "Add {item}",
             "DESCRIPTION": "description | description",
             "LANGUAGE": "language",

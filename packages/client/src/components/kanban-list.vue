@@ -1,11 +1,11 @@
 <template>
   <v-card dense flat tile class="flex-card" style="background: transparent">
     <v-card-title dense>
-      {{ $tc("APP.ACTOR", 2) | capitalize }}
+       {{ title | capitalize }}
     </v-card-title>
     <v-card-text class="text-description">
       <Container>
-        <Draggable v-for="item in actors" :key="item.id">
+        <Draggable v-for="(item, id) in items" :key="id">
           <KanbanCard :item="item" />
         </Draggable>
       </Container>
@@ -19,44 +19,37 @@ import { v4 as uuidv4 } from "uuid";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent } from "../models";
+import { CollectionNames, TranslateKeys } from "../services/meiosis";
 import KanbanCard from "./kanban-card.vue";
 
 @Component({
   components: { Container, Draggable, KanbanCard },
 })
 export default class KanbanList extends Vue {
-  private title: string = "Kanban";
-  private time: number = 0;
-  private timer?: any;
-  private actors: Partial<IContent>[] = [];
+  @Prop({ default: "" }) public itemkey!: CollectionNames;
+  private items: Partial<IContent>[] = [];
+  private title: string = "";
+
+  @Watch("itemkey")
+  private itemkeyChanged() {
+    this.init();
+  }
 
   constructor() {
     super();
   }
 
   private async init() {
-    await this.$store.actions.actors.updateList();
+    if (!this.itemkey || !this.itemkey.length) return;
+    this.title = this.$tc(`APP.${TranslateKeys[this.itemkey]}`, 2);
+    await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map((s) => {
-      if (s.actors && s.actors.list) {
-        this.actors = s.actors.list;
-      }
+      this.items = s[this.itemkey].list!;
     });
   }
 
-  private formattedTime(): string {
-    return lightFormat(this.time, "yyyy-MM-dd '@' HH:mm:ss");
-  }
-
-  private addActor(): void {
-    this.$store.actions.actors.save({ id: uuidv4(), name: "Hannibal", type: "Actor" });
-  }
-
-  destroyed() {
-    if (!!this.timer) return;
-    clearInterval(this.timer);
-  }
-
   mounted() {
+    console.log(`KanbanList mounted`);
     this.init();
   }
 }

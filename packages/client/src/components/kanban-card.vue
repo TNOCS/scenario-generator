@@ -1,5 +1,5 @@
 <template>
-  <v-card flat tile class="flex-card">
+  <v-card tile class="flex-card ma-1" elevation="2" color="#5FB0C7">
     <v-card-title> {{ $tc("APP.ACTOR") | capitalize }}: {{ item.name }} </v-card-title>
     <v-card-text class="text-description">
       {{ item.id }}

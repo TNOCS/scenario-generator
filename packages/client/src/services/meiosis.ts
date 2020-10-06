@@ -11,6 +11,8 @@ export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppMode
 export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
 export type CollectionNames = "actors" | "locations" | "motivations";
+export const CollectionNamesArr: Array<CollectionNames> = ["actors", "locations", "motivations"];
+export const TranslateKeys = { actors: "ACTOR", locations: "LOCATION", motivations: "MOTIVATION" };
 
 const actorsCollection = collectionFactory<IContent>("actors");
 const locationsCollection = collectionFactory<IContent>("locations");

@@ -3,6 +3,7 @@
         "APP": {
             "ACTOR": "actor | actors",
             "ADD": "{item} toevoegen",
+            "COMPONENT": "component | componenten",
             "DESCRIPTION": "beschrijving | beschrijvingen",
             "LANGUAGE": "taal",
             "LOCATION": "locatie | locaties",
