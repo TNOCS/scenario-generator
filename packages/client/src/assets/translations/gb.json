@@ -1,12 +1,13 @@
 {
     "gb": {
         "APP": {
-            "LANGUAGE": "language",
             "ACTOR": "actor | actors",
+            "ADD": "Add {item}",
+            "DESCRIPTION": "description | description",
+            "LANGUAGE": "language",
             "LOCATION": "location | locations",
             "MOTIVATION": "motivation | motivations",
-            "WEAPON": "weapon | weapons",
-            "ADD": "Add {item}"
+            "WEAPON": "weapon | weapons"
         }
     }
 }

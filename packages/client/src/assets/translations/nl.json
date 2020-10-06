@@ -1,12 +1,13 @@
 {
     "nl": {
         "APP": {
-            "LANGUAGE": "taal",
             "ACTOR": "actor | actors",
+            "ADD": "{item} toevoegen",
+            "DESCRIPTION": "beschrijving | beschrijvingen",
+            "LANGUAGE": "taal",
             "LOCATION": "locatie | locaties",
             "MOTIVATION": "motivatie | motivaties",
-            "WEAPON": "wapen | wapens",
-            "ADD": "{item} toevoegen"
+            "WEAPON": "wapen | wapens"
         }
     }
 }

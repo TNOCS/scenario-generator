@@ -4,7 +4,7 @@
       <v-col md="12" cols="12" class="full-height">
         <splitpanes vertical class="full-height">
           <pane min-size="10" size="50">
-            <ChartCard />
+            <KanbanList />
           </pane>
           <pane min-size="10" size="50">
             <DescriptionCard
@@ -22,10 +22,10 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import "splitpanes/dist/splitpanes.css";
 import { Splitpanes, Pane } from "splitpanes";
 import DescriptionCard from "../components/description-card.vue";
-import ChartCard from "../components/chart-card.vue";
+import KanbanList from "../components/kanban-list.vue";
 
 @Component({
-  components: { Splitpanes, Pane, DescriptionCard, ChartCard },
+  components: { Splitpanes, Pane, DescriptionCard, KanbanList },
 })
 export default class EditorView extends Vue {
   mounted() {

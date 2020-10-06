@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile class="flex-card" style="background: transparent">
-    <div class="overline px-2 py-0">Description</div>
+    <div class="overline px-2 py-0">{{ $tc("APP.DESCRIPTION") }}</div>
     <div v-if="subtitle && subtitle.length > 0" class="px-4 pt-0 pb-2 v-card__text">
       {{ subtitle }}
     </div>
@@ -40,7 +40,9 @@ export default class DescriptionCard extends Vue {
   async mounted() {
     await this.$store.actions.actors.updateList();
     this.$store.states.map((s) => {
-      this.actors = s.actors.list;
+      if (s.actors && s.actors.list) {
+        this.actors = s.actors.list;
+      }
     });
   }
 }
