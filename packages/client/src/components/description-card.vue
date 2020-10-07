@@ -8,7 +8,7 @@
     <v-card-text class="text-description">
       <div v-html="html" />
       <v-divider class="my-6"></v-divider>
-      <v-list-item v-for="a in actors" :key="a.id" @click="delActor(a)">
+      <v-list-item v-for="a in actors" :key="a.id">
         <v-list-item-content>
           <v-list-item-title>{{ a.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ a.id }}</v-list-item-subtitle>
@@ -31,10 +31,6 @@ export default class DescriptionCard extends Vue {
 
   constructor() {
     super();
-  }
-
-  private delActor(a: IContent): void {
-    this.$store.actions.actors.del(a.id);
   }
 
   async mounted() {

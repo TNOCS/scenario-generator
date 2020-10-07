@@ -4,7 +4,9 @@
       <v-col md="12" cols="12" class="full-height">
         <splitpanes vertical class="full-height">
           <pane min-size="10" size="50">
-            <ChartCard />
+            <DescriptionCard
+              html="<h3>Hello world</h3><br/><a href='https://www.defensie.nl' target='_blank'>Defensie</a>"
+            ></DescriptionCard>
           </pane>
           <pane min-size="10" size="50">
             <DescriptionCard
