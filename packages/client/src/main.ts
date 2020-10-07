@@ -11,6 +11,7 @@ import "./assets/v2018.css";
 
 Vue.config.productionTip = false;
 Vue.prototype.$store = store;
+
 Vue.use(Vuetify);
 Vue.filter("uppercase", (value: string) => {
   if (!value) return "";

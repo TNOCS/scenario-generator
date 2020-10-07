@@ -13,6 +13,7 @@ import { Component, Watch, Vue } from "vue-property-decorator";
 import AppBar from "./components/app-bar.vue";
 import NavigationDrawer from "./components/navigation-drawer.vue";
 import { Route } from "vue-router";
+import { CollectionNamesArr } from "./services/meiosis";
 
 @Component({
   components: {
@@ -22,6 +23,13 @@ import { Route } from "vue-router";
 })
 export default class App extends Vue {
   private theme: string = "";
+
+  constructor() {
+    super();
+    CollectionNamesArr.forEach(async (n) => {
+      await this.$store.actions[n].updateList();
+    });
+  }
 
   @Watch("theme")
   themeUpdated(theme: string) {
