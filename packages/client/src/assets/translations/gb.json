@@ -1,14 +1,15 @@
 {
-    "gb": {
-        "APP": {
-            "ACTOR": "actor | actors",
-            "COMPONENT": "component | components",
-            "ADD": "Add {item}",
-            "DESCRIPTION": "description | description",
-            "LANGUAGE": "language",
-            "LOCATION": "location | locations",
-            "MOTIVATION": "motivation | motivations",
-            "WEAPON": "weapon | weapons"
-        }
+  "gb": {
+    "APP": {
+      "ACTOR": "actor | actors",
+      "COMPONENT": "component | components",
+      "ADD": "Add {item}",
+      "DESCRIPTION": "description | description",
+      "LANGUAGE": "language",
+      "LOCATION": "location | locations",
+      "MOTIVATION": "motivation | motivations",
+      "THEME": "theme",
+      "WEAPON": "weapon | weapons"
     }
+  }
 }

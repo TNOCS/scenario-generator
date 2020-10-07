@@ -21,6 +21,13 @@ import { Route } from "vue-router";
   },
 })
 export default class App extends Vue {
+  private theme: string = "";
+
+  @Watch("theme")
+  themeUpdated(theme: string) {
+    this.$vuetify.theme.dark = theme === "dark" ? true : false;
+  }
+
   @Watch("$route")
   routeUpdated(to: Route, from: Route) {
     if (`/${this.$store.states().app.route}` !== to.path) {
@@ -29,7 +36,9 @@ export default class App extends Vue {
   }
 
   public mounted() {
-    
+    this.$store.states.map((s) => {
+      this.theme = s.app.theme;
+    });
   }
 }
 </script>

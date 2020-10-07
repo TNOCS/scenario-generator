@@ -10,8 +10,8 @@
 
 <script lang="ts">
 import { lightFormat } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
+import { getUuid } from "../utils/constants";
 
 @Component({
   components: {},
@@ -39,7 +39,7 @@ export default class ChartCard extends Vue {
   }
 
   private addActor(): void {
-    this.$store.actions.actors.save({ id: uuidv4(), name: "Hannibal", type: "Actor" });
+    this.$store.actions.actors.save({ id: getUuid(), name: "Hannibal", type: 'actors' });
   }
 
   destroyed() {

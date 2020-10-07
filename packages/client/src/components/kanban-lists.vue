@@ -1,8 +1,8 @@
 <template>
   <v-card dense flat tile class="flex-card" style="background: transparent">
     <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
-    <v-card-text class="text-description">
-      <v-container fluid>
+    <v-card-text class="text-description ma-1 pa-0">
+      <v-container fluid class="ma-0 pa-0">
         <v-row no-gutters>
           <v-col v-for="(val, i) in columns" :key="i">
             <KanbanList :itemkey="val" />
@@ -15,11 +15,11 @@
 
 <script lang="ts">
 import { lightFormat } from "date-fns";
-import { v4 as uuidv4 } from "uuid";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
+import { getUuid } from "../utils/constants";
 import KanbanList from "./kanban-list.vue";
 
 @Component({
@@ -49,10 +49,6 @@ export default class KanbanLists extends Vue {
   private getCardPayload(id: string) {
     console.log(`getCardPayload ${id}`);
     return id;
-  }
-
-  private addActor(): void {
-    this.$store.actions.actors.save({ id: uuidv4(), name: "Hannibal", type: "Actor" });
   }
 
   mounted() {

@@ -1,3 +1,4 @@
+import { themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
 
@@ -8,6 +9,7 @@ export interface IAppStateModel {
     apiService: string;
     route: string;
     language: string;
+    theme: string;
     //   page?: Dashboards;
   };
 }
@@ -16,6 +18,7 @@ export interface IAppStateActions {
   search: (isSearching: boolean, searchQuery?: string) => void;
   changePage: (route: string) => void;
   changeLanguage: (language: string) => void;
+  changeTheme: (theme: string) => void;
 }
 
 export interface IAppState {
@@ -30,6 +33,7 @@ export const appStateMgmt = {
       apiService: process.env.SERVER || window.location.origin,
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
+      theme: "light",
     },
   },
   actions: (update, _states) => {
@@ -44,6 +48,11 @@ export const appStateMgmt = {
         i18n.locale = language;
         localStorage.setItem(languageStorageKey, language);
         update({ app: { language } });
+      },
+      changeTheme: (theme: string) => {
+        log("Set theme " + theme);
+        localStorage.setItem(themeStorageKey, theme);
+        update({ app: { theme } });
       },
     };
   },

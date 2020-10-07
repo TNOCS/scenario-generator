@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer width="240px" app clipped floating permanent class="noselect">
+  <v-navigation-drawer width="200px" app clipped floating permanent class="noselect">
     <v-subheader class="font-weight-thin">CONTROLS</v-subheader>
     <v-row no-gutters align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="100" contain />
@@ -18,6 +18,16 @@
         <CountryFlag iso="nl" mode="squared"></CountryFlag>
       </v-card-text>
     </v-card>
+    <v-card flat tile class="" style="background: transparent">
+      <div class="overline px-2 py-2">{{ $t("APP.THEME") }}</div>
+      <v-divider />
+      <v-card-text class="text-description px-4 py-1">
+        <v-radio-group v-model="activeTheme" @change="themeChanged" class="ind-radio">
+          <v-radio v-for="t in themes" :key="t" :label="t" :value="t"> </v-radio>
+        </v-radio-group>
+        <CountryFlag iso="nl" mode="squared"></CountryFlag>
+      </v-card-text>
+    </v-card>
   </v-navigation-drawer>
 </template>
 
@@ -32,13 +42,22 @@ import CountryFlag from "@dzangolab/vue-country-flag-icon";
 export default class NavigationDrawer extends Vue {
   private languages: string[] = ["gb", "nl"];
   private activeLanguage: string = "";
+  private themes: string[] = ["light", "dark"];
+  private activeTheme: string = "";
 
   private async languageChanged() {
     this.$store.actions.changeLanguage(this.activeLanguage);
   }
 
+  private async themeChanged() {
+    this.$store.actions.changeTheme(this.activeTheme);
+  }
+
   async mounted() {
-    this.$store.states.map((a) => (this.activeLanguage = a.app.language));
+    this.$store.states.map((a) => {
+      this.activeLanguage = a.app.language;
+      this.activeTheme = a.app.theme;
+    });
   }
 }
 </script>

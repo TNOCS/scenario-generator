@@ -10,7 +10,7 @@ Vue.use(CountryFlag);
 
 const messages = Object.assign(nl, gb);
 const languages = ["gb", "nl"];
-const languageStorageKey = "MAVAST_LANGUAGE";
+const languageStorageKey = "V2018_LANGUAGE";
 
 const i18n = new VueI18n({
   locale: localStorage.getItem(languageStorageKey) || "gb", // set locale

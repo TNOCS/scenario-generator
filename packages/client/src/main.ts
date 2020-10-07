@@ -3,6 +3,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import App from "./App.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
+import colors from "vuetify/lib/util/colors";
 import router from "./router";
 import { store } from "./services/meiosis";
 import { i18n } from "./i18n";
@@ -29,8 +30,8 @@ const vuetify = new Vuetify({
   theme: {
     dark: false,
     themes: {
-      light: { accent: "#FF9800" },
-      dark: { accent: "#FF9800" },
+      light: { accent: "#5FB0C7", secondary: "#ddeced" },
+      dark: { accent: "#3f798a",  secondary: "#223132" },
     },
   },
 });
