@@ -1,14 +1,25 @@
 {
   "gb": {
     "APP": {
-      "ACTOR": "actor | actors",
-      "COMPONENT": "component | components",
+      "ACTIVE_SCENARIO": "active scenario",
       "ADD": "Add {item}",
+      "ADD_COMPONENTS": "Add components",
+      "CANCEL": "cancel",
+      "COMPONENT": "component | components",
+      "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
       "LANGUAGE": "language",
+      "NAME": "name",
+      "SAVE": "save",
+      "SENTENCE": "sentence | sentences",
+      "SHOW_SCENARIO": "Show scenario",
+      "THEME": "theme"
+    },
+    "COMP": {
+      "ACTOR": "actor | actors",
       "LOCATION": "location | locations",
       "MOTIVATION": "motivation | motivations",
-      "THEME": "theme",
+      "SCENARIO": "scenario | scenarios",
       "WEAPON": "weapon | weapons"
     }
   }

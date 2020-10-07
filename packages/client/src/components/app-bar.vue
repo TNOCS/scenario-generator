@@ -4,13 +4,13 @@
     <v-toolbar-title>V2018 Scenario Generator</v-toolbar-title>
     <div class="text-center">
       <v-btn class="ml-8 mx-2 my-2 app-btn" outlined :to="'add'" small color="blue">
-        <v-icon left>mdi-plus</v-icon>Add components
+        <v-icon left>mdi-plus</v-icon>{{ $t("APP.ADD_COMPONENTS") }}
       </v-btn>
       <v-btn class="mx-2 my-2 app-btn" outlined :to="'create'" small color="blue">
-        <v-icon left>mdi-pencil</v-icon>Create scenario
+        <v-icon left>mdi-pencil</v-icon>{{ $t("APP.CREATE_SCENARIO") }}
       </v-btn>
       <v-btn class="mx-2 my-2 app-btn" outlined :to="'show'" small color="blue">
-        <v-icon left>mdi-graph-outline</v-icon>Show scenario
+        <v-icon left>mdi-graph-outline</v-icon>{{ $t("APP.SHOW_SCENARIO") }}
       </v-btn>
     </div>
     <v-spacer />

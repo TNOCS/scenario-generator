@@ -1,5 +1,7 @@
 {
+    "scenarios": ["Demo"],
     "actors": ["Hannibal", "Murdock", "B.A. Baracus"],
     "locations": ["Washington", "Vietnam", "NYC"],
-    "motivations": ["Money", "Justice", "Revenge"]
+    "motivations": ["Money", "Justice", "Revenge"],
+    "weapons": ["Gun", "Drone", "Bomb", "Helicopter"]
 }

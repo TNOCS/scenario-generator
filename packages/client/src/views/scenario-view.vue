@@ -1,8 +1,8 @@
 <template>
-  <v-container class="full-height py-0" fluid>
-    <v-row class="full-height" justify="center">
+  <v-container class="full-height pa-0" fluid>
+    <v-row no-gutters class="full-height" justify="center">
       <v-col md="12" cols="12" class="full-height">
-        THis is a scenario
+        <ScenarioBuilder/>
       </v-col>
     </v-row>
   </v-container>
@@ -13,14 +13,14 @@ import { Component, Prop, Vue } from "vue-property-decorator";
 import "splitpanes/dist/splitpanes.css";
 import { Splitpanes, Pane } from "splitpanes";
 import DescriptionCard from "../components/description-card.vue";
-import KanbanLists from "../components/kanban-lists.vue";
+import ScenarioBuilder from "../components/scenario-builder.vue";
 
 @Component({
-  components: { KanbanLists },
+  components: { ScenarioBuilder },
 })
 export default class ScenarioView extends Vue {
   mounted() {
-    console.log(`Editor mounted`);
+    console.log(`ScenarioView mounted`);
   }
 }
 </script>

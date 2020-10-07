@@ -1,6 +1,6 @@
 <template>
-  <v-container class="full-height py-0" fluid>
-    <v-row class="full-height" justify="center">
+  <v-container class="full-height pa-0" fluid>
+    <v-row no-gutters class="full-height" justify="center">
       <v-col md="12" cols="12" class="full-height">
         <splitpanes vertical class="full-height">
           <pane min-size="10" size="50">

@@ -1,5 +1,5 @@
 <template>
-  <v-card dense flat tile class="flex-card" color="secondary">
+  <v-card dense flat tile class="flex-card mx-1 elevation-1" color="secondary">
     <v-card-title dense>
       {{ title | capitalize }}
       <v-spacer />
@@ -11,16 +11,16 @@
         </template>
         <v-card>
           <v-card-title dense class="kanban-menu">
-            {{ $t("APP.ADD", { item: $tc(`APP.${this.getTranslateKey()}`) }) }}
+            {{ $t("APP.ADD", { item: $tc(`COMP.${this.getTranslateKey()}`) }) }}
           </v-card-title>
           <v-card-text class="pb-0">
-            <v-text-field label="Name" v-model="newItem.name" autofocus v-on:keyup.enter="addItem"></v-text-field>
+            <v-text-field :label="`${$t('APP.NAME')}` | capitalize" v-model="newItem.name" autofocus v-on:keyup.enter="addItem"></v-text-field>
             <v-text-field label="Type" disabled v-model="newItem.type">itemkey</v-text-field>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn text @click="menu = false"> Cancel </v-btn>
-            <v-btn color="primary" text @click="addItem"> Save </v-btn>
+            <v-btn text @click="menu = false"> {{ $t("APP.CANCEL") }} </v-btn>
+            <v-btn color="primary" text @click="addItem"> {{ $t("APP.SAVE") }} </v-btn>
           </v-card-actions>
         </v-card>
       </v-menu>
@@ -74,7 +74,7 @@ export default class KanbanList extends Vue {
   private async init() {
     if (!this.itemkey || !this.itemkey.length) return;
     this.resetNewItem();
-    this.title = this.$tc(`APP.${this.getTranslateKey()}`, 2);
+    this.title = this.$tc(`COMP.${this.getTranslateKey()}`, 2);
     await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map((s) => {
       this.items = s[this.itemkey].list!;

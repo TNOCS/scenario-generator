@@ -1,14 +1,23 @@
 {
   "nl": {
     "APP": {
-      "ACTOR": "actor | actors",
       "ADD": "{item} toevoegen",
+      "ADD_COMPONENTS": "voeg componenten toe",
+      "CANCEL": "cancel",
       "COMPONENT": "component | componenten",
+      "CREATE_SCENARIO": "creëer scenario",
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "LANGUAGE": "taal",
+      "NAME": "naam",
+      "SAVE": "opslaan",
+      "SHOW_SCENARIO": "toon scenario",
+      "THEME": "thema"
+    },
+    "COMP": {
+      "ACTOR": "actor | actors",
       "LOCATION": "locatie | locaties",
       "MOTIVATION": "motivatie | motivaties",
-      "THEME": "thema",
+      "SCENARIO": "scenario | scenarios",
       "WEAPON": "wapen | wapens"
     }
   }

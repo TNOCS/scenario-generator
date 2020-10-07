@@ -26,7 +26,6 @@ import KanbanList from "./kanban-list.vue";
   components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
-  private title: string = "Kanban";
   private columns: Array<CollectionNames> = [];
 
   constructor() {
