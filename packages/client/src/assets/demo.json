@@ -1,7 +1,46 @@
 {
-    "scenarios": ["Demo"],
-    "actors": ["Hannibal", "Murdock", "B.A. Baracus"],
-    "locations": ["Washington", "Vietnam", "NYC"],
-    "motivations": ["Money", "Justice", "Revenge"],
-    "weapons": ["Gun", "Drone", "Bomb", "Helicopter"]
+  "blocks": [
+    {
+      "id": "actors_attack",
+      "prefix": "A",
+      "suffix": "wants to demonstrate for",
+      "blocktype": "actors"
+    },
+    {
+      "id": "actors_attack",
+      "prefix": "A",
+      "suffix": "wants to attack",
+      "blocktype": "actors"
+    },
+    {
+      "id": "object_1",
+      "prefix": "a",
+      "suffix": "",
+      "blocktype": "objects"
+    },
+    {
+      "id": "location_1",
+      "prefix": "in",
+      "suffix": "",
+      "blocktype": "locations"
+    },
+    {
+      "id": "motivation_1",
+      "prefix": "for",
+      "suffix": "reasons",
+      "blocktype": "locations"
+    },
+    {
+      "id": "weapons_1",
+      "prefix": "with a",
+      "suffix": "",
+      "blocktype": "weapons"
+    }
+  ],
+  "scenarios": ["Demo"],
+  "actors": ["Hannibal", "Murdock", "B.A. Baracus"],
+  "locations": ["Washington", "Vietnam", "NYC"],
+  "motivations": ["Money", "Justice", "Revenge"],
+  "objects": ["Church", "Park", "Palace", "Airport"],
+  "weapons": ["Gun", "Drone", "Bomb", "Helicopter"]
 }

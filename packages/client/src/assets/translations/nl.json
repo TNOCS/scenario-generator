@@ -1,6 +1,7 @@
 {
   "nl": {
     "APP": {
+      "ACTIVE_SCENARIO": "actief scenario",
       "ADD": "{item} toevoegen",
       "ADD_COMPONENTS": "voeg componenten toe",
       "CANCEL": "cancel",
@@ -15,8 +16,10 @@
     },
     "COMP": {
       "ACTOR": "actor | actors",
+      "BLOCK": "blok | blokken",
       "LOCATION": "locatie | locaties",
       "MOTIVATION": "motivatie | motivaties",
+      "OBJECT": "object | objecten",
       "SCENARIO": "scenario | scenarios",
       "WEAPON": "wapen | wapens"
     }

@@ -5,10 +5,7 @@
         <v-row no-gutters>
           <v-col md="2"> {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}: {{ this.activeScenarioName }} </v-col>
           <v-col md="10">
-            <v-btn @click="addScenario" color="accent darken-1" icon small class="mr-2">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-            <v-btn @click="addScenario" color="accent darken-1" icon small class="mr-2">
+            <v-btn :to="'add'" color="accent darken-1" icon small class="mr-2">
               <v-icon>mdi-folder-open</v-icon>
             </v-btn>
           </v-col>

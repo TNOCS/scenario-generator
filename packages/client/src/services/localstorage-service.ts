@@ -1,19 +1,23 @@
-import { IContent } from "../models";
+import { IBlock, IContent } from "../models";
 import demo from "../assets/demo.json";
 import { CollectionNames } from "./meiosis";
-import { getUuid } from '../utils/constants';
+import { getUuid } from "../utils/constants";
 
 const log = console.log;
 const error = console.error;
 
 const createLocalStorageFactory = () => {
-  return <T extends IContent>(listKey: string) => {
+  return <T extends IContent>(listKey: CollectionNames) => {
     log(`Start LocalStorageFactory ${listKey}...`);
 
     if (!localStorage.getItem(listKey)) {
       log(`Loading example keys for ${listKey}...`);
-      const items: IContent[] = (demo[listKey as CollectionNames] as string[]).map((name) => {
-        return { id: getUuid(), name: name, type: listKey } as IContent;
+      const items: IContent[] = (demo[listKey as CollectionNames] as (string | IBlock)[]).map((nameOrObj: string | IBlock) => {
+        if (listKey === "blocks") {
+          return nameOrObj as IContent;
+        } else {
+          return { id: getUuid(), name: nameOrObj, type: listKey } as IContent;
+        }
       });
       localStorage.setItem(listKey, JSON.stringify(items));
     }

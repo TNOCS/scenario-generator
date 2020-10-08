@@ -25,7 +25,7 @@
         </v-card>
       </v-menu>
     </v-card-title>
-    <v-card-text class="text-description">
+    <v-card-text class="text-description px-2">
       <Container>
         <Draggable v-for="(item, id) in items" :key="id">
           <KanbanCard :item="item" />

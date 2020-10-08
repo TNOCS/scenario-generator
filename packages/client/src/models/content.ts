@@ -1,4 +1,4 @@
-import { CollectionNames } from '@/services/meiosis';
+import { CollectionNames } from '../services/meiosis';
 export interface IBasicContent {
   id: string;
   name: string;

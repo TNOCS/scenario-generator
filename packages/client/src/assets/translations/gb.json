@@ -17,8 +17,10 @@
     },
     "COMP": {
       "ACTOR": "actor | actors",
+      "BLOCK": "block | blocks",
       "LOCATION": "location | locations",
       "MOTIVATION": "motivation | motivations",
+      "OBJECT": "object | objects",
       "SCENARIO": "scenario | scenarios",
       "WEAPON": "weapon | weapons"
     }
