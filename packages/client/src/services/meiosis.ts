@@ -4,7 +4,7 @@ import { collectionFactory, CollectionsActions, CollectionsModel, CollectionType
 import { appStateMgmt, IAppStateActions, IAppStateModel } from "./states/app-state";
 import { IContent, IScenario } from "../models";
 
-export interface IActions extends IAppStateActions, CollectionsActions<IContent> {}
+export interface IActions extends IAppStateActions, CollectionsActions<IContent | IScenario> {}
 
 export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppModel>) => Partial<IAppModel>);
 

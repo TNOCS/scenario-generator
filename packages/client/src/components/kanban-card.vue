@@ -1,5 +1,5 @@
 <template>
-  <v-card tile class="flex-card ma-1 kanban-card" elevation="2" color="accent">
+  <v-card tile class="flex-card ma-1 kanban-card" elevation="2" color="accent" @click="selectItem">
     <v-card-title class="px-4 pt-2 pb-0">
       {{ item.name }}
       <v-spacer />
@@ -16,7 +16,7 @@
 <script lang="ts">
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { IContent } from "../models";
+import { IContent, IScenario } from "../models";
 
 @Component({
   components: {},
@@ -26,6 +26,10 @@ export default class KanbanCard extends Vue {
 
   constructor() {
     super();
+  }
+
+  private async selectItem() {
+    this.$store.actions[this.item.type!].load(this.item.id!);
   }
 
   private async deleteItem() {

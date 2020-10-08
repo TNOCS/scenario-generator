@@ -40,7 +40,7 @@ export default class ActiveScenario extends Vue {
     this.$store.states.map((s) => {
       this.activeScenario = s.scenarios.current;
       if (this.activeScenario) {
-        this.activeScenarioName = this.activeScenario ? this.activeScenario.name : 'None';
+        this.activeScenarioName = this.activeScenario ? this.activeScenario.name! : 'None';
       }
     });
   }
