@@ -4,15 +4,18 @@
       "ACTIVE_SCENARIO": "active scenario",
       "ADD": "Add {item}",
       "ADD_COMPONENTS": "Add components",
+      "BUILD_SENTENCE": "Build a sentence structure",
       "CANCEL": "cancel",
       "COMPONENT": "component | components",
       "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
+      "FILL_SENTENCE": "Fill the sentence",
       "LANGUAGE": "language",
       "NAME": "name",
       "SAVE": "save",
       "SENTENCE": "sentence | sentences",
       "SHOW_SCENARIO": "Show scenario",
+      "STRUCTURE": "structure",
       "THEME": "theme"
     },
     "COMP": {

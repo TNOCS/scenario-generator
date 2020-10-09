@@ -1,11 +1,14 @@
 <template>
   <v-card dense flat tile class="flex-card scenario-bar">
-    <v-card-text class="text-description ma-0 py-3 px-2">
+    <v-card-text class="text-description ma-0 py-2 px-2">
       <v-container fluid class="ma-0 pa-0">
         <v-row no-gutters>
-          <v-col md="2"> {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}: {{ this.activeScenarioName }} </v-col>
+          <v-col md="2">
+            {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}:
+            <span class="title-name"> {{ this.activeScenarioName }} </span></v-col
+          >
           <v-col md="10">
-            <v-btn :to="'add'" color="accent darken-1" icon small class="mr-2">
+            <v-btn :to="'add'" color="accent darken-1" icon x-small class="mr-2">
               <v-icon>mdi-folder-open</v-icon>
             </v-btn>
           </v-col>
@@ -37,7 +40,7 @@ export default class ActiveScenario extends Vue {
     this.$store.states.map((s) => {
       this.activeScenario = s.scenarios.current;
       if (this.activeScenario) {
-        this.activeScenarioName = this.activeScenario ? this.activeScenario.name! : 'None';
+        this.activeScenarioName = this.activeScenario ? this.activeScenario.name! : "None";
       }
     });
   }
@@ -45,10 +48,16 @@ export default class ActiveScenario extends Vue {
 </script>
 
 <style lang="css">
+.scenario-bar {
+  height: 40px;
+}
 .scenario-bar.v-card.theme--light {
   background: lightgrey;
 }
 .scenario-bar.v-card.theme--dark {
   background: rgb(48, 48, 48);
+}
+.title-name {
+  font-weight: bold;
 }
 </style>

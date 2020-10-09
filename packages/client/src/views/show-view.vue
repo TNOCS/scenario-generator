@@ -5,12 +5,12 @@
         <splitpanes vertical class="full-height">
           <pane min-size="10" size="50">
             <DescriptionCard
-              html="<h3>Hello world</h3><br/><a href='https://www.defensie.nl' target='_blank'>Defensie</a>"
+              html="<h3>Hello world</h3><br/><a href='https://www.tno.nl' target='_blank'>TNO</a>"
             ></DescriptionCard>
           </pane>
           <pane min-size="10" size="50">
             <DescriptionCard
-              html="<h3>Hello world</h3><br/><a href='https://www.politie.nl' target='_blank'>Politie</a>"
+              html="<h3>Hello world</h3><br/><a href='https://www.tno.nl' target='_blank'>TNO</a>"
             ></DescriptionCard>
           </pane>
         </splitpanes>

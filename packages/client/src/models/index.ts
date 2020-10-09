@@ -1,3 +1,4 @@
+export * from './block';
 export * from './content';
 export * from './scenario';
-export * from './block';
+export * from './sentence';

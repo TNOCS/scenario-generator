@@ -8,12 +8,12 @@
     <v-card-text class="text-description">
       <div v-html="html" />
       <v-divider class="my-6"></v-divider>
-      <v-list-item v-for="a in actors" :key="a.id">
+      <!-- <v-list-item v-for="a in actors" :key="a.id">
         <v-list-item-content>
           <v-list-item-title>{{ a.name }}</v-list-item-title>
           <v-list-item-subtitle>{{ a.id }}</v-list-item-subtitle>
         </v-list-item-content>
-      </v-list-item>
+      </v-list-item> -->
     </v-card-text>
   </v-card>
 </template>

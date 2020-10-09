@@ -1,102 +1,63 @@
 <template>
-  <div>
-    <ActiveScenario />
-    <v-card dense flat tile class="flex-card" style="background: transparent">
-      <div class="overline px-2 py-0">{{ $tc("APP.SENTENCE", 2) }}</div>
-      <v-card-text class="text-description ma-0 pa-1">
-        <div v-if="scenario && scenario.sentences">
-          <div v-for="se in scenario.sentences" :key="se">
-            {{ se }}
+  <v-card dense flat tile class="flex-card" style="background: transparent">
+    <div class="overline px-2 py-0">{{ `2. ${$t("APP.FILL_SENTENCE")}` }}</div>
+    <v-card-text class="text-description ma-0 pa-1">
+      <v-form v-model="valid" class="nat-lang-form" autocomplete="off">
+        <v-container fluid>
+          <v-row>
+            <v-col cols="12" class="flex-shrink-1"></v-col>
+            <v-col>
+              <div class="build-block" v-for="b in sentenceblocks" :key="b.id">
+                {{ b.prefix }}
+                <v-select
+                  class="d-inline-flex flex-shrink-1 nat-lang-select"
+                  item-value="name"
+                  item-text="name"
+                  :items="columns[b.blocktype]"
+                  v-model="answers[b.blocktype]"
+                  dense
+                  single-line
+                  :rules="nameRules"
+                  :label="getTranslateKey(b.blocktype)"
+                  required
+                ></v-select>
+                {{ b.suffix }}
+              </div>
+            </v-col>
+            <v-col cols="1" class="flex-grow-1"></v-col>
+          </v-row>
+          <v-btn @click="addSentence" color="accent darken-1" elevation="2" class="d-flex ma-4">
+            {{ $t("APP.ADD", { item: $tc("APP.SENTENCE") }) }}
+          </v-btn>
+          <div style="margin-left: -8px" class="overline py-4">{{ `3. Scenario` }}</div>
+          <div v-if="scenario && scenario.sentences">
+            <div v-for="se in scenario.sentences" :key="se">
+              {{ se }}
+            </div>
           </div>
-        </div>
-        <v-form v-model="valid" class="nat-lang-form" autocomplete="off">
-          <v-container fluid>
-            <v-row>
-              <v-col cols="12" class="flex-shrink-1"></v-col>
-              <v-col>
-                <v-select
-                  class="d-inline-flex flex-shrink-1 nat-lang-select"
-                  item-value="name"
-                  item-text="name"
-                  :items="columns['actors']"
-                  v-model="actor"
-                  dense
-                  single-line
-                  :rules="nameRules"
-                  :label="$tc('COMP.ACTOR', 1)"
-                  required
-                ></v-select>
-                attacks an object in
-                <v-select
-                  class="d-inline-flex flex-shrink-1 nat-lang-select"
-                  item-value="name"
-                  item-text="name"
-                  :items="columns['locations']"
-                  v-model="location"
-                  dense
-                  single-line
-                  :rules="nameRules"
-                  :label="$tc('COMP.LOCATION')"
-                  required
-                ></v-select>
-                with an
-                <v-select
-                  class="d-inline-flex flex-shrink-1 nat-lang-select"
-                  item-value="name"
-                  item-text="name"
-                  :items="columns['weapons']"
-                  v-model="weapon"
-                  dense
-                  single-line
-                  :rules="nameRules"
-                  :label="$tc('COMP.WEAPON')"
-                  required
-                ></v-select>
-                for
-                <v-select
-                  class="d-inline-flex flex-shrink-1 nat-lang-select"
-                  item-value="name"
-                  item-text="name"
-                  :items="columns['motivations']"
-                  v-model="motivation"
-                  dense
-                  single-line
-                  :rules="nameRules"
-                  :label="$tc('COMP.MOTIVATION')"
-                ></v-select>
-                reasons.
-              </v-col>
-              <v-col cols="1" class="flex-grow-1"></v-col>
-            </v-row>
-            <v-btn @click="addSentence" color="accent darken-1" elevation="2" class="d-flex ma-4">
-              {{ $t("SUBMIT") }}
-            </v-btn>
-          </v-container>
-        </v-form>
-      </v-card-text>
-    </v-card>
-  </div>
+        </v-container>
+      </v-form>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script lang="ts">
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent, IScenario } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
+import { IBlock, IContent, IScenario, ISentence } from "../models";
+import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
-import ActiveScenario from "./active-scenario.vue";
 
 @Component({
-  components: { ActiveScenario },
+  components: {},
 })
 export default class ScenarioBuilder extends Vue {
   private columns: Record<CollectionNames, Partial<IContent>[]> = {} as Record<CollectionNames, Partial<IContent>[]>;
-  private actor: string = "";
-  private location: string = "";
-  private motivation: string = "";
-  private weapon: string = "";
-  private scenario?: Partial<IScenario>;
+  private answers: Record<CollectionNames, string> = {} as Record<CollectionNames, string>;
+  private scenario: Partial<IScenario> = {};
+  private sentence: ISentence = {} as ISentence;
+  private sentenceblocks: IBlock[] = [];
 
   private valid: boolean = true;
   private nameRules = [
@@ -112,6 +73,12 @@ export default class ScenarioBuilder extends Vue {
   private async init() {
     this.$store.states.map((s) => {
       this.scenario = s.scenarios.current;
+      Vue.set(this, "sentence", s.app.sentence);
+      Vue.set(
+        this,
+        "sentenceblocks",
+        s.app.sentence.blockids.map((id) => s["blocks"].list!.find((b) => b.id === id))
+      );
       const columns = {} as Record<CollectionNames, Partial<IContent>[]>;
       CollectionNamesArr.forEach((n) => {
         columns[n] = s[n].list!;
@@ -120,12 +87,20 @@ export default class ScenarioBuilder extends Vue {
     });
   }
 
+  private getTranslateKey(itemtype: CollectionNames) {
+    return this.$tc(`COMP.${TranslateKeys[itemtype]}`);
+  }
+
   private async addSentence() {
-    if (!this.scenario) return;
+    if (!this.scenario) {
+      alert(`Select a scenario first, by clicking a card in the "Add components" view!`);
+      return;
+    }
     if (!this.scenario.sentences) this.scenario.sentences = [];
-    this.scenario.sentences.push(
-      `${this.actor} attacks an object in ${this.location} with an ${this.weapon} for ${this.motivation} reasons.`
-    );
+    const result = this.sentenceblocks.reduce((prev, cur, curInd) => {
+      return `${prev} ${cur.prefix} ${this.answers[cur.blocktype]} ${cur.suffix}`;
+    }, "");
+    this.scenario.sentences.push(result);
     this.$store.actions.scenarios.save(this.scenario);
   }
 
@@ -154,5 +129,8 @@ export default class ScenarioBuilder extends Vue {
 }
 .nat-lang-form {
   font-size: 150%;
+}
+.build-block {
+  display: inline;
 }
 </style>

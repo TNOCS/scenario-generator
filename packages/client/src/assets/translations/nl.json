@@ -4,14 +4,18 @@
       "ACTIVE_SCENARIO": "actief scenario",
       "ADD": "{item} toevoegen",
       "ADD_COMPONENTS": "voeg componenten toe",
+      "BUILD_SENTENCE": "Bouw een zinsstructuur",
       "CANCEL": "cancel",
       "COMPONENT": "component | componenten",
       "CREATE_SCENARIO": "creëer scenario",
       "DESCRIPTION": "beschrijving | beschrijvingen",
+      "FILL_SENTENCE": "Vul de zin in",
       "LANGUAGE": "taal",
       "NAME": "naam",
       "SAVE": "opslaan",
+      "SENTENCE": "zin | zinnen",
       "SHOW_SCENARIO": "toon scenario",
+      "STRUCTURE": "structuur",
       "THEME": "thema"
     },
     "COMP": {

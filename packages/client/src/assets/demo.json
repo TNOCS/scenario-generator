@@ -3,13 +3,13 @@
     {
       "id": "actors_attack",
       "prefix": "A",
-      "suffix": "wants to demonstrate for",
+      "suffix": "wants to attack",
       "blocktype": "actors"
     },
     {
-      "id": "actors_attack",
+      "id": "actors_demonstrate",
       "prefix": "A",
-      "suffix": "wants to attack",
+      "suffix": "wants to demonstrate for",
       "blocktype": "actors"
     },
     {
@@ -28,7 +28,7 @@
       "id": "motivation_1",
       "prefix": "for",
       "suffix": "reasons",
-      "blocktype": "locations"
+      "blocktype": "motivations"
     },
     {
       "id": "weapons_1",
