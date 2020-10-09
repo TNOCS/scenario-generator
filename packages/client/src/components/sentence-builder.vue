@@ -57,7 +57,7 @@ export default class SentenceBuilder extends Vue {
   private addBlockSentence() {
     const s: ISentence = {
       id: getUuid(),
-      blockids: this.blocks.filter((b) => b.id !== "actors_demonstrate").map((b) => b.id),
+      blockids: this.blocks.filter((b) => b.id !== "actors_demonstrate").map((b) => b.id!),
     };
     this.$store.actions.changeSentence(s);
   }

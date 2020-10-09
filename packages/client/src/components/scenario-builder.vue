@@ -55,7 +55,7 @@ import { getUuid } from "../utils/constants";
 export default class ScenarioBuilder extends Vue {
   private columns: Record<CollectionNames, Partial<IContent>[]> = {} as Record<CollectionNames, Partial<IContent>[]>;
   private answers: Record<CollectionNames, string> = {} as Record<CollectionNames, string>;
-  private scenario: Partial<IScenario> = {};
+  private scenario?: Partial<IScenario> = {};
   private sentence: ISentence = {} as ISentence;
   private sentenceblocks: IBlock[] = [];
 

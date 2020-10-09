@@ -36,7 +36,7 @@ export default class ScenarioView extends Vue {
   private init() {
     this.$store.states.map((s) => {
       if (!s.scenarios.current && s.scenarios.list!.length > 0) {
-        this.$store.actions.scenarios.load(s.scenarios.list![0].id);
+        this.$store.actions.scenarios.load(s.scenarios.list![0].id!);
       }
     });
   }
