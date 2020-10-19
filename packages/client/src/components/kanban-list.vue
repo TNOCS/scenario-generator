@@ -1,36 +1,47 @@
 <template>
-  <v-card dense flat tile class="flex-card mx-1 elevation-1" color="secondary">
-    <v-card-title dense>
-      {{ title | capitalize }}
-      <v-spacer />
-      <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab small elevation="2" class="mr-2">
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </template>
-        <v-card>
-          <v-card-title dense class="kanban-menu">
-            {{ $t("APP.ADD", { item: $tc(`COMP.${this.getTranslateKey()}`) }) }}
-          </v-card-title>
-          <v-card-text class="pb-0">
-            <v-text-field :label="`${$t('APP.NAME')}` | capitalize" v-model="newItem.name" autofocus v-on:keyup.enter="addItem"></v-text-field>
-            <v-text-field label="Type" disabled v-model="newItem.type">itemkey</v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn text @click="menu = false"> {{ $t("APP.CANCEL") }} </v-btn>
-            <v-btn color="primary" text @click="addItem"> {{ $t("APP.SAVE") }} </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-menu>
-    </v-card-title>
-    <v-card-text class="text-description px-2">
-      <Container>
-        <Draggable v-for="(item, id) in items" :key="id">
-          <KanbanCard :item="item" />
-        </Draggable>
-      </Container>
+  <v-card dense flat tile class="flex-card" color="secondary">
+    <v-card-text>
+      <v-row no-gutters>
+        <v-col cols="2" class="py-2 pl-3 divider-r">
+          <span class="title">{{ title | capitalize }}</span>
+          <v-spacer />
+          <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab small elevation="2" class="mr-4 add-button">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <v-card>
+              <v-card-title dense class="kanban-menu">
+                {{ $t("APP.ADD", { item: $tc(`COMP.${this.getTranslateKey()}`) }) }}
+              </v-card-title>
+              <v-card-text class="pb-0">
+                <v-text-field
+                  :label="`${$t('APP.NAME')}` | capitalize"
+                  v-model="newItem.name"
+                  autofocus
+                  v-on:keyup.enter="addItem"
+                ></v-text-field>
+                <v-text-field label="Type" disabled v-model="newItem.type">itemkey</v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn text @click="menu = false"> {{ $t("APP.CANCEL") }} </v-btn>
+                <v-btn color="primary" text @click="addItem"> {{ $t("APP.SAVE") }} </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </v-col>
+        <v-col cols="10" class="py-1 pl-1">
+          <div class="text-description px-2">
+            <Container orientation="horizontal">
+              <Draggable v-for="(item, id) in items" :key="id">
+                <KanbanCard :item="item" />
+              </Draggable>
+            </Container>
+          </div>
+        </v-col>
+      </v-row>
     </v-card-text>
   </v-card>
 </template>
@@ -97,5 +108,14 @@ export default class KanbanList extends Vue {
 <style scoped lang="css">
 .kanban-menu {
   padding: 8px 16px;
+}
+.add-button {
+  float: right;
+}
+.theme--light .divider-r {
+  border-right: lightgray 1px solid;
+}
+.theme--dark .divider-r {
+  border-right: rgb(80, 80, 80) 1px solid;
 }
 </style>

@@ -11,6 +11,7 @@
       "DESCRIPTION": "description | description",
       "FILL_SENTENCE": "Fill the sentence",
       "LANGUAGE": "language",
+      "LOCATION": "location",
       "NAME": "name",
       "SAVE": "save",
       "SENTENCE": "sentence | sentences",
@@ -22,11 +23,13 @@
       "ACTOR": "actor | actors",
       "BLOCK": "block | blocks",
       "LOCATION": "location | locations",
+      "MODUS_OPERANDUS": "modus operandus | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "OBJECT": "object | objects",
       "RESPONSIBILITY": "responsibility | responsibilities",
       "SCENARIO": "scenario | scenarios",
-      "WEAPON": "weapon | weapons"
+      "WEAPON": "weapon | weapons",
+      "WEATHER_CONDITION": "weather condition | weather conditions"
     },
     "UTIL": {
       "A": "a",

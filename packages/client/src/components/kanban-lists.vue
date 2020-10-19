@@ -3,10 +3,10 @@
     <ActiveScenario />
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
-      <v-card-text class="text-description ma-1 pa-0">
+      <v-card-text class="text-description ma-0 pa-2">
         <v-container fluid class="ma-0 pa-0">
-          <v-row no-gutters>
-            <v-col v-for="(val, i) in columns" :key="i">
+          <v-row no-gutters v-for="(val, i) in columns" :key="i" class="kanban-col">
+            <v-col cols="12" class="my-1 elevation-1">
               <KanbanList :itemkey="val" />
             </v-col>
           </v-row>
@@ -61,4 +61,8 @@ export default class KanbanLists extends Vue {
 }
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="css">
+.kanban-col {
+  min-width: 320px;
+}
+</style>

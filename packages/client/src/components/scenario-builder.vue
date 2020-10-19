@@ -8,13 +8,16 @@
             <v-col cols="12" class="flex-shrink-1"></v-col>
             <v-col>
               <div class="build-block" v-for="b in sentenceblocks" :key="b.id">
-                {{ b.prefix }}
+                <span class="build-block pre" v-if="b.prefix && b.prefix.length > 0">{{ $t(b.prefix) }}</span>
+                <span class="build-block article" v-if="b.indefinite">
+                  {{ answers.hasOwnProperty(b.id) ? answers[b.id] : getTranslateKey(b.blocktype) | getArticle }}
+                </span>
                 <v-select
                   class="d-inline-flex flex-shrink-1 nat-lang-select"
                   item-value="name"
                   item-text="name"
                   :items="columns[b.blocktype]"
-                  v-model="answers[b.blocktype]"
+                  v-model="answers[b.id]"
                   dense
                   single-line
                   :rules="nameRules"
@@ -31,9 +34,7 @@
           </v-btn>
           <div style="margin-left: -8px" class="overline py-4">{{ `3. Scenario` }}</div>
           <div v-if="scenario && scenario.sentences">
-            <div v-for="(se, idx) in scenario.sentences" :key="idx">
-              {{ se }}.
-            </div>
+            <div v-for="(se, idx) in scenario.sentences" :key="idx">{{ se | capitalize }}</div>
           </div>
         </v-container>
       </v-form>
@@ -54,7 +55,7 @@ import { getUuid } from "../utils/constants";
 })
 export default class ScenarioBuilder extends Vue {
   private columns: Record<CollectionNames, Partial<IContent>[]> = {} as Record<CollectionNames, Partial<IContent>[]>;
-  private answers: Record<CollectionNames, string> = {} as Record<CollectionNames, string>;
+  private answers: Record<string, string> = {} as Record<string, string>;
   private scenario?: Partial<IScenario> = {};
   private sentence: ISentence = {} as ISentence;
   private sentenceblocks: IBlock[] = [];
@@ -98,9 +99,14 @@ export default class ScenarioBuilder extends Vue {
     }
     if (!this.scenario.sentences) this.scenario.sentences = [];
     const result = this.sentenceblocks.reduce((prev, cur, curInd) => {
-      return `${prev} ${cur.prefix} ${this.answers[cur.blocktype]} ${cur.suffix}`;
+      const parts: string[] = [prev];
+      parts.push(cur.prefix);
+      parts.push(cur.indefinite ? this.$options.filters!.getArticle(this.answers[cur.id]) : "");
+      parts.push(this.answers[cur.id]);
+      parts.push(cur.suffix);
+      return `${parts.filter(p => p && p.length > 0).join(" ")}`;
     }, "");
-    this.scenario.sentences.push(result);
+    this.scenario.sentences.push(this.$options.filters!.capitalize(`${result}`));
     this.$store.actions.scenarios.save(this.scenario);
     this.$store.actions.changeSelectedBlocks([]);
     this.$store.actions.changeSentence({ id: getUuid(), blockids: [] });
@@ -125,14 +131,16 @@ export default class ScenarioBuilder extends Vue {
 }
 .nat-lang-select {
   min-width: min-content;
-}
-.nat-lang-select {
   font-weight: bold;
+  margin-left: 6px;
 }
 .nat-lang-form {
   font-size: 150%;
 }
 .build-block {
   display: inline;
+}
+.build-block.article {
+
 }
 </style>

@@ -24,7 +24,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import "splitpanes/dist/splitpanes.css";
 import { Splitpanes, Pane } from "splitpanes";
-import DescriptionCard from "../components/description-card.vue";
 import ScenarioBuilder from "../components/scenario-builder.vue";
 import SentenceBuilder from "../components/sentence-builder.vue";
 import ActiveScenario from "../components/active-scenario.vue";

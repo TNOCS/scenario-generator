@@ -9,11 +9,17 @@ import { store } from "./services/meiosis";
 import { i18n } from "./i18n";
 import "./assets/v2018.css";
 import { isVowelSound } from "./utils/constants";
+import VueLayers from "vuelayers";
+import "vuelayers/lib/style.css"; // needs css-loader
 
 Vue.config.productionTip = false;
 Vue.prototype.$store = store;
 
 Vue.use(Vuetify);
+Vue.use(VueLayers, {
+  dataProjection: "EPSG:4326",
+});
+
 Vue.filter("uppercase", (value: string) => {
   if (!value) return "";
   value = value.toString();

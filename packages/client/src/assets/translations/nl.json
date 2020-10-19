@@ -11,6 +11,7 @@
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "FILL_SENTENCE": "Vul de zin in",
       "LANGUAGE": "taal",
+      "LOCATION": "lokatie",
       "NAME": "naam",
       "SAVE": "opslaan",
       "SENTENCE": "zin | zinnen",
@@ -22,11 +23,13 @@
       "ACTOR": "actor | actors",
       "BLOCK": "blok | blokken",
       "LOCATION": "locatie | locaties",
+      "MODUS_OPERANDUS": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
       "OBJECT": "object | objecten",
       "RESPONSIBILITY": "verantwoordelijkheid | verantwoordelijkheden",
       "SCENARIO": "scenario | scenarios",
-      "WEAPON": "wapen | wapens"
+      "WEAPON": "wapen | wapens",
+      "WEATHER_CONDITION": "weersconditie | weerscondities"
     },
     "UTIL": {
       "A": "een",

@@ -16,8 +16,10 @@ export type CollectionNames =
   | "actors"
   | "locations"
   | "motivations"
+  | "modusoperandi"
   | "objects"
   | "weapons"
+  | "weatherconditions"
   | "responsibilities";
 export const CollectionNamesArr: Array<CollectionNames> = [
   "blocks",
@@ -25,8 +27,10 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "actors",
   "locations",
   "motivations",
+  "modusoperandi",
   "objects",
   "weapons",
+  "weatherconditions",
   "responsibilities",
 ];
 export const TranslateKeys = {
@@ -35,9 +39,11 @@ export const TranslateKeys = {
   actors: "ACTOR",
   locations: "LOCATION",
   motivations: "MOTIVATION",
+  modusoperandi: "MODUS_OPERANDUS",
   weapons: "WEAPON",
   objects: "OBJECT",
   responsibilities: "RESPONSIBILITY",
+  weatherconditions: "WEATHER_CONDITION",
 };
 
 const blocksCollection = collectionFactory<IBlock>("blocks");
@@ -48,6 +54,8 @@ const objectsCollection = collectionFactory<IContent>("objects");
 const motivationsCollection = collectionFactory<IContent>("motivations");
 const weaponsCollection = collectionFactory<IContent>("weapons");
 const responsibilitiesCollection = collectionFactory<IContent>("responsibilities");
+const weatherconditionsCollection = collectionFactory<IContent>("weatherconditions");
+const modusoperandiCollection = collectionFactory<IContent>("modusoperandi");
 
 export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
   blocks: CollectionType<IScenario>;
@@ -58,6 +66,8 @@ export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
   motivations: CollectionType<IContent>;
   weapons: CollectionType<IContent>;
   responsibilities: CollectionType<IContent>;
+  weatherconditions: CollectionType<IContent>;
+  modusoperandi: CollectionType<IContent>;
 }
 
 // export type MeiosisComponent = FactoryComponent<{
@@ -75,7 +85,9 @@ const app = {
     motivationsCollection.initial,
     objectsCollection.initial,
     weaponsCollection.initial,
-    responsibilitiesCollection.initial
+    responsibilitiesCollection.initial,
+    weatherconditionsCollection.initial,
+    modusoperandiCollection.initial
   ) as IAppModel,
   actions: (update: UpdateStream, states: flyd.Stream<IAppModel>) =>
     Object.assign(
@@ -88,7 +100,9 @@ const app = {
       motivationsCollection.actions(update, states),
       objectsCollection.actions(update, states),
       weaponsCollection.actions(update, states),
-      responsibilitiesCollection.actions(update, states)
+      responsibilitiesCollection.actions(update, states),
+      weatherconditionsCollection.actions(update, states),
+      modusoperandiCollection.actions(update, states)
     ) as IActions,
 };
 

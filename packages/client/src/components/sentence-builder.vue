@@ -5,10 +5,10 @@
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid>
           <v-row>
-            <v-col xs="6" sm="2" v-for="b in blocks" :key="b.id" class="sentence-col">
-              <v-checkbox v-model="selectedBlockIds" :value="b.id">
+            <v-col xs="6" sm="2" v-for="b in blocks" :key="b.id" class="sentence-col pl-2 py-0">
+              <v-checkbox dense hide-details v-model="selectedBlockIds" :value="b.id">
                 <template v-slot:label class="inline-label">
-                  <span class="sentence-block pre" v-if="b.prefix && b.prefix.length > 0">{{ $t(b.prefix) }}</span>
+                  <span class="sentence-block pre" v-if="b.prefix && b.prefix.length > 0">{{ b.prefix }}</span>
                   <span class="sentence-block article" v-if="b.indefinite">
                     {{ getTranslateKey(b.blocktype) | getArticle | trim }}
                   </span>

@@ -9,9 +9,7 @@
             ></DescriptionCard>
           </pane>
           <pane min-size="10" size="50">
-            <DescriptionCard
-              html="<h3>Hello world</h3><br/><a href='https://www.tno.nl' target='_blank'>TNO</a>"
-            ></DescriptionCard>
+            <MapCard></MapCard>
           </pane>
         </splitpanes>
       </v-col>
@@ -23,11 +21,12 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import "splitpanes/dist/splitpanes.css";
 import { Splitpanes, Pane } from "splitpanes";
+import MapCard from "../components/map-card.vue";
 import DescriptionCard from "../components/description-card.vue";
 import ChartCard from "../components/chart-card.vue";
 
 @Component({
-  components: { Splitpanes, Pane, DescriptionCard, ChartCard },
+  components: { Splitpanes, Pane, DescriptionCard, ChartCard, MapCard },
 })
 export default class ShowView extends Vue {
   mounted() {
