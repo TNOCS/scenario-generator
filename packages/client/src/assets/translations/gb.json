@@ -24,8 +24,13 @@
       "LOCATION": "location | locations",
       "MOTIVATION": "motivation | motivations",
       "OBJECT": "object | objects",
+      "RESPONSIBILITY": "responsibility | responsibilities",
       "SCENARIO": "scenario | scenarios",
       "WEAPON": "weapon | weapons"
+    },
+    "UTIL": {
+      "A": "a",
+      "AN": "an"
     }
   }
 }

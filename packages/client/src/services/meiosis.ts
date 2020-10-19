@@ -10,9 +10,35 @@ export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppMode
 
 export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
-export type CollectionNames = "blocks"| "scenarios"| "actors" | "locations" | "motivations" | "objects" | "weapons";
-export const CollectionNamesArr: Array<CollectionNames> = ["blocks", "scenarios", "actors", "locations", "motivations", "objects", "weapons"];
-export const TranslateKeys = { blocks: "BLOCK", scenarios: "SCENARIO", actors: "ACTOR", locations: "LOCATION", motivations: "MOTIVATION", weapons: "WEAPON", objects: "OBJECT" };
+export type CollectionNames =
+  | "blocks"
+  | "scenarios"
+  | "actors"
+  | "locations"
+  | "motivations"
+  | "objects"
+  | "weapons"
+  | "responsibilities";
+export const CollectionNamesArr: Array<CollectionNames> = [
+  "blocks",
+  "scenarios",
+  "actors",
+  "locations",
+  "motivations",
+  "objects",
+  "weapons",
+  "responsibilities",
+];
+export const TranslateKeys = {
+  blocks: "BLOCK",
+  scenarios: "SCENARIO",
+  actors: "ACTOR",
+  locations: "LOCATION",
+  motivations: "MOTIVATION",
+  weapons: "WEAPON",
+  objects: "OBJECT",
+  responsibilities: "RESPONSIBILITY",
+};
 
 const blocksCollection = collectionFactory<IBlock>("blocks");
 const scenariosCollection = collectionFactory<IScenario>("scenarios");
@@ -21,6 +47,7 @@ const locationsCollection = collectionFactory<IContent>("locations");
 const objectsCollection = collectionFactory<IContent>("objects");
 const motivationsCollection = collectionFactory<IContent>("motivations");
 const weaponsCollection = collectionFactory<IContent>("weapons");
+const responsibilitiesCollection = collectionFactory<IContent>("responsibilities");
 
 export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
   blocks: CollectionType<IScenario>;
@@ -30,6 +57,7 @@ export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
   objects: CollectionType<IContent>;
   motivations: CollectionType<IContent>;
   weapons: CollectionType<IContent>;
+  responsibilities: CollectionType<IContent>;
 }
 
 // export type MeiosisComponent = FactoryComponent<{
@@ -46,7 +74,8 @@ const app = {
     locationsCollection.initial,
     motivationsCollection.initial,
     objectsCollection.initial,
-    weaponsCollection.initial
+    weaponsCollection.initial,
+    responsibilitiesCollection.initial
   ) as IAppModel,
   actions: (update: UpdateStream, states: flyd.Stream<IAppModel>) =>
     Object.assign(
@@ -58,7 +87,8 @@ const app = {
       locationsCollection.actions(update, states),
       motivationsCollection.actions(update, states),
       objectsCollection.actions(update, states),
-      weaponsCollection.actions(update, states)
+      weaponsCollection.actions(update, states),
+      responsibilitiesCollection.actions(update, states)
     ) as IActions,
 };
 

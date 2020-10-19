@@ -5,15 +5,17 @@
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid>
           <v-row>
-            <v-col xs="6" sm="2" v-for="b in blocks" :key="b.id">
-              <div class="sentence-block pre">
-                <v-icon>{{
-                  b.id === "actors_demonstrate" ? "mdi-checkbox-blank-outline" : "mdi-checkbox-marked-outline"
-                }}</v-icon>
-              </div>
-              <div class="sentence-block pre">{{ `${b.prefix} ` }}</div>
-              <div class="sentence-block main">{{ `${getTranslateKey(b.blocktype)} ` }}</div>
-              <div class="sentence-block suf">{{ `${b.suffix}` }}</div>
+            <v-col xs="6" sm="2" v-for="b in blocks" :key="b.id" class="sentence-col">
+              <v-checkbox v-model="selectedBlockIds" :value="b.id">
+                <template v-slot:label class="inline-label">
+                  <span class="sentence-block pre" v-if="b.prefix && b.prefix.length > 0">{{ $t(b.prefix) }}</span>
+                  <span class="sentence-block article" v-if="b.indefinite">
+                    {{ getTranslateKey(b.blocktype) | getArticle | trim }}
+                  </span>
+                  <span class="sentence-block main">{{ getTranslateKey(b.blocktype) }}</span>
+                  <span class="sentence-block suf" v-if="b.suffix && b.suffix.length > 0">{{ b.suffix }}</span>
+                </template>
+              </v-checkbox>
             </v-col>
           </v-row>
           <v-btn @click="addBlockSentence" color="accent darken-1" elevation="2" class="d-flex ma-4">
@@ -39,6 +41,7 @@ import ActiveScenario from "./active-scenario.vue";
 })
 export default class SentenceBuilder extends Vue {
   private blocks: Partial<IContent>[] = [];
+  private selectedBlockIds: string[] = [];
 
   constructor() {
     super();
@@ -47,6 +50,7 @@ export default class SentenceBuilder extends Vue {
   private async init() {
     this.$store.states.map((s) => {
       Vue.set(this, "blocks", s.blocks.list!);
+      Vue.set(this, "selectedBlockIds", s.app.selectedBlocks);
     });
   }
 
@@ -57,7 +61,7 @@ export default class SentenceBuilder extends Vue {
   private addBlockSentence() {
     const s: ISentence = {
       id: getUuid(),
-      blockids: this.blocks.filter((b) => b.id !== "actors_demonstrate").map((b) => b.id!),
+      blockids: this.selectedBlockIds,
     };
     this.$store.actions.changeSentence(s);
   }
@@ -72,15 +76,22 @@ export default class SentenceBuilder extends Vue {
 <style lang="css">
 .sentence-block {
   display: inline;
+  font-size: 110%;
 }
 .sentence-block.main {
   font-weight: bold;
-  font-size: 120%;
+  margin-right: 4px;
 }
 .sentence-block.pre {
-  font-size: 110%;
+  margin-right: 4px;
+}
+.sentence-block.article {
+  margin-right: 4px;
 }
 .sentence-block.suf {
-  font-size: 110%;
+  margin-right: 4px;
+}
+.sentence-col .v-input--selection-controls .v-input__slot>.v-label {
+  display: inline;
 }
 </style>

@@ -8,6 +8,7 @@ import router from "./router";
 import { store } from "./services/meiosis";
 import { i18n } from "./i18n";
 import "./assets/v2018.css";
+import { isVowelSound } from "./utils/constants";
 
 Vue.config.productionTip = false;
 Vue.prototype.$store = store;
@@ -23,6 +24,14 @@ Vue.filter("capitalize", (value: string) => {
   value = value.toString();
   return value.charAt(0).toUpperCase() + value.slice(1);
 });
+Vue.filter("getArticle", (value: string) => {
+  if (!value) return "";
+  return isVowelSound(value) ? i18n.t("UTIL.AN") : i18n.t("UTIL.A");
+});
+Vue.filter("trim", (value: string) => {
+  if (!value) return "";
+  return value.trim();
+});
 
 const vuetify = new Vuetify({
   icons: {
@@ -32,7 +41,7 @@ const vuetify = new Vuetify({
     dark: false,
     themes: {
       light: { accent: "#5FB0C7", secondary: "#ddeced" },
-      dark: { accent: "#3f798a",  secondary: "#223132" },
+      dark: { accent: "#3f798a", secondary: "#223132" },
     },
   },
 });

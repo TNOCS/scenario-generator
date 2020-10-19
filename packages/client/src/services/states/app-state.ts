@@ -1,7 +1,7 @@
 import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
-import { ISentence } from '../../models';
+import { ISentence } from "../../models";
 
 const log = console.log;
 
@@ -12,6 +12,7 @@ export interface IAppStateModel {
     language: string;
     theme: string;
     sentence: ISentence;
+    selectedBlocks: string[];
     //   page?: Dashboards;
   };
 }
@@ -21,6 +22,7 @@ export interface IAppStateActions {
   changePage: (route: string) => void;
   changeLanguage: (language: string) => void;
   changeTheme: (theme: string) => void;
+  changeSelectedBlocks: (blockids: string[]) => void;
   changeSentence: (sentence: ISentence) => void;
 }
 
@@ -37,7 +39,8 @@ export const appStateMgmt = {
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
       theme: "light",
-      sentence: {id: getUuid(), blockids: []}
+      selectedBlocks: [],
+      sentence: { id: getUuid(), blockids: [] },
     },
   },
   actions: (update, _states) => {
@@ -57,6 +60,10 @@ export const appStateMgmt = {
         log("Set theme " + theme);
         localStorage.setItem(themeStorageKey, theme);
         update({ app: { theme } });
+      },
+      changeSelectedBlocks: (selectedBlocks: string[]) => {
+        log("Set blocks " + selectedBlocks);
+        update({ app: { selectedBlocks } });
       },
       changeSentence: (sentence: ISentence) => {
         log("Set sentence " + sentence.id);

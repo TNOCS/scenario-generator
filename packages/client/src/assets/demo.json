@@ -2,39 +2,73 @@
   "blocks": [
     {
       "id": "actors_attack",
-      "prefix": "A",
+      "indefinite": true,
+      "prefix": "",
       "suffix": "wants to attack",
       "blocktype": "actors"
     },
     {
       "id": "actors_demonstrate",
-      "prefix": "A",
+      "indefinite": true,
+      "prefix": "",
       "suffix": "wants to demonstrate for",
       "blocktype": "actors"
     },
     {
       "id": "object_1",
-      "prefix": "a",
+      "indefinite": true,
+      "prefix": "",
       "suffix": "",
       "blocktype": "objects"
     },
     {
       "id": "location_1",
+      "indefinite": false,
       "prefix": "in",
       "suffix": "",
       "blocktype": "locations"
     },
     {
+      "id": "location_2",
+      "indefinite": false,
+      "prefix": "at",
+      "suffix": "",
+      "blocktype": "locations"
+    },
+    {
+      "id": "location_3",
+      "indefinite": true,
+      "prefix": "",
+      "suffix": "",
+      "blocktype": "locations"
+    },
+    {
       "id": "motivation_1",
+      "indefinite": false,
       "prefix": "for",
       "suffix": "reasons",
       "blocktype": "motivations"
     },
     {
       "id": "weapons_1",
-      "prefix": "with a",
+      "indefinite": true,
+      "prefix": "with",
       "suffix": "",
       "blocktype": "weapons"
+    },
+    {
+      "id": "responsibilities_1",
+      "indefinite": false,
+      "prefix": "is the responsibility of",
+      "suffix": "",
+      "blocktype": "responsibilities"
+    },
+    {
+      "id": "responsibilities_2",
+      "indefinite": true,
+      "prefix": "is the responsibility of",
+      "suffix": "party",
+      "blocktype": "responsibilities"
     }
   ],
   "scenarios": ["Demo"],
@@ -42,5 +76,6 @@
   "locations": ["Washington", "Vietnam", "NYC"],
   "motivations": ["Money", "Justice", "Revenge"],
   "objects": ["Church", "Park", "Palace", "Airport"],
-  "weapons": ["Gun", "Drone", "Bomb", "Helicopter"]
+  "weapons": ["Gun", "Drone", "Bomb", "Helicopter"],
+  "responsibilities": ["Private", "Public"]
 }

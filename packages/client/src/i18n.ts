@@ -3,6 +3,7 @@ import VueI18n from "vue-i18n";
 import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import nl from "./assets/translations/nl.json";
 import gb from "./assets/translations/gb.json";
+import { isVowelSound } from "./utils/constants";
 
 // register i18n module
 Vue.use(VueI18n);
@@ -16,6 +17,10 @@ const i18n = new VueI18n({
   locale: localStorage.getItem(languageStorageKey) || "gb", // set locale
   fallbackLocale: "gb",
   messages, // set locale messages
+  modifiers: {
+    addArticle: (str) => (isVowelSound(str) ? `${translate("AN")} ${str}` : `${translate("A")}`),
+    getArticle: (str) => (isVowelSound(str) ? translate("AN") : translate("A")),
+  },
 });
 
 const translate = (key: string): string => {

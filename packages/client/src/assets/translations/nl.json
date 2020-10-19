@@ -24,8 +24,13 @@
       "LOCATION": "locatie | locaties",
       "MOTIVATION": "motivatie | motivaties",
       "OBJECT": "object | objecten",
+      "RESPONSIBILITY": "verantwoordelijkheid | verantwoordelijkheden",
       "SCENARIO": "scenario | scenarios",
       "WEAPON": "wapen | wapens"
+    },
+    "UTIL": {
+      "A": "een",
+      "AN": "een"
     }
   }
 }

@@ -31,8 +31,8 @@
           </v-btn>
           <div style="margin-left: -8px" class="overline py-4">{{ `3. Scenario` }}</div>
           <div v-if="scenario && scenario.sentences">
-            <div v-for="se in scenario.sentences" :key="se">
-              {{ se }}
+            <div v-for="(se, idx) in scenario.sentences" :key="idx">
+              {{ se }}.
             </div>
           </div>
         </v-container>
@@ -102,6 +102,8 @@ export default class ScenarioBuilder extends Vue {
     }, "");
     this.scenario.sentences.push(result);
     this.$store.actions.scenarios.save(this.scenario);
+    this.$store.actions.changeSelectedBlocks([]);
+    this.$store.actions.changeSentence({ id: getUuid(), blockids: [] });
   }
 
   mounted() {
