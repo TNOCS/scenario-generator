@@ -94,4 +94,7 @@ export default class SentenceBuilder extends Vue {
 .sentence-col .v-input--selection-controls .v-input__slot>.v-label {
   display: inline;
 }
+.sentence-col .v-input--selection-controls {
+  margin-top: 8px;
+}
 </style>

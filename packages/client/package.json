@@ -20,6 +20,7 @@
     "date-fns": "^2.16.1",
     "flyd": "^0.2.8",
     "lodash": "^4.17.20",
+    "overpass-frontend": "^2.4.11",
     "query-string": "^6.13.5",
     "roboto-fontface": "^0.10.0",
     "splitpanes": "^2.3.3",

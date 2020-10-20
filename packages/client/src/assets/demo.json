@@ -104,6 +104,48 @@
       "prefix": "in",
       "suffix": "weather",
       "blocktype": "weatherconditions"
+    },
+    {
+      "id": "weatherbehaviour_1",
+      "indefinite": false,
+      "prefix": "weather is",
+      "suffix": "",
+      "blocktype": "weatherbehaviour"
+    },
+    {
+      "id": "targettypes_1",
+      "indefinite": false,
+      "prefix": "target is of type",
+      "suffix": "",
+      "blocktype": "targettypes"
+    },
+    {
+      "id": "targettypes_2",
+      "indefinite": false,
+      "prefix": "of type",
+      "suffix": "",
+      "blocktype": "targettypes"
+    },
+    {
+      "id": "equipment_1",
+      "indefinite": true,
+      "prefix": "with",
+      "suffix": "",
+      "blocktype": "equipment"
+    },
+    {
+      "id": "equipment_2",
+      "indefinite": false,
+      "prefix": "with",
+      "suffix": "",
+      "blocktype": "equipment"
+    },
+    {
+      "id": "capabilities_1",
+      "indefinite": false,
+      "prefix": "has",
+      "suffix": "capabilities",
+      "blocktype": "capabilities"
     }
   ],
   "scenarios": ["Demo"],
@@ -114,5 +156,9 @@
   "objects": ["Church", "Park", "Palace", "Airport"],
   "weapons": ["Gun", "Drone", "Bomb", "Helicopter"],
   "weatherconditions": ["Rainy", "Sunny", "Windy", "Cloudy"],
-  "responsibilities": ["Private", "Public"]
+  "weatherbehaviour": ["Stable", "Changing"],
+  "responsibilities": ["Private", "Public"],
+  "capabilities": ["Knowledge", "Water"],
+  "equipment": ["Lawn mower", "Knife", "Rifle"],
+  "targettypes": ["Bicycle", "Public building", "Lake"]
 }
