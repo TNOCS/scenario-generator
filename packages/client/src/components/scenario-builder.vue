@@ -32,9 +32,12 @@
           <v-btn @click="addSentence" color="accent darken-1" elevation="2" class="d-flex ma-4">
             {{ $t("APP.ADD", { item: $tc("APP.SENTENCE") }) }}
           </v-btn>
-          <div style="margin-left: -8px" class="overline py-4">{{ `3. Scenario` }}</div>
-          <div v-if="scenario && scenario.sentences">
+          <!-- <div style="margin-left: -8px" class="overline py-4">{{ `3. Scenario` }}</div> -->
+          <!-- <div v-if="scenario && scenario.sentences">
             <div v-for="(se, idx) in scenario.sentences" :key="idx">{{ se | capitalize }}</div>
+          </div> -->
+          <div style="margin-left: -16px">
+            <ScenarioText />
           </div>
         </v-container>
       </v-form>
@@ -49,9 +52,10 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { IBlock, IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
+import ScenarioText from "../components/scenario-text.vue";
 
 @Component({
-  components: {},
+  components: { ScenarioText },
 })
 export default class ScenarioBuilder extends Vue {
   private columns: Record<CollectionNames, Partial<IContent>[]> = {} as Record<CollectionNames, Partial<IContent>[]>;
@@ -104,9 +108,9 @@ export default class ScenarioBuilder extends Vue {
       parts.push(cur.indefinite ? this.$options.filters!.getArticle(this.answers[cur.id]) : "");
       parts.push(this.answers[cur.id]);
       parts.push(cur.suffix);
-      return `${parts.filter(p => p && p.length > 0).join(" ")}`;
+      return `${parts.filter((p) => p && p.length > 0).join(" ")}`;
     }, "");
-    this.scenario.sentences.push(this.$options.filters!.capitalize(`${result}`));
+    this.scenario.sentences.push(this.$options.filters!.capitalize(`${result}.`));
     this.$store.actions.scenarios.save(this.scenario);
     this.$store.actions.changeSelectedBlocks([]);
     this.$store.actions.changeSentence({ id: getUuid(), blockids: [] });
@@ -141,6 +145,5 @@ export default class ScenarioBuilder extends Vue {
   display: inline;
 }
 .build-block.article {
-
 }
 </style>

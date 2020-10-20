@@ -27,6 +27,12 @@
               <vl-source-vector>
                 <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties">
                   <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point>
+                  <vl-style-box>
+                    <vl-style-circle :radius="10">
+                      <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
+                      <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
+                    </vl-style-circle>
+                  </vl-style-box>
                 </vl-feature>
               </vl-source-vector>
             </vl-layer-vector>
@@ -38,10 +44,12 @@
 </template>
 
 <script lang="ts">
-import _, { cloneDeep, random, range } from "lodash";
+import _, { cloneDeep, random, range, throttle } from "lodash";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { createStyle } from "vuelayers/lib/ol-ext/style";
 import { Map } from "vuelayers";
+import { Feature, FeatureCollection, Point } from "geojson";
+import center from "@turf/center";
 
 @Component({
   components: {},
@@ -64,29 +72,26 @@ export default class MapCard extends Vue {
     }
   }
 
-  private async updateMap() {
-    console.log(`Get map data`);
-    const features = _.chain([1, 2, 3, 4])
-      .map((d) => {
-        const coords = [Math.random() * 40, Math.random() * 40];
-        return {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: coords,
-          },
-          properties: {
-            test: "Test " + d,
-          },
-        };
-      })
-      .filter((f) => !!f)
-      .value();
+  private zoomMap = _.throttle(this.zoomMapThrottled, 500);
 
-    setTimeout(() => {
-      this.features = features;
-    }, 20);
-    console.log(`Got map data`);
+  private zoomMapThrottled() {
+    if (!this.features) return;
+    const c: Feature<any> = center({ type: "FeatureCollection", features: this.features } as FeatureCollection<
+      any,
+      any
+    >);
+    this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
+    this.zoom = 14;
+  }
+
+  private async addFeature(f: Feature<Point>) {
+    this.features.push(f);
+    this.zoomMap();
+  }
+
+  private async updateMap() {
+    console.log(`Request map data`);
+    const data = this.$overpass.getGeojson("Buitenpost", this.addFeature);
   }
 
   async mounted() {

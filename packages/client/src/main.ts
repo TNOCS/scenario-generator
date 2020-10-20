@@ -11,9 +11,11 @@ import "./assets/v2018.css";
 import { isVowelSound } from "./utils/constants";
 import VueLayers from "vuelayers";
 import "vuelayers/lib/style.css"; // needs css-loader
+import OverpassService from './services/overpass-service';
 
 Vue.config.productionTip = false;
 Vue.prototype.$store = store;
+Vue.prototype.$overpass = new OverpassService();
 
 Vue.use(Vuetify);
 Vue.use(VueLayers, {

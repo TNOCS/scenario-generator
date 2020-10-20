@@ -2,3 +2,5 @@ export * from './block';
 export * from './content';
 export * from './scenario';
 export * from './sentence';
+export * from './nominatim';
+export * from './overpassresult';

@@ -37,6 +37,7 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "objects",
   "targettypes",
   "weapons",
+  "weatherconditions",
   "weatherbehaviour",
   "responsibilities",
 ];
