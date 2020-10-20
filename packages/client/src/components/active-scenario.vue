@@ -31,7 +31,7 @@ export default class ActiveScenario extends Vue {
   private activeScenarioName: string = "None";
 
   private async addScenario() {
-    const scenario: IScenario = { id: getUuid(), name: "Nieuw scenario", type: "scenarios", sentences: [] };
+    const scenario: IScenario = { id: getUuid(), name: "Nieuw scenario", category: 'SCENARIO', type: "scenarios", sentences: [] };
     await this.$store.actions.scenarios.save(scenario);
     await this.$store.actions.scenarios.load(scenario.id);
   }

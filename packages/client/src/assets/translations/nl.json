@@ -14,6 +14,7 @@
       "LOCATION": "lokatie",
       "NAME": "naam",
       "SAVE": "opslaan",
+      "SCENARIO": "scenario",
       "SENTENCE": "zin | zinnen",
       "SHOW_SCENARIO": "toon scenario",
       "STRUCTURE": "structuur",
@@ -22,19 +23,19 @@
     "COMP": {
       "ACTOR": "actor | actors",
       "BLOCK": "blok | blokken",
-      "EQUIPMENT": "uitrusting | uitrustingen",
       "CAPABILITY": "capability | capabilities",
-      "TARGET_TYPE": "doeltype | doeltypes",
-      "PHYSICAL_ANGLE": "fysieke hoek | fysieke hoek",
+      "EQUIPMENT": "uitrusting | uitrustingen",
       "LOCATION": "locatie | locaties",
       "MODUS_OPERANDUS": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
       "OBJECT": "object | objecten",
+      "PHYSICAL_ANGLE": "fysieke hoek | fysieke hoek",
       "RESPONSIBILITY": "verantwoordelijkheid | verantwoordelijkheden",
       "SCENARIO": "scenario | scenarios",
+      "TARGET_TYPE": "doeltype | doeltypes",
       "WEAPON": "wapen | wapens",
-      "WEATHER_CONDITION": "weersconditie | weerscondities",
-      "WEATHER_BEHAVIOUR": "weersgedrag | weersgedragingen"
+      "WEATHER_BEHAVIOUR": "weersgedrag | weersgedragingen",
+      "WEATHER_CONDITION": "weersconditie | weerscondities"
     },
     "UTIL": {
       "A": "een",

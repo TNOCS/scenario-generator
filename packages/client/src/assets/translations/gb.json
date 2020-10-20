@@ -14,6 +14,7 @@
       "LOCATION": "location",
       "NAME": "name",
       "SAVE": "save",
+      "SCENARIO": "Scenario",
       "SENTENCE": "sentence | sentences",
       "SHOW_SCENARIO": "Show scenario",
       "STRUCTURE": "structure",
@@ -22,19 +23,19 @@
     "COMP": {
       "ACTOR": "actor | actors",
       "BLOCK": "block | blocks",
-      "EQUIPMENT": "equipment | equipments",
       "CAPABILITY": "capability | capabilities",
-      "TARGET_TYPE": "target type | target types",
-      "PHYSICAL_ANGLE": "physical angle | physical angles",
+      "EQUIPMENT": "equipment | equipments",
       "LOCATION": "location | locations",
       "MODUS_OPERANDUS": "modus operandus | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "OBJECT": "object | objects",
+      "PHYSICAL_ANGLE": "physical angle | physical angles",
       "RESPONSIBILITY": "responsibility | responsibilities",
       "SCENARIO": "scenario | scenarios",
+      "TARGET_TYPE": "target type | target types",
       "WEAPON": "weapon | weapons",
-      "WEATHER_CONDITION": "weather condition | weather conditions",
-      "WEATHER_BEHAVIOUR": "weather behaviour | weather behaviours"
+      "WEATHER_BEHAVIOUR": "weather behaviour | weather behaviours",
+      "WEATHER_CONDITION": "weather condition | weather conditions"
     },
     "UTIL": {
       "A": "a",

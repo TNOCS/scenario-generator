@@ -1,5 +1,7 @@
 import "vuetify/dist/vuetify.min.css";
 import "@mdi/font/css/materialdesignicons.css";
+import '@dzangolab/vue-country-flag-icon/dist/CountryFlag.css';
+import CountryFlag from '@dzangolab/vue-country-flag-icon';
 import App from "./App.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
@@ -21,6 +23,7 @@ Vue.use(Vuetify);
 Vue.use(VueLayers, {
   dataProjection: "EPSG:4326",
 });
+Vue.use(CountryFlag);
 
 Vue.filter("uppercase", (value: string) => {
   if (!value) return "";
