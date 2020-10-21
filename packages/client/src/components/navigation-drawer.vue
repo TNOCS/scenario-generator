@@ -104,6 +104,7 @@ export default class NavigationDrawer extends Vue {
   }
 
   async mounted() {
+    console.log(`navigation mounted`);
     this.$store.states.map((a) => {
       this.activeLanguage = a.app.language;
       this.activeTheme = a.app.theme;

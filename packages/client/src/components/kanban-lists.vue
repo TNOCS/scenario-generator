@@ -2,7 +2,7 @@
   <div>
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab v-for="cat in categories" :key="cat">
+      <v-tab v-for="cat in categoryNames" :key="cat">
         {{ cat }}
       </v-tab>
     </v-tabs>
@@ -29,7 +29,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent } from "../models";
+import { ContentCategory, IContent } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import KanbanList from "./kanban-list.vue";
@@ -40,7 +40,10 @@ import KanbanList from "./kanban-list.vue";
 export default class KanbanLists extends Vue {
   private columns: Array<CollectionNames> = [];
   private tab: number = 0;
-  private categories: string[] = [];
+  private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
+    [key in ContentCategory]: Array<CollectionNames>;
+  };
+  private categoryNames: ContentCategory[] = [];
 
   constructor() {
     super();
@@ -52,6 +55,10 @@ export default class KanbanLists extends Vue {
       CollectionNamesArr.forEach((n) => {
         this.columns.push(n);
       });
+      this.categories = s.scenarios.current
+        ? s.scenarios.current!.categories
+        : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
   }
 
@@ -64,7 +71,7 @@ export default class KanbanLists extends Vue {
     return id;
   }
 
-  mounted() {
+  async mounted() {
     console.log(`KanbanLists mounted`);
     this.init();
   }

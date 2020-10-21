@@ -1,4 +1,4 @@
-import { CollectionNames } from "@/services/meiosis";
+import { CollectionNames } from "../services/meiosis";
 import { IContent } from ".";
 import { ContentCategory } from "./content";
 

@@ -64,6 +64,7 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "OpenCompartments",
   "RelationOwnerObjectAndOwnerSecuritySystem",
 ];
+export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, 'scenarios'];
 
 export type ICollectionRecord = { [key in CollectionNames]: ICollectionState<IContent> };
 
@@ -80,15 +81,13 @@ const app = {
     {},
     appStateMgmt.initial,
     scenariosCollection.initial,
-    // blocksCollection.initial,
     ...Object.values(AllCollections).map((coll) => coll.initial)
   ) as IAppModel,
   actions: (update: UpdateStream, states: flyd.Stream<IAppModel>) =>
     Object.assign(
       {},
       appStateMgmt.actions(update, states),
-      // scenariosCollection.actions(update, states),
-      // blocksCollection.actions(update, states),
+      scenariosCollection.actions(update, states),
       ...Object.values(AllCollections).map((coll) => coll.actions(update, states))
     ) as IActions,
 };
