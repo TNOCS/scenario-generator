@@ -1,14 +1,8 @@
 import { merge } from "../utils/mergerino";
 import { scan, stream } from "flyd";
-import {
-  collectionFactory,
-  CollectionsActions,
-  CollectionsModel,
-  CollectionType,
-  ICollectionState,
-} from "./states/collection-state";
+import { collectionFactory, CollectionsActions, CollectionsModel, CollectionType, ICollectionState } from "./states/collection-state";
 import { appStateMgmt, IAppStateActions, IAppStateModel } from "./states/app-state";
-import { IBlock, IContent, IScenario } from "../models";
+import { IContent, IScenario } from "../models";
 
 export interface IActions extends IAppStateActions, CollectionsActions<IContent | IScenario> {}
 
@@ -17,71 +11,75 @@ export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppMode
 export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
 export type CollectionNames =
-  | "blocks"
-  | "capabilities"
-  | "equipment"
-  | "scenarios"
-  | "actors"
-  | "locations"
-  | "motivations"
-  | "modusoperandi"
-  | "objects"
-  | "targettypes"
-  | "weapons"
-  | "weatherconditions"
-  | "weatherbehaviour"
-  | "responsibilities";
+  | "ThreatDirection"
+  | "Impact"
+  | "Duration"
+  | "Persons"
+  | "Motivation"
+  | "Capabilities"
+  | "PhysicalAngleOfAttack"
+  | "ModusOperandi"
+  | "Equipment"
+  | "TargetType"
+  | "Responsibility"
+  | "WeatherType"
+  | "WeatherBehaviour"
+  | "TypeOfEnvironment"
+  | "PeopleDensity"
+  | "Intent"
+  | "ExistingInfra"
+  | "PrivacyAwareness"
+  | "SecurityAwareness"
+  | "TypeOfObject"
+  | "AvailableBudget"
+  | "CompartmentsPresent"
+  | "OpenCompartments"
+  | "RelationOwnerObjectAndOwnerSecuritySystem";
+
+export type CollectionNamesPlus = CollectionNames | 'scenarios';
+
 export const CollectionNamesArr: Array<CollectionNames> = [
-  "blocks",
-  "capabilities",
-  "equipment",
-  "scenarios",
-  "actors",
-  "locations",
-  "motivations",
-  "modusoperandi",
-  "objects",
-  "targettypes",
-  "weapons",
-  "weatherconditions",
-  "weatherbehaviour",
-  "responsibilities",
+  "ThreatDirection",
+  "Impact",
+  "Duration",
+  "Persons",
+  "Motivation",
+  "Capabilities",
+  "PhysicalAngleOfAttack",
+  "ModusOperandi",
+  "Equipment",
+  "TargetType",
+  "Responsibility",
+  "WeatherType",
+  "WeatherBehaviour",
+  "TypeOfEnvironment",
+  "PeopleDensity",
+  "Intent",
+  "ExistingInfra",
+  "PrivacyAwareness",
+  "SecurityAwareness",
+  "TypeOfObject",
+  "AvailableBudget",
+  "CompartmentsPresent",
+  "OpenCompartments",
+  "RelationOwnerObjectAndOwnerSecuritySystem",
 ];
-export const TranslateKeys: { [key in CollectionNames]: string } = {
-  blocks: "BLOCK",
-  capabilities: "CAPABILITY",
-  equipment: "EQUIPMENT",
-  scenarios: "SCENARIO",
-  actors: "ACTOR",
-  locations: "LOCATION",
-  motivations: "MOTIVATION",
-  modusoperandi: "MODUS_OPERANDUS",
-  weapons: "WEAPON",
-  objects: "OBJECT",
-  targettypes: "TARGET_TYPE",
-  responsibilities: "RESPONSIBILITY",
-  weatherconditions: "WEATHER_CONDITION",
-  weatherbehaviour: "WEATHER_BEHAVIOUR",
-};
 
 export type ICollectionRecord = { [key in CollectionNames]: ICollectionState<IContent> };
 
 export const AllCollections: ICollectionRecord = {} as ICollectionRecord;
 CollectionNamesArr.forEach((name) => (AllCollections[name] = collectionFactory<IContent>(name)));
-
-// const blocksCollection = collectionFactory<IBlock>("blocks");
-// const scenariosCollection = collectionFactory<IScenario>("scenarios");
+const scenariosCollection = collectionFactory<IScenario>("scenarios");
 
 export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
-  // blocks: CollectionType<IScenario>;
-  // scenarios: CollectionType<IScenario>;
+  scenarios: CollectionType<IScenario>;
 }
 
 const app = {
   initial: Object.assign(
     {},
     appStateMgmt.initial,
-    // scenariosCollection.initial,
+    scenariosCollection.initial,
     // blocksCollection.initial,
     ...Object.values(AllCollections).map((coll) => coll.initial)
   ) as IAppModel,

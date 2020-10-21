@@ -4,6 +4,16 @@
     <v-row no-gutters align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="100" contain />
     </v-row>
+    <v-row no-gutters align-content="center" justify="center" class="mt-2">
+      <v-menu v-model="importMenu" :close-on-content-click="false" :nudge-width="200" offset-x>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn v-on="on" v-bind="attrs" color="accent darken-1" small elevation="2" class="mr-1">
+            <v-icon class="pr-1" small>mdi-import</v-icon> Import/export
+          </v-btn>
+        </template>
+        <ImportExportCard @close="closeImportMenu"></ImportExportCard>
+      </v-menu>
+    </v-row>
     <v-card flat tile class="" style="background: transparent">
       <div class="overline px-2 py-2">{{ $t("APP.LANGUAGE") }}</div>
       <v-divider />
@@ -58,9 +68,10 @@ import { languageStorageKey } from "../i18n";
 import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import { IScenario } from "../models";
 import AddComponentCard from "./add-component-card.vue";
+import ImportExportCard from "./import-export-card.vue";
 
 @Component({
-  components: { CountryFlag, AddComponentCard },
+  components: { CountryFlag, AddComponentCard, ImportExportCard },
 })
 export default class NavigationDrawer extends Vue {
   private languages: string[] = ["gb", "nl"];
@@ -70,6 +81,7 @@ export default class NavigationDrawer extends Vue {
   private activeTheme: string = "";
   private activeScenario: Partial<IScenario> = {};
   private menu: boolean = false;
+  private importMenu: boolean = false;
 
   private async languageChanged() {
     this.$store.actions.changeLanguage(this.activeLanguage);
@@ -85,6 +97,10 @@ export default class NavigationDrawer extends Vue {
 
   private async closeMenu() {
     this.menu = false;
+  }
+
+  private async closeImportMenu() {
+    this.importMenu = false;
   }
 
   async mounted() {

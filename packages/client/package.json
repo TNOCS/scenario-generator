@@ -22,6 +22,7 @@
     "@types/geojson": "^7946.0.7",
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
+    "file-saver": "^2.0.2",
     "flyd": "^0.2.8",
     "lodash": "^4.17.20",
     "overpass-frontend": "^2.4.11",
@@ -41,6 +42,7 @@
   "devDependencies": {
     "@mdi/font": "^5.6.55",
     "@turf/turf": "^5.1.6",
+    "@types/file-saver": "^2.0.1",
     "@types/lodash": "^4.14.161",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.3.0",

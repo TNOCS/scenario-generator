@@ -1,20 +1,29 @@
-import { IBlock, IContent } from "../models";
+import { IBlock, IContent, IScenario } from "../models";
 import demo from "../assets/demo.json";
-import { CollectionNames } from "./meiosis";
 import { getUuid } from "../utils/constants";
+import { CollectionNames, CollectionNamesArr, CollectionNamesPlus } from './meiosis';
+
+interface IDemoScenarios {
+  scenarios: IScenario[];
+}
+type IDemoRest = {
+  [key in CollectionNames]: string[];
+};
+type IDemo = IDemoScenarios & IDemoRest;
 
 const log = console.log;
 const error = console.error;
+const demoFile = demo as any as IDemo;
 
 const createLocalStorageFactory = () => {
-  return <T extends IContent>(listKey: CollectionNames) => {
+  return <T extends IContent>(listKey: CollectionNamesPlus) => {
     log(`Start LocalStorageFactory ${listKey}...`);
 
-    if (!localStorage.getItem(listKey)) {
+    if (!localStorage.getItem(listKey) && demoFile.hasOwnProperty(listKey)) {
       log(`Loading example keys for ${listKey}...`);
-      const items: IContent[] = (demo[listKey as CollectionNames] as (string | IBlock)[]).map((nameOrObj: string | IBlock) => {
-        if (listKey === "blocks") {
-          return nameOrObj as IContent;
+      const items: IContent[] = (demoFile[listKey] as (string | IScenario)[]).map((nameOrObj: string | IScenario) => {
+        if (listKey === "scenarios") {
+          return nameOrObj as IScenario;
         } else {
           return { id: getUuid(), name: nameOrObj, type: listKey } as IContent;
         }

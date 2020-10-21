@@ -1,17 +1,27 @@
 <template>
   <div>
-    <v-card dense flat tile class="flex-card" style="background: transparent">
-      <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
-      <v-card-text class="text-description ma-0 pa-2">
-        <v-container fluid class="ma-0 pa-0">
-          <v-row no-gutters v-for="(val, i) in columns" :key="i" class="kanban-col">
-            <v-col cols="12" class="my-1 elevation-1">
-              <KanbanList :itemkey="val" />
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-    </v-card>
+    <v-tabs v-model="tab">
+      <v-tabs-slider color="blue"></v-tabs-slider>
+      <v-tab v-for="cat in categories" :key="cat">
+        {{ cat }}
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab">
+      <v-tab-item v-for="cat in categories" :key="cat">
+        <v-card dense flat tile class="flex-card" style="background: transparent">
+          <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
+          <v-card-text class="text-description ma-0 pa-2">
+            <v-container fluid class="ma-0 pa-0">
+              <v-row no-gutters v-for="(val, i) in columns" :key="i" class="kanban-col">
+                <v-col cols="12" class="my-1 elevation-1">
+                  <KanbanList :itemkey="val" />
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
@@ -25,10 +35,12 @@ import { getUuid } from "../utils/constants";
 import KanbanList from "./kanban-list.vue";
 
 @Component({
-  components: {  KanbanList },
+  components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
   private columns: Array<CollectionNames> = [];
+  private tab: number = 0;
+  private categories: string[] = [];
 
   constructor() {
     super();
@@ -38,7 +50,7 @@ export default class KanbanLists extends Vue {
     this.$store.states.map((s) => {
       this.columns.length = 0;
       CollectionNamesArr.forEach((n) => {
-        if (n != "blocks") this.columns.push(n);
+        if (n != "scenarios") this.columns.push(n);
       });
     });
   }

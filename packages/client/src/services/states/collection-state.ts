@@ -1,4 +1,4 @@
-import { CollectionNames, IAppModel, UpdateStream } from "../meiosis";
+import { CollectionNames, CollectionNamesPlus, IAppModel, UpdateStream } from "../meiosis";
 import { IContent } from "../../models";
 import { localStorageFactory } from '../localstorage-service';
 
@@ -34,7 +34,7 @@ export interface ICollectionState<T extends IContent> {
   actions: (us: UpdateStream, states: flyd.Stream<IAppModel>) => CollectionsActions<T>;
 }
 
-export const collectionFactory = <T extends IContent>(collectionName: CollectionNames) => {
+export const collectionFactory = <T extends IContent>(collectionName: CollectionNamesPlus) => {
   const lsSvc = localStorageFactory<T>(collectionName);
 
   return {

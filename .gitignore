@@ -31,3 +31,4 @@ packages/server/dashboard/
 exec/dashboard/
 exec/exec.7z
 *.7z
+packages/client/_morf.json

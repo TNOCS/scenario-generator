@@ -9,7 +9,10 @@
       "COMPONENT": "component | components",
       "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
+      "EXPORT": "Export file",
       "FILL_SENTENCE": "Fill the sentence",
+      "IMPORT": "Import file",
+      "IMPORT_EXPORT_TITLE": "Import/export project",
       "LANGUAGE": "language",
       "LOCATION": "location",
       "NAME": "name",
@@ -22,7 +25,6 @@
     },
     "COMP": {
       "ACTOR": "actor | actors",
-      "BLOCK": "block | blocks",
       "CAPABILITY": "capability | capabilities",
       "EQUIPMENT": "equipment | equipments",
       "LOCATION": "location | locations",

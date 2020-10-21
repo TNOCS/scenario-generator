@@ -1,8 +1,8 @@
-import { CollectionNames } from "../services/meiosis";
+import { CollectionNamesPlus } from "../services/meiosis";
 export interface IBasicContent {
   id: string;
   name: string;
-  type: CollectionNames;
+  type: CollectionNamesPlus;
 }
 
 export type ContentCategory = "THREAT" | "CONTEXT" | "SCENARIO";

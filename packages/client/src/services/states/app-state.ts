@@ -12,7 +12,6 @@ export interface IAppStateModel {
     language: string;
     theme: string;
     sentence: ISentence;
-    selectedBlocks: string[];
     //   page?: Dashboards;
   };
 }
@@ -22,7 +21,8 @@ export interface IAppStateActions {
   changePage: (route: string) => void;
   changeLanguage: (language: string) => void;
   changeTheme: (theme: string) => void;
-  changeSelectedBlocks: (blockids: string[]) => void;
+  importState: (state: string) => void;
+  exportState: () => string;
   changeSentence: (sentence: ISentence) => void;
 }
 
@@ -39,7 +39,6 @@ export const appStateMgmt = {
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
       theme: localStorage.getItem(themeStorageKey) || "light",
-      selectedBlocks: [],
       sentence: { id: getUuid(), blockids: [] },
     },
   },
@@ -61,9 +60,13 @@ export const appStateMgmt = {
         localStorage.setItem(themeStorageKey, theme);
         update({ app: { theme } });
       },
-      changeSelectedBlocks: (selectedBlocks: string[]) => {
-        log("Set blocks " + selectedBlocks);
-        update({ app: { selectedBlocks } });
+      importState: (state: string) => {
+        log("Import state");
+        // update({ app: { selectedBlocks } });
+      },
+      exportState: () => {
+        log("Export state");
+        return JSON.stringify(_states);
       },
       changeSentence: (sentence: ISentence) => {
         log("Set sentence " + sentence.id);

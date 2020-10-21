@@ -1,164 +1,33 @@
 {
-  "blocks": [
+  "scenarios": [
     {
-      "id": "actors_1",
-      "indefinite": true,
-      "prefix": "",
-      "suffix": "",
-      "blocktype": "actors"
-    },
-    {
-      "id": "actors_2",
-      "indefinite": false,
-      "prefix": "",
-      "suffix": "",
-      "blocktype": "actors"
-    },
-    {
-      "id": "mo_1",
-      "indefinite": true,
-      "prefix": "wants to perform",
-      "suffix": "",
-      "blocktype": "modusoperandi"
-    },
-    {
-      "id": "object_1",
-      "indefinite": true,
-      "prefix": "",
-      "suffix": "",
-      "blocktype": "objects"
-    },
-    {
-      "id": "object_2",
-      "indefinite": true,
-      "prefix": "of",
-      "suffix": "",
-      "blocktype": "objects"
-    },
-    {
-      "id": "location_1",
-      "indefinite": false,
-      "prefix": "in",
-      "suffix": "",
-      "blocktype": "locations"
-    },
-    {
-      "id": "location_2",
-      "indefinite": true,
-      "prefix": "at",
-      "suffix": "",
-      "blocktype": "locations"
-    },
-    {
-      "id": "location_3",
-      "indefinite": true,
-      "prefix": "",
-      "suffix": "",
-      "blocktype": "locations"
-    },
-    {
-      "id": "motivation_1",
-      "indefinite": false,
-      "prefix": "for",
-      "suffix": "reasons",
-      "blocktype": "motivations"
-    },
-    {
-      "id": "motivation_2",
-      "indefinite": false,
-      "prefix": "the motivation is",
-      "suffix": "",
-      "blocktype": "motivations"
-    },
-    {
-      "id": "weapons_1",
-      "indefinite": true,
-      "prefix": "with",
-      "suffix": "",
-      "blocktype": "weapons"
-    },
-    {
-      "id": "responsibilities_1",
-      "indefinite": false,
-      "prefix": "is the responsibility of",
-      "suffix": "",
-      "blocktype": "responsibilities"
-    },
-    {
-      "id": "responsibilities_2",
-      "indefinite": true,
-      "prefix": "is the responsibility of",
-      "suffix": "party",
-      "blocktype": "responsibilities"
-    },
-    {
-      "id": "weatherconditions_1",
-      "indefinite": false,
-      "prefix": "the weather is",
-      "suffix": "",
-      "blocktype": "weatherconditions"
-    },
-    {
-      "id": "weatherconditions_2",
-      "indefinite": false,
-      "prefix": "in",
-      "suffix": "weather",
-      "blocktype": "weatherconditions"
-    },
-    {
-      "id": "weatherbehaviour_1",
-      "indefinite": false,
-      "prefix": "weather is",
-      "suffix": "",
-      "blocktype": "weatherbehaviour"
-    },
-    {
-      "id": "targettypes_1",
-      "indefinite": false,
-      "prefix": "target is of type",
-      "suffix": "",
-      "blocktype": "targettypes"
-    },
-    {
-      "id": "targettypes_2",
-      "indefinite": false,
-      "prefix": "of type",
-      "suffix": "",
-      "blocktype": "targettypes"
-    },
-    {
-      "id": "equipment_1",
-      "indefinite": true,
-      "prefix": "with",
-      "suffix": "",
-      "blocktype": "equipment"
-    },
-    {
-      "id": "equipment_2",
-      "indefinite": false,
-      "prefix": "with",
-      "suffix": "",
-      "blocktype": "equipment"
-    },
-    {
-      "id": "capabilities_1",
-      "indefinite": false,
-      "prefix": "has",
-      "suffix": "capabilities",
-      "blocktype": "capabilities"
+      "id": "demo1",
+      "type": "scenarios",
+      "category": "SCENARIO",
+      "name": "Demo",
+      "categories": {
+        "Threat": ["ThreatDirection", "Impact", "Motivation", "ModusOperandi", "Equipment", "Responsibility"],
+        "Context": [
+          "WeatherType",
+          "WeatherBehaviour",
+          "TypeOfObject",
+          "AvailableBudget",
+          "OpenCompartments",
+          "Location"
+        ]
+      }
     }
   ],
-  "scenarios": ["Demo"],
-  "actors": ["Hannibal", "Murdock", "B.A. Baracus"],
-  "locations": ["Washington", "Vietnam", "NYC"],
-  "motivations": ["Money", "Justice", "Revenge"],
-  "modusoperandi": ["Sniper attack", "Kidnapping", "Flashmob"],
-  "objects": ["Church", "Park", "Palace", "Airport"],
-  "weapons": ["Gun", "Drone", "Bomb", "Helicopter"],
-  "weatherconditions": ["Rainy", "Sunny", "Windy", "Cloudy"],
-  "weatherbehaviour": ["Stable", "Changing"],
-  "responsibilities": ["Private", "Public"],
-  "capabilities": ["Knowledge", "Water"],
-  "equipment": ["Lawn mower", "Knife", "Rifle"],
-  "targettypes": ["Bicycle", "Public building", "Lake"]
+  "ThreatDirection": ["Hannibal", "The Romans", "Verweggistan"],
+  "Impact": ["Low", "Medium", "High"],
+  "Motivation": ["Money", "Justice", "Revenge"],
+  "ModusOperandi": ["Sniper attack", "Kidnapping", "Singing"],
+  "Equipment": ["None", "Drone", "Bomb", "Helicopter", "Hammer"],
+  "Responsibility": ["Private", "Public"],
+  "WeatherType": ["Rainy", "Sunny", "Windy", "Cloudy"],
+  "WeatherBehaviour": ["Stable", "Changing"],
+  "TypeOfObject": ["Church", "Park", "Palace", "Airport"],
+  "AvailableBudget": ["Knowledge", "Water"],
+  "OpenCompartments": ["Lawn mower", "Knife", "Rifle"],
+  "Location": ["Vietnam", "Washington", "Buitenpost"]
 }
