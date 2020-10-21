@@ -33,7 +33,7 @@ import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent } from "../models";
-import { CollectionNames, TranslateKeys } from "../services/meiosis";
+import { CollectionNames } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import KanbanCard from "./kanban-card.vue";
 import AddComponentCard from "./add-component-card.vue";
@@ -58,7 +58,7 @@ export default class KanbanList extends Vue {
 
   private async init() {
     if (!this.itemkey || !this.itemkey.length) return;
-    this.title = this.$tc(`COMP.${TranslateKeys[this.itemkey]}`, 2);
+    this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2);
     await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map((s) => {
       this.items = s[this.itemkey].list!;

@@ -34,12 +34,7 @@ export default class DescriptionCard extends Vue {
   }
 
   async mounted() {
-    await this.$store.actions.actors.updateList();
-    this.$store.states.map((s) => {
-      if (s.actors && s.actors.list) {
-        this.actors = s.actors.list;
-      }
-    });
+    await this.$store.actions.scenarios.updateList();
   }
 }
 </script>

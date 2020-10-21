@@ -50,7 +50,7 @@ import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IBlock, IContent, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
+import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import {  getUuid } from "../utils/constants";
 import ScenarioText from "../components/scenario-text.vue";
 
@@ -79,11 +79,6 @@ export default class ScenarioBuilder extends Vue {
     this.$store.states.map((s) => {
       this.scenario = s.scenarios.current;
       Vue.set(this, "sentence", s.app.sentence);
-      Vue.set(
-        this,
-        "sentenceblocks",
-        s.app.sentence.blockids.map((id) => s["blocks"].list!.find((b) => b.id === id))
-      );
       const columns = {} as Record<CollectionNames, Partial<IContent>[]>;
       CollectionNamesArr.forEach((n) => {
         columns[n] = s[n].list!;
@@ -93,7 +88,7 @@ export default class ScenarioBuilder extends Vue {
   }
 
   private getTranslateKey(itemtype: CollectionNames) {
-    return this.$tc(`COMP.${TranslateKeys[itemtype]}`);
+    return this.$tc(`COMP.${itemtype.toLocaleUpperCase()}`);
   }
 
   private async addSentence() {
@@ -101,7 +96,6 @@ export default class ScenarioBuilder extends Vue {
       alert(`Select a scenario first, by clicking a card in the "Add components" view!`);
       return;
     }
-    if (!this.scenario.sentences) this.scenario.sentences = [];
     const result = this.sentenceblocks.reduce((prev, cur, curInd) => {
       const parts: string[] = [prev];
       parts.push(cur.prefix);
@@ -110,9 +104,8 @@ export default class ScenarioBuilder extends Vue {
       parts.push(cur.suffix);
       return `${parts.filter((p) => p && p.length > 0).join(" ")}`;
     }, "");
-    this.scenario.sentences.push(this.$options.filters!.capitalize(`${result}.`));
     this.$store.actions.scenarios.save(this.scenario);
-    this.$store.actions.changeSelectedBlocks([]);
+    // this.$store.actions.changeSelectedBlocks([]);
     this.$store.actions.changeSentence({ id: getUuid(), blockids: [] });
   }
 

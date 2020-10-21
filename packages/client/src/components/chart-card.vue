@@ -39,7 +39,7 @@ export default class ChartCard extends Vue {
   }
 
   private addActor(): void {
-    this.$store.actions.actors.save({ id: getUuid(), name: "Hannibal", type: 'actors' });
+    this.$store.actions.scenarios.save({ id: getUuid(), name: "Hannibal", type: 'scenarios' });
   }
 
   destroyed() {

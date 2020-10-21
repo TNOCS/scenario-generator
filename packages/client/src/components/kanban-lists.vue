@@ -50,7 +50,7 @@ export default class KanbanLists extends Vue {
     this.$store.states.map((s) => {
       this.columns.length = 0;
       CollectionNamesArr.forEach((n) => {
-        if (n != "scenarios") this.columns.push(n);
+        this.columns.push(n);
       });
     });
   }

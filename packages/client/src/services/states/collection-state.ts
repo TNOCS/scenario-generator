@@ -27,7 +27,7 @@ export type CollectionActions<T extends IContent> = {
 };
 
 /** All actions that can be invoked per collection */
-export type CollectionsActions<T extends IContent> = Record<CollectionNames, CollectionActions<T>>;
+export type CollectionsActions<T extends IContent> = Record<CollectionNamesPlus, CollectionActions<T>>;
 
 export interface ICollectionState<T extends IContent> {
   initial: CollectionsModel<T>;

@@ -32,7 +32,7 @@ import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
+import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
 @Component({
@@ -48,13 +48,11 @@ export default class SentenceBuilder extends Vue {
 
   private async init() {
     this.$store.states.map((s) => {
-      Vue.set(this, "blocks", s.blocks.list!);
-      Vue.set(this, "selectedBlockIds", s.app.selectedBlocks);
     });
   }
 
   private getTranslateKey(itemtype: CollectionNames) {
-    return this.$tc(`COMP.${TranslateKeys[itemtype]}`);
+    return this.$tc(`COMP.${itemtype.toLocaleUpperCase()}`);
   }
 
   private addBlockSentence() {

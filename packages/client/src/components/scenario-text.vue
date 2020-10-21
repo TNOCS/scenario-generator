@@ -20,7 +20,7 @@ import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IBlock, IContent, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
+import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
 @Component({

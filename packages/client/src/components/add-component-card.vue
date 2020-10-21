@@ -24,7 +24,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { IContent, IScenario } from "../models";
-import { CollectionNames, TranslateKeys } from "../services/meiosis";
+import { CollectionNames } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
 @Component({
@@ -39,7 +39,7 @@ export default class AddComponentCard extends Vue {
   }
 
   private getTranslateKey() {
-    return this.$tc(`COMP.${TranslateKeys[this.itemkey]}`);
+    return this.$tc(`COMP.${this.itemkey}`);
   }
 
   private resetNewItem() {
