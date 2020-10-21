@@ -4,6 +4,7 @@
       "ACTIVE_SCENARIO": "actief scenario",
       "ADD": "{item} toevoegen",
       "ADD_COMPONENTS": "voeg componenten toe",
+      "ADD_CONTEXT": "voeg context toe",
       "BUILD_SENTENCE": "Bouw een zinsstructuur",
       "CANCEL": "cancel",
       "COMPONENT": "component | componenten",
@@ -24,20 +25,24 @@
       "THEME": "thema"
     },
     "COMP": {
-      "ACTOR": "actor | actors",
-      "CAPABILITY": "capability | capabilities",
+      "AVAILABLEBUDGET": "budget | budget",
+      "CAPABILITIES": "capability | capabilities",
       "EQUIPMENT": "uitrusting | uitrustingen",
+      "IMPACT": "impact",
       "LOCATION": "locatie | locaties",
-      "MODUS_OPERANDUS": "modus operandus | modus operandi",
+      "MODUSOPERANDI": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
       "OBJECT": "object | objecten",
+      "OPENCOMPARTMENTS": "open compartiment | open compartimenten",
       "PHYSICAL_ANGLE": "fysieke hoek | fysieke hoek",
       "RESPONSIBILITY": "verantwoordelijkheid | verantwoordelijkheden",
       "SCENARIO": "scenario | scenarios",
-      "TARGET_TYPE": "doeltype | doeltypes",
+      "THREATDIRECTION": "actor | actors",
+      "TYPEOFENVIRONMENT": "omgevingstype",
+      "TYPEOFOBJECT": "doeltype | doeltypes",
       "WEAPON": "wapen | wapens",
-      "WEATHER_BEHAVIOUR": "weersgedrag | weersgedragingen",
-      "WEATHER_CONDITION": "weersconditie | weerscondities"
+      "WEATHERBEHAVIOUR": "weersgedrag | weersgedragingen",
+      "WEATHERTYPE": "weersconditie | weerscondities"
     },
     "UTIL": {
       "A": "een",

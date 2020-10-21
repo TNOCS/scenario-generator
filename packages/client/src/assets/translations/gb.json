@@ -4,6 +4,7 @@
       "ACTIVE_SCENARIO": "active scenario",
       "ADD": "Add {item}",
       "ADD_COMPONENTS": "Add components",
+      "ADD_CONTEXT": "add context",
       "BUILD_SENTENCE": "Build a sentence structure",
       "CANCEL": "cancel",
       "COMPONENT": "component | components",
@@ -24,20 +25,24 @@
       "THEME": "theme"
     },
     "COMP": {
-      "ACTOR": "actor | actors",
-      "CAPABILITY": "capability | capabilities",
+      "AVAILABLEBUDGET": "budget | budget",
+      "CAPABILITIES": "capability | capabilities",
       "EQUIPMENT": "equipment | equipments",
+      "IMPACT": "impact",
       "LOCATION": "location | locations",
-      "MODUS_OPERANDUS": "modus operandus | modus operandi",
+      "MODUSOPERANDI": "modus operandus | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "OBJECT": "object | objects",
+      "OPENCOMPARTMENTS": "open compartment | open compartments",
       "PHYSICAL_ANGLE": "physical angle | physical angles",
       "RESPONSIBILITY": "responsibility | responsibilities",
       "SCENARIO": "scenario | scenarios",
-      "TARGET_TYPE": "target type | target types",
+      "THREATDIRECTION": "actor | actors",
+      "TYPEOFENVIRONMENT": "environment type | environment types",
+      "TYPEOFOBJECT": "target type | target types",
       "WEAPON": "weapon | weapons",
-      "WEATHER_BEHAVIOUR": "weather behaviour | weather behaviours",
-      "WEATHER_CONDITION": "weather condition | weather conditions"
+      "WEATHERBEHAVIOUR": "weather behaviour | weather behaviours",
+      "WEATHERTYPE": "weather condition | weather conditions"
     },
     "UTIL": {
       "A": "a",

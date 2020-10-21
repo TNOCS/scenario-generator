@@ -6,9 +6,11 @@ export interface IBasicContent {
 }
 
 export type ContentCategory = "THREAT" | "CONTEXT" | "SCENARIO";
+export const ContextTypes = ["NONE", "LOCATION", "LOCATIONTYPE"] as const;
+export type ContextType = typeof ContextTypes[number];
 
 export interface IContext {
-  type: string;
+  type: ContextType;
   data: Record<string, any>;
 }
 

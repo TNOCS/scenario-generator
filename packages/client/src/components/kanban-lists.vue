@@ -2,17 +2,17 @@
   <div>
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
-      <v-tab v-for="cat in categoryNames" :key="cat">
-        {{ cat }}
+      <v-tab v-for="catName in categoryNames" :key="catName">
+        {{ catName }}
       </v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab">
-      <v-tab-item v-for="cat in categories" :key="cat">
+      <v-tab-item v-for="(val, cat) in categories" :key="cat">
         <v-card dense flat tile class="flex-card" style="background: transparent">
           <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2">
             <v-container fluid class="ma-0 pa-0">
-              <v-row no-gutters v-for="(val, i) in columns" :key="i" class="kanban-col">
+              <v-row no-gutters v-for="(val, i) in getCategoryRows(cat)" :key="i" class="kanban-col">
                 <v-col cols="12" class="my-1 elevation-1">
                   <KanbanList :itemkey="val" />
                 </v-col>
@@ -38,7 +38,7 @@ import KanbanList from "./kanban-list.vue";
   components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
-  private columns: Array<CollectionNames> = [];
+  private rows: Array<CollectionNames> = [];
   private tab: number = 0;
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
     [key in ContentCategory]: Array<CollectionNames>;
@@ -49,14 +49,18 @@ export default class KanbanLists extends Vue {
     super();
   }
 
+  private getCategoryRows(cat: ContentCategory) {
+    return this.rows.filter((r) => this.categories[cat].includes(r));
+  }
+
   private async init() {
     this.$store.states.map((s) => {
-      this.columns.length = 0;
+      this.rows.length = 0;
       CollectionNamesArr.forEach((n) => {
-        this.columns.push(n);
+        this.rows.push(n);
       });
       this.categories = s.scenarios.current
-        ? s.scenarios.current!.categories
+        ? s.scenarios.current!.categories!
         : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
