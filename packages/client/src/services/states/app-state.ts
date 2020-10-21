@@ -38,7 +38,7 @@ export const appStateMgmt = {
       apiService: process.env.SERVER || window.location.origin,
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
-      theme: "light",
+      theme: localStorage.getItem(themeStorageKey) || "light",
       selectedBlocks: [],
       sentence: { id: getUuid(), blockids: [] },
     },
