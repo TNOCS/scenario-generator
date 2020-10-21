@@ -1,6 +1,5 @@
 <template>
   <div>
-    <ActiveScenario />
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
       <v-card-text class="text-description ma-0 pa-2">
@@ -24,10 +23,9 @@ import { IContent } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import KanbanList from "./kanban-list.vue";
-import ActiveScenario from "./active-scenario.vue";
 
 @Component({
-  components: { ActiveScenario, KanbanList },
+  components: {  KanbanList },
 })
 export default class KanbanLists extends Vue {
   private columns: Array<CollectionNames> = [];

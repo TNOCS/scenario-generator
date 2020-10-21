@@ -41,7 +41,7 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "weatherbehaviour",
   "responsibilities",
 ];
-export const TranslateKeys = {
+export const TranslateKeys: { [key in CollectionNames]: string } = {
   blocks: "BLOCK",
   capabilities: "CAPABILITY",
   equipment: "EQUIPMENT",
@@ -58,10 +58,10 @@ export const TranslateKeys = {
   weatherbehaviour: "WEATHER_BEHAVIOUR",
 };
 
+const scenariosCollection = collectionFactory<IScenario>("scenarios");
 const blocksCollection = collectionFactory<IBlock>("blocks");
 const capabilitiesCollection = collectionFactory<IBlock>("capabilities");
 const equipmentCollection = collectionFactory<IBlock>("equipment");
-const scenariosCollection = collectionFactory<IScenario>("scenarios");
 const actorsCollection = collectionFactory<IContent>("actors");
 const locationsCollection = collectionFactory<IContent>("locations");
 const objectsCollection = collectionFactory<IContent>("objects");

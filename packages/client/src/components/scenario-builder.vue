@@ -51,7 +51,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
 import { IBlock, IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
+import {  getUuid } from "../utils/constants";
 import ScenarioText from "../components/scenario-text.vue";
 
 @Component({

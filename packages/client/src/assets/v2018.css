@@ -15,6 +15,10 @@
   font-size: 1.4em;
 }
 
+.bold--text {
+  font-weight: bold;
+}
+
 .cardcontent {
   border: black solid 1px;
   padding: 4px 8px;

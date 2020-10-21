@@ -11,25 +11,7 @@
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
-            <v-card>
-              <v-card-title dense class="kanban-menu">
-                {{ $t("APP.ADD", { item: $tc(`COMP.${this.getTranslateKey()}`) }) }}
-              </v-card-title>
-              <v-card-text class="pb-0">
-                <v-text-field
-                  :label="`${$t('APP.NAME')}` | capitalize"
-                  v-model="newItem.name"
-                  autofocus
-                  v-on:keyup.enter="addItem"
-                ></v-text-field>
-                <v-text-field label="Type" disabled v-model="newItem.type">itemkey</v-text-field>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn text @click="menu = false"> {{ $t("APP.CANCEL") }} </v-btn>
-                <v-btn color="primary" text @click="addItem"> {{ $t("APP.SAVE") }} </v-btn>
-              </v-card-actions>
-            </v-card>
+            <AddComponentCard :itemkey="itemkey" @close="closeMenu"></AddComponentCard>
           </v-menu>
         </v-col>
         <v-col cols="10" class="py-1 pl-1">
@@ -54,16 +36,16 @@ import { IContent } from "../models";
 import { CollectionNames, TranslateKeys } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import KanbanCard from "./kanban-card.vue";
+import AddComponentCard from "./add-component-card.vue";
 
 @Component({
-  components: { Container, Draggable, KanbanCard },
+  components: { Container, Draggable, KanbanCard, AddComponentCard },
 })
 export default class KanbanList extends Vue {
   @Prop({ default: "" }) public itemkey!: CollectionNames;
   private items: Partial<IContent>[] = [];
   private title: string = "";
   private menu: boolean = false;
-  private newItem: Partial<IContent> = {};
 
   @Watch("itemkey")
   private itemkeyChanged() {
@@ -74,27 +56,16 @@ export default class KanbanList extends Vue {
     super();
   }
 
-  private resetNewItem() {
-    this.newItem = { name: "", type: this.itemkey, id: getUuid() };
-  }
-
-  private getTranslateKey() {
-    return TranslateKeys[this.itemkey] || "";
-  }
-
   private async init() {
     if (!this.itemkey || !this.itemkey.length) return;
-    this.resetNewItem();
-    this.title = this.$tc(`COMP.${this.getTranslateKey()}`, 2);
+    this.title = this.$tc(`COMP.${TranslateKeys[this.itemkey]}`, 2);
     await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map((s) => {
       this.items = s[this.itemkey].list!;
     });
   }
 
-  private async addItem() {
-    this.$store.actions[this.itemkey].save(this.newItem);
-    this.resetNewItem();
+  private async closeMenu() {
     this.menu = false;
   }
 

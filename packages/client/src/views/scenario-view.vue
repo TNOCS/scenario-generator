@@ -1,11 +1,6 @@
 <template>
   <v-container class="full-height pa-0" fluid>
-    <v-row no-gutters justify="center">
-      <v-col md="12" cols="12">
-        <ActiveScenario />
-      </v-col>
-    </v-row>
-    <v-row no-gutters class="full-height-min-bar" justify="center">
+    <v-row no-gutters class="full-height" justify="center">
       <v-col md="12" cols="12" class="full-height">
         <splitpanes horizontal class="full-height">
           <pane min-size="10" size="35">
@@ -26,10 +21,9 @@ import "splitpanes/dist/splitpanes.css";
 import { Splitpanes, Pane } from "splitpanes";
 import ScenarioBuilder from "../components/scenario-builder.vue";
 import SentenceBuilder from "../components/sentence-builder.vue";
-import ActiveScenario from "../components/active-scenario.vue";
 
 @Component({
-  components: { ScenarioBuilder, SentenceBuilder, ActiveScenario, Splitpanes, Pane },
+  components: { ScenarioBuilder, SentenceBuilder, Splitpanes, Pane },
 })
 export default class ScenarioView extends Vue {
   private init() {
@@ -48,7 +42,7 @@ export default class ScenarioView extends Vue {
 </script>
 
 <style scoped lang="css">
-.full-height-min-bar {
-  height: calc(100% - 40px);
+.full-height {
+  height: 100%;
 }
 </style>

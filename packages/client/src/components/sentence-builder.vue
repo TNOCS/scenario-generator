@@ -34,10 +34,9 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr, TranslateKeys } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
-import ActiveScenario from "./active-scenario.vue";
 
 @Component({
-  components: { ActiveScenario },
+  components: {},
 })
 export default class SentenceBuilder extends Vue {
   private blocks: Partial<IContent>[] = [];
@@ -91,7 +90,7 @@ export default class SentenceBuilder extends Vue {
 .sentence-block.suf {
   margin-right: 4px;
 }
-.sentence-col .v-input--selection-controls .v-input__slot>.v-label {
+.sentence-col .v-input--selection-controls .v-input__slot > .v-label {
   display: inline;
 }
 .sentence-col .v-input--selection-controls {

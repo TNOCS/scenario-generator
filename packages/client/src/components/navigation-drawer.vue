@@ -28,7 +28,15 @@
     </v-card>
     <v-card flat tile class="" style="background: transparent">
       <div class="overline px-2 py-2">
-        {{ $t("APP.SCENARIO") }} <v-icon style="float: right" class="mr-2 pt-1">mdi-plus</v-icon>
+        {{ $t("APP.SCENARIO") }}
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab x-small elevation="2" class="mr-1 add-button">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <AddComponentCard itemkey="scenarios" @close="closeMenu"></AddComponentCard>
+        </v-menu>
       </div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
@@ -49,9 +57,10 @@ import { Component, Vue, Watch } from "vue-property-decorator";
 import { languageStorageKey } from "../i18n";
 import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import { IScenario } from "../models";
+import AddComponentCard from "./add-component-card.vue";
 
 @Component({
-  components: { CountryFlag },
+  components: { CountryFlag, AddComponentCard },
 })
 export default class NavigationDrawer extends Vue {
   private languages: string[] = ["gb", "nl"];
@@ -60,6 +69,7 @@ export default class NavigationDrawer extends Vue {
   private scenarios: Partial<IScenario>[] = [];
   private activeTheme: string = "";
   private activeScenario: Partial<IScenario> = {};
+  private menu: boolean = false;
 
   private async languageChanged() {
     this.$store.actions.changeLanguage(this.activeLanguage);
@@ -73,12 +83,16 @@ export default class NavigationDrawer extends Vue {
     this.$store.actions[this.activeScenario.type!].load(this.activeScenario.id!);
   }
 
+  private async closeMenu() {
+    this.menu = false;
+  }
+
   async mounted() {
     this.$store.states.map((a) => {
       this.activeLanguage = a.app.language;
       this.activeTheme = a.app.theme;
-      this.scenarios = a.scenarios.list;
-      this.activeScenario = a.scenarios.current;
+      this.scenarios = a.scenarios.list || [];
+      this.activeScenario = a.scenarios.current || {};
     });
   }
 }
@@ -90,5 +104,8 @@ export default class NavigationDrawer extends Vue {
 }
 .v2018-radio {
   margin-top: 2px;
+}
+.add-button {
+  float: right;
 }
 </style>
