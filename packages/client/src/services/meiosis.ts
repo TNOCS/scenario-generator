@@ -34,9 +34,10 @@ export type CollectionNames =
   | "AvailableBudget"
   | "CompartmentsPresent"
   | "OpenCompartments"
-  | "RelationOwnerObjectAndOwnerSecuritySystem";
+  | "RelationOwnerObjectAndOwnerSecuritySystem"
+  | "Location";
 
-export type CollectionNamesPlus = CollectionNames | 'scenarios';
+export type CollectionNamesPlus = CollectionNames | "scenarios";
 
 export const CollectionNamesArr: Array<CollectionNames> = [
   "ThreatDirection",
@@ -63,8 +64,9 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "CompartmentsPresent",
   "OpenCompartments",
   "RelationOwnerObjectAndOwnerSecuritySystem",
+  "Location",
 ];
-export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, 'scenarios'];
+export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, "scenarios"];
 
 export type ICollectionRecord = { [key in CollectionNames]: ICollectionState<IContent> };
 

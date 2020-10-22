@@ -91,6 +91,15 @@ const createLocalStorageFactory = () => {
       return JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
     };
 
+    const saveList = async (list: Partial<T>[]) => {
+      localStorage.setItem(listKey, JSON.stringify(list));
+    };
+
+    const resetList = async () => {
+      const list = [] as T[];
+      localStorage.setItem(listKey, JSON.stringify(list));
+    };
+
     return {
       create,
       update,
@@ -98,6 +107,8 @@ const createLocalStorageFactory = () => {
       del,
       load,
       loadList,
+      saveList,
+      resetList,
     };
   };
 };

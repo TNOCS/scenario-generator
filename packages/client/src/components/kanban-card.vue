@@ -40,7 +40,7 @@ export default class KanbanCard extends Vue {
 
   private getContext(item: Partial<IContent>): string {
     if (!item || !item.context || !item.context.type)
-      return this.$options.filters.capitalize(this.$t("APP.ADD_CONTEXT"));
+      return this.$options.filters!.capitalize(this.$t("APP.ADD_CONTEXT"));
     return item.context.type;
   }
 

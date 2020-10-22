@@ -10,6 +10,7 @@
       "COMPONENT": "component | components",
       "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
+      "DONE": "done",
       "EXPORT": "Export file",
       "FILL_SENTENCE": "Fill the sentence",
       "IMPORT": "Import file",

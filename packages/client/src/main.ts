@@ -1,7 +1,7 @@
 import "vuetify/dist/vuetify.min.css";
 import "@mdi/font/css/materialdesignicons.css";
-import '@dzangolab/vue-country-flag-icon/dist/CountryFlag.css';
-import CountryFlag from '@dzangolab/vue-country-flag-icon';
+import "@dzangolab/vue-country-flag-icon/dist/CountryFlag.css";
+import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import App from "./App.vue";
 import Vue from "vue";
 import Vuetify from "vuetify";
@@ -13,7 +13,7 @@ import "./assets/v2018.css";
 import { isVowelSound } from "./utils/constants";
 import VueLayers from "vuelayers";
 import "vuelayers/lib/style.css"; // needs css-loader
-import OverpassService from './services/overpass-service';
+import OverpassService from "./services/overpass-service";
 
 Vue.config.productionTip = false;
 Vue.prototype.$store = store;

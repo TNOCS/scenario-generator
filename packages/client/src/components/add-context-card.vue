@@ -1,16 +1,12 @@
 <template>
   <v-card>
     <v-card-title dense class="add-context-card">
-      {{ $t("APP.ADD", { item: 'context' }) }}
+      {{ $t("APP.ADD", { item: "context" }) }}
     </v-card-title>
     <v-card-text class="pb-0">
       <v-select v-model="activeType" :items="types" @change="typeSelected"></v-select>
       <v-text-field :label="`${$t('APP.KEY')}` | capitalize" v-model="activeKey" autofocus></v-text-field
-      ><v-text-field
-        :label="`${$t('APP.VALUE')}` | capitalize"
-        v-model="activeVal"
-        v-on:keyup.enter="addItem"
-      ></v-text-field>
+      ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -38,6 +34,17 @@ export default class AddContextCard extends Vue {
   private activeVal: string = "";
   private newContext: IContext = { type: "NONE", data: {} };
 
+  @Watch("item", { deep: true })
+  private itemChanged() {
+    console.log(`Item changed`);
+    this.resetNewItem();
+    if (this.item && this.item.context) {
+      this.activeType = this.item.context.type;
+      this.activeKey = Object.keys(this.item.context.data).shift() || "";
+      this.activeVal = Object.values(this.item.context.data).shift() || "";
+    }
+  }
+
   constructor() {
     super();
   }
@@ -47,10 +54,10 @@ export default class AddContextCard extends Vue {
   }
 
   private async addItem() {
+    this.newContext.type = this.activeType;
     this.newContext.data[this.activeKey] = this.activeVal;
     this.item.context = Object.assign({}, this.newContext) as IContext;
     this.$store.actions[this.item.type!].save(this.item);
-    this.resetNewItem();
     this.$emit("close");
   }
 
@@ -61,12 +68,12 @@ export default class AddContextCard extends Vue {
   }
 
   private async cancel() {
-    this.resetNewItem();
     this.$emit("close");
   }
 
   async mounted() {
-    this.resetNewItem();
+    console.log(`Add context card mounted`);
+    this.itemChanged();
   }
 }
 </script>

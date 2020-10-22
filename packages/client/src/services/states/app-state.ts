@@ -2,6 +2,7 @@ import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
 import { ISentence } from "../../models";
+import _ from "lodash";
 
 const log = console.log;
 
@@ -62,11 +63,18 @@ export const appStateMgmt = {
       },
       importState: (state: string) => {
         log("Import state");
-        // update({ app: { selectedBlocks } });
+        const newState = JSON.parse(state);
+        update(newState);
       },
       exportState: () => {
         log("Export state");
-        return JSON.stringify(_states);
+        return JSON.stringify(
+          _states.map((s) =>
+            _.pickBy(s, (val, key) => {
+              return key != "app";
+            })
+          )
+        );
       },
       changeSentence: (sentence: ISentence) => {
         log("Set sentence " + sentence.id);

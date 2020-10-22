@@ -1,6 +1,6 @@
 import { CollectionNames, CollectionNamesPlus, IAppModel, UpdateStream } from "../meiosis";
 import { IContent } from "../../models";
-import { localStorageFactory } from '../localstorage-service';
+import { localStorageFactory } from "../localstorage-service";
 
 export type CollectionItemMode = "view" | "edit" | "loading";
 
@@ -16,6 +16,8 @@ export type CollectionsModel<T extends IContent> = Record<CollectionNames, Colle
 export type CollectionActions<T extends IContent> = {
   /** Get a list of all the active (?) items */
   updateList: () => void;
+  /** Save the list of all the items (after import) */
+  saveList: () => void;
   /** Select an item */
   load: (id: string) => void;
   /** Save an item */
@@ -52,6 +54,12 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
             const list = await lsSvc.loadList();
             if (list) {
               us({ [collectionName]: { list } });
+            }
+          },
+          saveList: async () => {
+            if (states()[collectionName] && states()[collectionName].list) {
+            await lsSvc.saveList(states()[collectionName].list! as any);
+            us({ [collectionName]: { list: states()[collectionName].list! } });
             }
           },
           load: async (id) => {
