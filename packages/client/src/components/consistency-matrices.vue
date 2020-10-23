@@ -13,12 +13,15 @@
           <v-card-text class="text-description ma-0 pa-2">
             <v-container fluid class="ma-0 pa-0">
               <v-row no-gutters>
-                <v-col>
-                  <v-select :items="getCategoryRows(cat)" v-model="selectedCategory"> </v-select>
+                <v-col xs="12" md="6" class="">
+                  <span>{{ $t("APP.SELECT_COMPONENT") }}</span>
+                  <span>
+                    <v-select :items="getCategoryRows(cat)" v-model="selectedCategory"> </v-select>
+                  </span>
                 </v-col>
               </v-row>
               <v-row no-gutters>
-                <TableCard :category="selectedCategory" />
+                <TableCard :category="selectedCategory" :othercategories="getCategoryRows(cat)"/>
               </v-row>
             </v-container>
           </v-card-text>
@@ -54,7 +57,7 @@ export default class ConsistencyMatrices extends Vue {
     super();
   }
 
-  private getCategoryRows(cat: ContentCategory) {
+  private getCategoryRows(cat: ContentCategory): CollectionNames[] {
     return this.rows.filter((r) => this.categories[cat].includes(r));
   }
 
@@ -66,6 +69,7 @@ export default class ConsistencyMatrices extends Vue {
         this.rows.push(n);
       });
       this.categories = s.scenarios.current ? s.scenarios.current!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.selectedCategory = this.rows.length > 0 ? this.rows[0] : null;
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
   }
