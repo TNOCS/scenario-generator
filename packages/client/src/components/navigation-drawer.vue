@@ -50,13 +50,11 @@
       </div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
-        <v-select
-          v-model="activeScenario"
-          :items="scenarios"
-          item-text="name"
-          return-object
-          @change="scenarioSelected"
-        ></v-select>
+        <v-select v-model="activeScenario" :items="scenarios" item-text="name" return-object @change="scenarioSelected"></v-select>
+        <div class="blue--text">
+          {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}:
+          <span class="bold--text">{{ this.activeScenario.name }} </span>
+        </div>
       </v-card-text>
     </v-card>
   </v-navigation-drawer>
@@ -101,6 +99,10 @@ export default class NavigationDrawer extends Vue {
 
   private async closeImportMenu() {
     this.importMenu = false;
+  }
+
+  private activeScenarioName() {
+    this.activeScenario.name ? this.activeScenario.name : '-';
   }
 
   async mounted() {

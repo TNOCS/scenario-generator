@@ -3,6 +3,7 @@ import Vue from "vue";
 import ShowView from "./views/show-view.vue";
 import ScenarioView from "./views/scenario-view.vue";
 import ComponentsView from "./views/components-view.vue";
+import ConsistencyView from "./views/consistency-view.vue";
 
 Vue.use(Router);
 
@@ -11,6 +12,7 @@ export default new Router({
   routes: [
     { path: "/", redirect: { name: "components" } },
     { path: "/add", name: "components", component: ComponentsView },
+    { path: "/consistency", name: "consistency", component: ConsistencyView },
     { path: "/create", name: "create", component: ScenarioView },
     { path: "/show", name: "show", component: ShowView },
   ]
