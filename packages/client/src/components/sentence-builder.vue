@@ -1,26 +1,43 @@
 <template>
   <div>
-    <v-card dense flat tile class="flex-card" style="background: transparent">
+    <v-card dense flat tile class="flex-card" style="background: transparent; overflow: auto">
       <div class="overline px-2 py-0">{{ `1. ${$t("APP.BUILD_SENTENCE")}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
-        <v-container fluid>
-          <v-row>
-            <v-col xs="6" sm="2" v-for="b in blocks" :key="b.id" class="sentence-col pl-2 py-0">
-              <v-checkbox dense hide-details v-model="selectedBlockIds" :value="b.id">
-                <template v-slot:label class="inline-label">
-                  <span class="sentence-block pre" v-if="b.prefix && b.prefix.length > 0">{{ b.prefix }}</span>
-                  <span class="sentence-block article" v-if="b.indefinite">
-                    {{ getTranslateKey(b.blocktype) | getArticle | trim }}
-                  </span>
-                  <span class="sentence-block main">{{ getTranslateKey(b.blocktype) }}</span>
-                  <span class="sentence-block suf" v-if="b.suffix && b.suffix.length > 0">{{ b.suffix }}</span>
-                </template>
-              </v-checkbox>
-            </v-col>
-          </v-row>
-          <v-btn @click="addBlockSentence" color="accent darken-1" elevation="2" class="d-flex ma-4">
-            {{ $t("APP.ADD", { item: $tc("APP.STRUCTURE") }) }}
+        <v-container fluid class="">
+          <v-btn @click="generateScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
+            {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>
+          <div v-if="generated">
+            <v-row v-for="catName in categoryNames" :key="catName" class="">
+              <v-col xs="12">
+                <v-card>
+                  <v-card-title dense class="add-context-card">
+                    {{ catName }}
+                  </v-card-title>
+                  <v-card-text class="pb-0">
+                    <v-simple-table dense>
+                      <template v-slot:default>
+                        <thead>
+                          <tr>
+                            <th class="text-left bold--text">Dimension</th>
+                            <th class="text-left bold--text more-padding">Selected</th>
+                          </tr>
+                        </thead>
+                        <tbody class="category-table">
+                          <template>
+                            <tr v-for="cat in categories[catName]" :key="cat">
+                              <td>{{ cat }}</td>
+                              <td class="more-padding">{{ getRandom(cat) }}</td>
+                            </tr>
+                          </template>
+                        </tbody>
+                      </template>
+                    </v-simple-table>
+                  </v-card-text>
+                </v-card>
+              </v-col>
+            </v-row>
+          </div>
         </v-container>
       </v-card-text>
     </v-card>
@@ -31,16 +48,24 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent, IScenario, ISentence } from "../models";
+import { ContentCategory, IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
+import { CollectionsModel } from "../services/states/collection-state";
 import { getUuid } from "../utils/constants";
+import _ from "lodash";
 
 @Component({
   components: {},
 })
 export default class SentenceBuilder extends Vue {
-  private blocks: Partial<IContent>[] = [];
-  private selectedBlockIds: string[] = [];
+  private scenario?: Partial<IScenario> = {};
+  private rows: Array<CollectionNames> = [];
+  private collections: CollectionsModel<IContent> | null = null;
+  private categoryNames: ContentCategory[] = [];
+  private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
+    [key in ContentCategory]: Array<CollectionNames>;
+  };
+  private generated: boolean = false;
 
   constructor() {
     super();
@@ -48,19 +73,33 @@ export default class SentenceBuilder extends Vue {
 
   private async init() {
     this.$store.states.map((s) => {
+      this.scenario = s.scenarios.current;
+      this.rows.length = 0;
+      CollectionNamesArr.forEach((n) => {
+        this.rows.push(n);
+      });
+      this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
+      this.collections = s;
     });
   }
 
-  private getTranslateKey(itemtype: CollectionNames) {
-    return this.$tc(`COMP.${itemtype.toLocaleUpperCase()}`);
+  private getCategoryRows(cat: ContentCategory): CollectionNames[] {
+    return this.rows.filter((r) => this.categories[cat].includes(r));
   }
 
-  private addBlockSentence() {
-    const s: ISentence = {
-      id: getUuid(),
-      blockids: this.selectedBlockIds,
-    };
-    this.$store.actions.changeSentence(s);
+  private getRandom(cat: CollectionNames): string {
+    if (this.collections[cat].list!.length <= 0) {
+      return "None";
+    } else {
+      const r = _.random(this.collections[cat].list!.length - 1);
+      return this.collections[cat].list![r].name!;
+    }
+  }
+
+  private generateScenario() {
+    console.log("generate");
+    this.generated = !this.generated;
   }
 
   mounted() {

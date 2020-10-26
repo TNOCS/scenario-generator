@@ -122,7 +122,7 @@ export default class TableCard extends Vue {
 
   private async init() {
     this.$store.states.map((s: IAppModel) => {
-      this.items = s[this.category].list!;
+      this.items = this.category ? s[this.category].list! : [];
       this.collections = s;
     });
   }

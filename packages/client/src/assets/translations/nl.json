@@ -15,6 +15,7 @@
       "DONE": "klaar",
       "EXPORT": "Exporteer bestand",
       "FILL_SENTENCE": "Vul de zin in",
+      "GENERATE": "Genereer {item}",
       "IMPORT": "Importeer bestand",
       "IMPORT_EXPORT_TITLE": "Importeer/exporteer project",
       "INCONSISTENT": "Combinaties met deze twee items zijn uitgesloten",
@@ -28,7 +29,8 @@
       "SENTENCE": "zin | zinnen",
       "SHOW_SCENARIO": "toon scenario",
       "STRUCTURE": "structuur",
-      "THEME": "thema"
+      "THEME": "thema",
+      "WRITE_NARRATIVE": "schrijf een narratief"
     },
     "COMP": {
       "AVAILABLEBUDGET": "budget | budget",

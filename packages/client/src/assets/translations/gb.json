@@ -15,6 +15,7 @@
       "DONE": "done",
       "EXPORT": "Export file",
       "FILL_SENTENCE": "Fill the sentence",
+      "GENERATE": "Generate {item}",
       "IMPORT": "Import file",
       "IMPORT_EXPORT_TITLE": "Import/export project",
       "INCONSISTENT": "Combinations with these two items are impossible",
@@ -28,7 +29,8 @@
       "SENTENCE": "sentence | sentences",
       "SHOW_SCENARIO": "Show scenario",
       "STRUCTURE": "structure",
-      "THEME": "theme"
+      "THEME": "theme",
+      "WRITE_NARRATIVE": "write a narrative"
     },
     "COMP": {
       "AVAILABLEBUDGET": "budget | budget",
