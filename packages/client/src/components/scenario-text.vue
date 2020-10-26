@@ -8,8 +8,8 @@
     </div>
     <v-divider />
     <v-card-text class="text-description ma-0 pa-1">
-      <div v-if="scenario && scenario.sentences">
-        <span class="scenario-sentence" v-for="(se, idx) in scenario.sentences" :key="idx">{{ se | capitalize }}</span>
+      <div v-if="scenario && scenario.narratives">
+        <span class="scenario-narrative" v-for="(nar, idx) in scenario.narratives" :key="idx">{{ nar.narrative }}</span>
       </div>
     </v-card-text>
   </v-card>

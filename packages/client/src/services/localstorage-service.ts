@@ -1,7 +1,7 @@
 import { IBlock, IContent, IScenario } from "../models";
 import demo from "../assets/demo.json";
 import { getUuid } from "../utils/constants";
-import { CollectionNames, CollectionNamesPlus } from './meiosis';
+import { CollectionNames, CollectionNamesPlus } from "./meiosis";
 
 interface IDemoScenarios {
   scenarios: IScenario[];
@@ -13,7 +13,7 @@ type IDemo = IDemoScenarios & IDemoRest;
 
 const log = console.log;
 const error = console.error;
-const demoFile = demo as any as IDemo;
+const demoFile = (demo as any) as IDemo;
 
 const createLocalStorageFactory = () => {
   return <T extends IContent>(listKey: CollectionNamesPlus) => {
@@ -23,7 +23,7 @@ const createLocalStorageFactory = () => {
       log(`Loading example keys for ${listKey}...`);
       const items: IContent[] = (demoFile[listKey] as (string | IScenario)[]).map((nameOrObj: string | IScenario) => {
         if (listKey === "scenarios") {
-          return nameOrObj as IScenario;
+          return Object.assign({ inconsistencies: [], narratives: [] }, nameOrObj) as IScenario;
         } else {
           return { id: getUuid(), name: nameOrObj, type: listKey } as IContent;
         }

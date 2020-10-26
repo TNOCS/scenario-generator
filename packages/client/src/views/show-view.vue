@@ -3,10 +3,10 @@
     <v-row no-gutters class="full-height" justify="center">
       <v-col md="12" cols="12" class="full-height">
         <splitpanes vertical class="full-height">
-          <pane min-size="10" size="50">
+          <pane min-size="10" size="50" class="pa-2">
             <ScenarioText></ScenarioText>
           </pane>
-          <pane min-size="10" size="50">
+          <pane min-size="10" size="50" class="pa-2">
             <MapCard></MapCard>
           </pane>
         </splitpanes>

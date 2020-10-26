@@ -9,7 +9,14 @@ export interface Inconsistency {
   type: InconsistencyType;
 }
 
+export interface INarrative {
+  name: string;
+  components: { [key in CollectionNames]: string };
+  narrative: string;
+}
+
 export interface IScenario extends IContent {
   categories: { [key in ContentCategory]: Array<CollectionNames> };
   inconsistencies: Inconsistency[];
+  narratives: INarrative[];
 }

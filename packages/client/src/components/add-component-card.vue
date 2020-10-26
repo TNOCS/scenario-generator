@@ -39,7 +39,7 @@ export default class AddComponentCard extends Vue {
   }
 
   private getTranslateKey() {
-    return this.$tc(`COMP.${this.itemkey}`);
+    return this.$tc(`COMP.${this.itemkey.toUpperCase()}`);
   }
 
   private resetNewItem() {

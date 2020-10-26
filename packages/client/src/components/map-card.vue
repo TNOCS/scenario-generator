@@ -50,11 +50,17 @@ import { createStyle } from "vuelayers/lib/ol-ext/style";
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
 import center from "@turf/center";
+import { IContent, IContext, INarrative, IScenario } from "../models";
+import { ICollectionRecord } from "../services/meiosis";
+import { CollectionType } from "../services/states/collection-state";
 
 @Component({
   components: {},
 })
 export default class MapCard extends Vue {
+  private scenario: Partial<IScenario> = {};
+  private locations: CollectionType<IContent> = {};
+
   private url: string = "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   private urls: string[] = [
     "https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
@@ -76,10 +82,7 @@ export default class MapCard extends Vue {
 
   private zoomMapThrottled() {
     if (!this.features) return;
-    const c: Feature<any> = center({ type: "FeatureCollection", features: this.features } as FeatureCollection<
-      any,
-      any
-    >);
+    const c: Feature<any> = center({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>);
     this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
     this.zoom = 14;
   }
@@ -91,10 +94,26 @@ export default class MapCard extends Vue {
 
   private async updateMap() {
     console.log(`Request map data`);
-    const data = this.$overpass.getGeojson("Buitenpost", this.addFeature);
+    if (this.scenario && this.scenario.narratives && this.scenario.narratives.length > 0) {
+      const n: INarrative | undefined = this.scenario.narratives[0];
+      if (!n) return;
+      const l = _.pick(n.components, "Location");
+      if (!l) return;
+      const loc = _.find(this.locations.list!, (val) => val.name === l.Location);
+      if (!loc) return;
+      const data = this.$overpass.getGeojson(Object.values(loc.context.data)[0], this.addFeature);
+    }
+  }
+
+  private init() {
+    this.$store.states.map((s) => {
+      this.scenario = s.scenarios.current!;
+      this.locations = s.Location;
+    });
   }
 
   async mounted() {
+    this.init();
     setTimeout(() => this.updateMap(), 250);
   }
 }

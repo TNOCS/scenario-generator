@@ -1,15 +1,15 @@
 <template>
   <div>
     <v-card dense flat tile class="flex-card" style="background: transparent; overflow: auto">
-      <div class="overline px-2 py-0">{{ `1. ${$t("APP.BUILD_SENTENCE")}` }}</div>
+      <div class="overline px-2 py-0">{{ `1. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid class="">
           <v-btn @click="generateScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
             {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>
           <div v-if="generated">
-            <v-row v-for="catName in categoryNames" :key="catName" class="">
-              <v-col xs="12">
+            <v-row class="mt-1">
+              <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6">
                 <v-card>
                   <v-card-title dense class="add-context-card">
                     {{ catName }}
@@ -27,7 +27,7 @@
                           <template>
                             <tr v-for="cat in categories[catName]" :key="cat">
                               <td>{{ cat }}</td>
-                              <td class="more-padding">{{ getRandom(cat) }}</td>
+                              <td class="more-padding">{{ answers[cat] }}</td>
                             </tr>
                           </template>
                         </tbody>
@@ -41,6 +41,21 @@
         </v-container>
       </v-card-text>
     </v-card>
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <div class="overline px-2 py-0">{{ `2. ${$t("APP.WRITE_NARRATIVE")}` }}</div>
+      <v-card-text class="text-description ma-0 pa-1">
+        <v-textarea filled v-model="scenariotext" hint="Write a narrative "> </v-textarea>
+      </v-card-text>
+    </v-card>
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <div class="overline px-2 py-0">{{ `3. ${$t("APP.PIN", { item: $tc("APP.SCENARIO") })}` }}</div>
+      <v-card-text class="text-description ma-0 pa-1">
+        <v-btn @click="pinScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
+          {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
+        </v-btn>
+      </v-card-text>
+    </v-card>
+    <v-row class="mt-1"> </v-row>
   </div>
 </template>
 
@@ -57,14 +72,16 @@ import _ from "lodash";
 @Component({
   components: {},
 })
-export default class SentenceBuilder extends Vue {
+export default class ScenarioGenerator extends Vue {
   private scenario?: Partial<IScenario> = {};
+  private scenariotext: string = "";
   private rows: Array<CollectionNames> = [];
   private collections: CollectionsModel<IContent> | null = null;
   private categoryNames: ContentCategory[] = [];
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
     [key in ContentCategory]: Array<CollectionNames>;
   };
+  private answers: { [key in CollectionNames]: string } = {} as { [key in CollectionNames]: string };
   private generated: boolean = false;
 
   constructor() {
@@ -99,11 +116,30 @@ export default class SentenceBuilder extends Vue {
 
   private generateScenario() {
     console.log("generate");
+    for (const c in this.categories) {
+      const names: CollectionNames[] = this.categories[c as ContentCategory];
+      for (const n in names) {
+        const name = names[n];
+        this.answers[name] = this.getRandom(name);
+      }
+    }
     this.generated = !this.generated;
   }
 
+  private pinScenario() {
+    console.log("pin");
+    if (!this.scenario) return;
+    if (!this.scenario.narratives) this.scenario.narratives = [];
+    this.scenario.narratives.length = 0;
+    this.scenario.narratives!.push({
+      name: `${Date.now()}`,
+      components: this.answers,
+      narrative: this.scenariotext,
+    });
+  }
+
   mounted() {
-    console.log(`SentenceBuilder mounted`);
+    console.log(`ScenarioGenerator mounted`);
     this.init();
   }
 }

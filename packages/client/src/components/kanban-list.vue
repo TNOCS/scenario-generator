@@ -2,7 +2,7 @@
   <v-card dense flat tile class="flex-card" color="secondary">
     <v-card-text>
       <v-row no-gutters>
-        <v-col cols="2" class="py-2 pl-3 divider-r">
+        <v-col cols="2" class="py-2 pl-0 divider-r">
           <span class="title">{{ title | capitalize }}</span>
           <v-spacer />
           <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>

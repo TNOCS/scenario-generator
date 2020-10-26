@@ -18,7 +18,9 @@
     </div>
     <v-spacer />
     <v-sheet class="blue px-2 d-flex" height="100%" tile>
-      <v-img :src="require('../assets/tno.png')" max-width="50" contain />
+      <a href="https://www.tno.nl" target="_blank" class="tno-link">
+        <v-img :src="require('../assets/tno.png')" max-width="50" contain />
+      </a>
     </v-sheet>
   </v-app-bar>
 </template>
@@ -51,5 +53,12 @@ export default class AppBar extends Vue {
 .flexcard {
   display: flex;
   flex-direction: column;
+}
+.v-toolbar__content {
+  padding-right: 0;
+}
+.tno-link{
+  display: flex;
+  vertical-align: middle;
 }
 </style>

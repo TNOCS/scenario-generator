@@ -1,10 +1,31 @@
 <template>
   <v-navigation-drawer width="240px" app clipped floating permanent class="noselect">
-    <v-subheader class="font-weight-thin">CONTROLS</v-subheader>
-    <v-row no-gutters align-content="center" justify="center">
+    <v-subheader class="font-weight-thin"></v-subheader>
+    <v-row no-gutters class="mb-4" align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="100" contain />
     </v-row>
-    <v-row no-gutters align-content="center" justify="center" class="mt-2">
+    <v-card flat tile class="" style="background: transparent">
+      <div class="overline px-2 py-2">
+        {{ $t("APP.SCENARIO") }}
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab x-small elevation="2" class="mr-1 add-button">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <AddComponentCard itemkey="scenarios" @close="closeMenu"></AddComponentCard>
+        </v-menu>
+      </div>
+      <v-divider />
+      <v-card-text class="text-description px-4 py-1">
+        <v-select v-model="activeScenario" :items="scenarios" item-text="name" return-object @change="scenarioSelected"></v-select>
+        <div class="blue--text">
+          {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}:
+          <span class="bold--text">{{ this.activeScenario.name || '-' }} </span>
+        </div>
+      </v-card-text>
+    </v-card>
+    <v-row no-gutters class="mt-2 ml-4">
       <v-menu v-model="importMenu" :close-on-content-click="false" :nudge-width="200" offset-x>
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-on="on" v-bind="attrs" color="accent darken-1" small elevation="2" class="mr-1">
@@ -34,27 +55,6 @@
         <v-radio-group v-model="activeTheme" @change="themeChanged" class="ind-radio">
           <v-radio v-for="t in themes" :key="t" :label="t" :value="t"> </v-radio>
         </v-radio-group>
-      </v-card-text>
-    </v-card>
-    <v-card flat tile class="" style="background: transparent">
-      <div class="overline px-2 py-2">
-        {{ $t("APP.SCENARIO") }}
-        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab x-small elevation="2" class="mr-1 add-button">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <AddComponentCard itemkey="scenarios" @close="closeMenu"></AddComponentCard>
-        </v-menu>
-      </div>
-      <v-divider />
-      <v-card-text class="text-description px-4 py-1">
-        <v-select v-model="activeScenario" :items="scenarios" item-text="name" return-object @change="scenarioSelected"></v-select>
-        <div class="blue--text">
-          {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}:
-          <span class="bold--text">{{ this.activeScenario.name }} </span>
-        </div>
       </v-card-text>
     </v-card>
   </v-navigation-drawer>
