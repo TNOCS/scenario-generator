@@ -1,7 +1,7 @@
 import { IBlock, IContent, IScenario } from "../models";
 import demo from "../assets/demo.json";
 import { getUuid } from "../utils/constants";
-import { CollectionNames, CollectionNamesArr, CollectionNamesPlus } from './meiosis';
+import { CollectionNames, CollectionNamesPlus } from './meiosis';
 
 interface IDemoScenarios {
   scenarios: IScenario[];

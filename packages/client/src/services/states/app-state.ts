@@ -1,7 +1,7 @@
 import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
-import { ISentence } from "../../models";
+import { Inconsistency, ISentence } from "../../models";
 import _ from "lodash";
 
 const log = console.log;
@@ -25,6 +25,7 @@ export interface IAppStateActions {
   importState: (state: string) => void;
   exportState: () => string;
   changeSentence: (sentence: ISentence) => void;
+  updateInconsistencies: (inconsistencies: Inconsistency[]) => void;
 }
 
 export interface IAppState {
@@ -79,6 +80,10 @@ export const appStateMgmt = {
       changeSentence: (sentence: ISentence) => {
         log("Set sentence " + sentence.id);
         update({ app: { sentence } });
+      },
+      updateInconsistencies: (inconsistencies: Inconsistency[]) => {
+        log("Set inconsistencies");
+        update({ scenarios: { current: { inconsistencies: inconsistencies } } });
       },
     };
   },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-tabs v-model="tab">
+    <v-tabs v-model="tab" @change="tabChanged">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab v-for="catName in categoryNames" :key="catName">
         {{ catName }}
@@ -14,14 +14,18 @@
             <v-container fluid class="ma-0 pa-0">
               <v-row no-gutters>
                 <v-col xs="12" md="6" class="">
-                  <span>{{ $t("APP.SELECT_COMPONENT") }}</span>
+                  <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span>
                   <span>
                     <v-select :items="getCategoryRows(cat)" v-model="selectedCategory"> </v-select>
                   </span>
                 </v-col>
               </v-row>
-              <v-row no-gutters>
-                <TableCard :category="selectedCategory" :othercategories="getCategoryRows(cat)"/>
+              <v-row no-gutters v-if="scenario">
+                <TableCard
+                  :category="selectedCategory"
+                  :othercategories="getCategoryRows(cat)"
+                  :inconsistencies="scenario.inconsistencies"
+                />
               </v-row>
             </v-container>
           </v-card-text>
@@ -57,6 +61,11 @@ export default class ConsistencyMatrices extends Vue {
     super();
   }
 
+  private tabChanged(newTab: number) {
+    console.log(newTab);
+    this.selectedCategory = Object.values(this.categories)[newTab][0];
+  }
+
   private getCategoryRows(cat: ContentCategory): CollectionNames[] {
     return this.rows.filter((r) => this.categories[cat].includes(r));
   }
@@ -64,12 +73,13 @@ export default class ConsistencyMatrices extends Vue {
   private async init() {
     this.$store.states.map((s) => {
       this.scenario = s.scenarios.current;
+      if (this.scenario && !this.scenario.inconsistencies) this.scenario.inconsistencies = [];
       this.rows.length = 0;
       CollectionNamesArr.forEach((n) => {
         this.rows.push(n);
       });
-      this.categories = s.scenarios.current ? s.scenarios.current!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
-      this.selectedCategory = this.rows.length > 0 ? this.rows[0] : null;
+      this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.selectedCategory = this.selectedCategory ? this.selectedCategory : this.rows.length > 0 ? this.rows[0] : null;
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
   }

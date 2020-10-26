@@ -6,22 +6,47 @@
     <v-card-text class="pa-0 full-width">
       <v-container fluid class="ma-0 pa-0">
         <v-row no-gutters>
-          <v-col>
-            <v-simple-table dense class="consistency-table">
+          <v-col v-if="collections">
+            <v-simple-table dense>
               <template v-slot:default>
                 <thead>
                   <tr>
                     <td class="text-left bold--text">Dimension</td>
-                    <td class="text-left bold--text">Name</td>
-                    <td class="text-left" v-for="item in items" :key="item.id">{{ item.name }}</td>
+                    <td class="text-left bold--text more-padding">Name</td>
+                    <td class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name }}</td>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody class="consistency-table">
                   <template v-for="cat in otherCategoriesWithoutSelected()">
                     <tr v-for="content in collections[cat].list" :key="content.id">
-                      <td class="table-padding">{{ cat }}</td>
-                      <td>{{ content.name }}</td>
-                      <td v-for="item in items" :key="item.id"><v-checkbox hide-details dense></v-checkbox></td>
+                      <td>{{ cat }}</td>
+                      <td class="more-padding">{{ content.name }}</td>
+                      <td v-for="hi in items" :key="hi.id">
+                        <v-tooltip right v-if="incons(content.id, hi.id, 'partly')">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, undefined)">
+                              <v-icon>mdi-checkerboard</v-icon>
+                            </v-btn></template
+                          >
+                          <span>{{ $t("APP.PARTLY_CONSISTENT") }}</span>
+                        </v-tooltip>
+                        <v-tooltip right v-if="incons(content.id, hi.id, 'totally')">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'partly')">
+                              <v-icon>mdi-checkbox-blank</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>{{ $t("APP.INCONSISTENT") }}</span>
+                        </v-tooltip>
+                        <v-tooltip right v-if="incons(content.id, hi.id, undefined)">
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'totally')">
+                              <v-icon>mdi-checkbox-blank-outline</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>{{ $t("APP.CONSISTENT") }}</span>
+                        </v-tooltip>
+                      </td>
                     </tr>
                   </template>
                 </tbody>
@@ -37,7 +62,7 @@
 <script lang="ts">
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ContextType, ContextTypes, IContent, IContext, IScenario } from "../models";
+import { ContextType, ContextTypes, IContent, IContext, Inconsistency, InconsistencyType, IScenario } from "../models";
 import { CollectionNames, IAppModel, ICollectionRecord } from "../services/meiosis";
 import { CollectionsModel } from "../services/states/collection-state";
 import { getUuid } from "../utils/constants";
@@ -46,13 +71,16 @@ import { getUuid } from "../utils/constants";
   components: {},
 })
 export default class TableCard extends Vue {
-  @Prop({ default: "ThreatDirection" }) public category!: CollectionNames;
+  @Prop({ default: null }) public category!: CollectionNames | null;
   @Prop({ default: () => [] }) public othercategories!: CollectionNames[];
+  @Prop({ default: () => [] }) public inconsistencies!: Inconsistency[];
   public items: Partial<IContent>[] = [];
   private collections: CollectionsModel<IContent> | null = null;
+  private alwaysTrue: boolean = true;
 
   @Watch("category")
-  private categoryChanged() {
+  private categoryChanged(newCat: string) {
+    console.log(`categoryChanged to ${newCat}`);
     this.init();
   }
 
@@ -62,6 +90,34 @@ export default class TableCard extends Vue {
 
   constructor() {
     super();
+  }
+
+  private incons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
+    const found = this.inconsistencies.filter((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
+    if (found) {
+      return found.type === inconstistency;
+    } else {
+      return !inconstistency;
+    }
+  }
+
+  private setcons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
+    if (!inconstistency) {
+      // If combination should be removed
+      const indexToDelete = this.inconsistencies.findIndex((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId));
+      if (indexToDelete >= 0) this.inconsistencies.splice(indexToDelete, 1);
+    } else {
+      // If combination should not be removed
+      const found = this.inconsistencies.filter((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
+      if (found) {
+        // If combination already exists
+        found.type = inconstistency;
+      } else {
+        // If combination not exists yet
+        this.inconsistencies.push({ ids: [fromId, toId], type: inconstistency });
+      }
+    }
+    this.$store.actions.updateInconsistencies(this.inconsistencies);
   }
 
   private async init() {
@@ -78,18 +134,18 @@ export default class TableCard extends Vue {
 }
 </script>
 
-<style scoped lang="css">
+<style lang="css">
 .consistency-table .v-input--checkbox {
   margin-top: 0;
 }
-.consistency-table td {
+.consistency-table .v-input__slot {
   align-items: center;
   justify-content: center;
 }
 .table-padding {
   padding: 4px;
 }
-.full-width {
-  min-width: 100%;
+.consistency-table td.more-padding {
+  padding-right: 48px !important;
 }
 </style>

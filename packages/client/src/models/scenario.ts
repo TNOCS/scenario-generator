@@ -2,6 +2,14 @@ import { CollectionNames } from "../services/meiosis";
 import { IContent } from ".";
 import { ContentCategory } from "./content";
 
+export type InconsistencyType = "partly" | "totally";
+
+export interface Inconsistency {
+  ids: string[];
+  type: InconsistencyType;
+}
+
 export interface IScenario extends IContent {
   categories: { [key in ContentCategory]: Array<CollectionNames> };
+  inconsistencies: Inconsistency[];
 }
