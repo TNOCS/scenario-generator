@@ -89,7 +89,7 @@ export default class SentenceBuilder extends Vue {
   }
 
   private getRandom(cat: CollectionNames): string {
-    if (this.collections[cat].list!.length <= 0) {
+    if (!this.collections || this.collections[cat].list!.length <= 0) {
       return "None";
     } else {
       const r = _.random(this.collections[cat].list!.length - 1);
