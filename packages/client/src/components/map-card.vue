@@ -101,7 +101,7 @@ export default class MapCard extends Vue {
       if (!l) return;
       const loc = _.find(this.locations.list!, (val) => val.name === l.Location);
       if (!loc) return;
-      const data = this.$overpass.getGeojson(Object.values(loc.context.data)[0], this.addFeature);
+      const data = this.$overpass.getGeojson(Object.values(loc!.context!.data)[0], this.addFeature);
     }
   }
 
