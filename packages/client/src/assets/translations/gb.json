@@ -19,6 +19,7 @@
       "IMPORT": "Import file",
       "IMPORT_EXPORT_TITLE": "Import/export project",
       "INCONSISTENT": "Combinations with these two items are impossible",
+      "KEY": "key",
       "LANGUAGE": "language",
       "LOCATION": "location",
       "NAME": "name",
@@ -31,6 +32,7 @@
       "SHOW_SCENARIO": "Show scenario",
       "STRUCTURE": "structure",
       "THEME": "theme",
+      "VALUE": "value",
       "WRITE_NARRATIVE": "write a narrative"
     },
     "COMP": {

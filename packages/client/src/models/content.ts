@@ -8,6 +8,8 @@ export interface IBasicContent {
 export type ContentCategory = "THREAT" | "CONTEXT" | "SCENARIO";
 export const ContextTypes = ["NONE", "LOCATION", "LOCATIONTYPE"] as const;
 export type ContextType = typeof ContextTypes[number];
+export const LocationTypes = ["NAME", "COORDINATES"] as const;
+export type LocationType = typeof LocationTypes[number];
 
 export interface IContext {
   type: ContextType;

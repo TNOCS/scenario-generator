@@ -19,11 +19,12 @@
       "IMPORT": "Importeer bestand",
       "IMPORT_EXPORT_TITLE": "Importeer/exporteer project",
       "INCONSISTENT": "Combinaties met deze twee items zijn uitgesloten",
+      "KEY": "key",
       "LANGUAGE": "taal",
       "LOCATION": "lokatie",
       "NAME": "naam",
-      "PIN": "Pin {item}",
       "PARTLY_CONSISTENT": "Combinaties met deze twee items zijn onwaarschijnlijk",
+      "PIN": "Pin {item}",
       "SAVE": "opslaan",
       "SCENARIO": "scenario",
       "SELECT_DIMENSION": "selecteer een dimensie",
@@ -31,6 +32,7 @@
       "SHOW_SCENARIO": "toon scenario",
       "STRUCTURE": "structuur",
       "THEME": "thema",
+      "VALUE": "value",
       "WRITE_NARRATIVE": "schrijf een narratief"
     },
     "COMP": {

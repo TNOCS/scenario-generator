@@ -5,8 +5,24 @@
     </v-card-title>
     <v-card-text class="pb-0">
       <v-select v-model="activeType" :items="types" @change="typeSelected"></v-select>
-      <v-text-field :label="`${$t('APP.KEY')}` | capitalize" v-model="activeKey" autofocus></v-text-field
-      ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
+      <div v-if="activeType == 'LOCATION'">
+        <v-select v-model="activeLocationType" :items="locationTypes" @change="locationTypeSelected"></v-select>
+        <div v-if="activeLocationType == 'NAME'">
+          <v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
+        </div>
+        <div v-else-if="activeLocationType == 'COORDINATES'">
+          <v-text-field type="number" label="Latitude" v-model="activeLat"></v-text-field>
+          <v-text-field type="number" label="Longitude" v-model="activeLon" v-on:keyup.enter="addItem"></v-text-field>
+        </div>
+      </div>
+      <div v-else-if="activeType == 'LOCATIONTYPE'">
+        <v-text-field :label="`${$t('APP.KEY')}` | capitalize" v-model="activeKey" autofocus></v-text-field
+        ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
+      </div>
+      <div v-else>
+        <v-text-field :label="`${$t('APP.KEY')}` | capitalize" disabled></v-text-field
+        ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" disabled></v-text-field>
+      </div>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
@@ -19,7 +35,7 @@
 <script lang="ts">
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ContextType, ContextTypes, IContent, IContext, IScenario } from "../models";
+import { ContextType, ContextTypes, IContent, IContext, IScenario, LocationType, LocationTypes } from "../models";
 import { CollectionNames } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
@@ -29,7 +45,11 @@ import { getUuid } from "../utils/constants";
 export default class AddContextCard extends Vue {
   @Prop({ default: () => {} }) public item!: Partial<IContent>;
   private types: ContextType[] = [...ContextTypes];
+  private locationTypes: LocationType[] = [...LocationTypes];
+  private activeLocationType: LocationType = "NAME";
   private activeType: ContextType = "NONE";
+  private activeLat: number = 0.0;
+  private activeLon: number = 0.0;
   private activeKey: string = "";
   private activeVal: string = "";
   private newContext: IContext = { type: "NONE", data: {} };
@@ -40,8 +60,17 @@ export default class AddContextCard extends Vue {
     this.resetNewItem();
     if (this.item && this.item.context) {
       this.activeType = this.item.context.type;
-      this.activeKey = Object.keys(this.item.context.data).shift() || "";
-      this.activeVal = Object.values(this.item.context.data).shift() || "";
+      if (this.activeType === "LOCATION") {
+        this.activeLocationType = (Object.keys(this.item.context.data).shift() as LocationType) || "NAME";
+        this.activeVal = Object.values(this.item.context.data).shift() || "";
+        if (this.activeLocationType === "COORDINATES") {
+          this.activeLat = +this.activeVal.split(",").shift();
+          this.activeLon = +this.activeVal.split(",").pop();
+        }
+      } else {
+        this.activeKey = Object.keys(this.item.context.data).shift() || "";
+        this.activeVal = Object.values(this.item.context.data).shift() || "";
+      }
     }
   }
 
@@ -55,7 +84,15 @@ export default class AddContextCard extends Vue {
 
   private async addItem() {
     this.newContext.type = this.activeType;
-    this.newContext.data[this.activeKey] = this.activeVal;
+    if (this.activeType === "LOCATION") {
+      if (this.activeLocationType === "COORDINATES") {
+        this.newContext.data[this.activeLocationType] = `${this.activeLat},${this.activeLon}`;
+      } else {
+        this.newContext.data[this.activeLocationType] = this.activeVal;
+      }
+    } else {
+      this.newContext.data[this.activeKey] = this.activeVal;
+    }
     this.item.context = Object.assign({}, this.newContext) as IContext;
     this.$store.actions[this.item.type!].save(this.item);
     this.$emit("close");
