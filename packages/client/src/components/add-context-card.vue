@@ -64,8 +64,8 @@ export default class AddContextCard extends Vue {
         this.activeLocationType = (Object.keys(this.item.context.data).shift() as LocationType) || "NAME";
         this.activeVal = Object.values(this.item.context.data).shift() || "";
         if (this.activeLocationType === "COORDINATES") {
-          this.activeLat = +this.activeVal.split(",").shift();
-          this.activeLon = +this.activeVal.split(",").pop();
+          this.activeLat = this.activeVal.includes(",") ? +this.activeVal.split(",")!.shift()! : 0;
+          this.activeLon = this.activeVal.includes(",") ? +this.activeVal.split(",")!.pop()! : 0;
         }
       } else {
         this.activeKey = Object.keys(this.item.context.data).shift() || "";
