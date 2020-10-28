@@ -51,7 +51,7 @@ import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { createStyle } from "vuelayers/lib/ol-ext/style";
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
-import center from "@turf/center";
+import { bbox, bboxPolygon, center } from "@turf/turf";
 import { IContent, IContext, INarrative, IScenario, LocationContext } from "../models";
 import { ICollectionRecord } from "../services/meiosis";
 import { CollectionType } from "../services/states/collection-state";
@@ -86,20 +86,28 @@ export default class MapCard extends Vue {
 
   private zoomMapThrottled() {
     if (!this.features) return;
-    const c: Feature<any> = center({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>);
+    const c: Feature<any> = center(
+      bboxPolygon(bbox({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>))
+    );
     this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
     this.zoom = 14;
   }
 
-  private pointerMove = _.throttle(this.pointerMoveThrottled, 50);
+  private pointerMove = _.throttle(this.pointerMoveThrottled, 50, { trailing: true });
 
   private pointerMoveThrottled(evt: any) {
     this.pointer = `Lat: ${evt.coordinate[1].toFixed(4)}, Lon: ${evt.coordinate[0].toFixed(4)}`;
   }
 
-  private async addFeature(f: Feature<Point>) {
-    this.features.push(f);
-    this.zoomMap();
+  private async addFeatures(error: Error | undefined, fc: FeatureCollection<Point>) {
+    if (error) {
+      console.log(error);
+    } else {
+      fc.features.forEach(f => {
+        this.features.push(f);
+        this.zoomMap();
+      });
+    }
   }
 
   private async updateMap() {
@@ -112,12 +120,13 @@ export default class MapCard extends Vue {
       if (context.type === "LOCATION") {
         const data = context.data as LocationContext;
         if (data.NAME) {
-          this.$overpass.getGeojsonFromQuery(data.NAME, this.addFeature);
+          this.$overpass.getGeojsonFromQuery(data.NAME, "amenity=restaurant", this.addFeatures);
         } else if (data.COORDINATES) {
-          this.$overpass.getGeojsonFromCoordinates(data.COORDINATES.split(',').map(c => +c), this.addFeature);
+          const coords = data.COORDINATES.split(",").map(c => +c);
+          this.$overpass.getGeojsonFromCoordinates(coords, "amenity=restaurant", this.addFeatures);
         }
       } else {
-        console.log('No location context found');
+        console.log("No location context found");
       }
     }
   }

@@ -1,24 +1,23 @@
 import { NominatimResult, OverpassResult } from "../models";
 import { Feature, GeoJsonProperties, Point } from "geojson";
-// import overpass from "overpass-frontend";
-const overpass = require("overpass-frontend");
+import query_overpass from "query-overpass";
+// const overpass = require("overpass-frontend");
 import queryString from "query-string";
 import { bbox, buffer } from "@turf/turf";
 import Axios from "axios";
 
 export default class OverpassService {
   private nominatim;
-  private overpass;
-  private callbackFcn?: (...args: any) => any;
+  private overpass: (query: string, cb: (...args: any) => void, options?: any) => void;
 
   constructor() {
     this.nominatim = "https://nominatim.openstreetmap.org/search?limit=10&";
-    this.overpass = new overpass("//overpass-api.de/api/interpreter");
+    this.overpass = query_overpass;
   }
 
-  public async getGeojsonFromCoordinates(coordinates: number[], callbackFcn: (...args: any) => any) {
+  public async getGeojsonFromCoordinates(coordinates: number[], type: string, callbackFcn: (...args: any) => any) {
     const f: Feature<Point> = this.createFeature(coordinates, {});
-    const buffered = buffer(f, 2, { units: "kilometers" });
+    const buffered = buffer(f, 5, { units: "kilometers" });
     const bufferBox = bbox(buffered);
     const queryBox = {
       minlat: +bufferBox[0],
@@ -26,10 +25,10 @@ export default class OverpassService {
       maxlat: +bufferBox[2],
       maxlon: +bufferBox[3],
     };
-    this.getGeojson(queryBox, callbackFcn);
+    this.getGeojson(queryBox, type, callbackFcn);
   }
 
-  public async getGeojsonFromQuery(name: string, callbackFcn: (...args: any) => any) {
+  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (error: Error | undefined, data: any) => any) {
     const query = queryString.stringify({ q: name, format: "json" });
     const aresult = await Axios.get(`${this.nominatim}${query}`);
     const result: NominatimResult[] = aresult.data;
@@ -44,31 +43,13 @@ export default class OverpassService {
       minlon: +found.boundingbox[2],
       maxlon: +found.boundingbox[3],
     };
-    this.getGeojson(foundBbox, callbackFcn);
+    this.getGeojson(foundBbox, type, callbackFcn);
   }
 
-  private async getGeojson(bbox: any, callbackFcn: (...args: any) => any) {
-    this.callbackFcn = callbackFcn;
-    const data = this.overpass.BBoxQuery(
-      "nwr[amenity=restaurant]",
-      //   { minlat: 48.195, maxlat: 48.2, minlon: 16.335, maxlon: 16.34 },
-      bbox,
-      {
-        properties: overpass.ALL,
-      },
-      (err: Error, result: OverpassResult) => {
-        console.log("* " + result.tags.name + " (" + result.id + ")");
-        const geoJson: Feature<Point> = this.createFeatureOverpass(result);
-        if (this.callbackFcn) {
-          this.callbackFcn(geoJson);
-        }
-      },
-      (err: Error) => {
-        if (err) {
-          console.log(err);
-        }
-      }
-    );
+  private async getGeojson(bb: any, type: string, cb: (...args: any) => any) {
+    const q = `[out:json];node(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];out center 10;`;
+    console.log(q);
+    const data = this.overpass(q, cb);
   }
 
   private createFeature(coords: number[], props: GeoJsonProperties): Feature<Point, GeoJsonProperties> {
