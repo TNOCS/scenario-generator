@@ -7,7 +7,7 @@
           <v-btn @click="generateScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
             {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>
-          <div v-if="generated">
+          <div>
             <v-row class="mt-1">
               <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6">
                 <v-card>
@@ -29,7 +29,7 @@
                               <td>{{ cat }}</td>
                               <td class="py-1">
                                 <!-- prettier-ignore -->
-                                <v-select :items="collections[cat].list" item-text="name" item-value="name" v-model="answers[cat]" solo dense hide-details></v-select>
+                                <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]" solo dense hide-details></v-select>
                               </td>
                             </tr>
                           </template>
@@ -47,7 +47,7 @@
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <div class="overline px-2 py-0">{{ `2. ${$t("APP.WRITE_NARRATIVE")}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
-        <v-textarea filled v-model="scenariotext" hint="Write a narrative "> </v-textarea>
+        <v-textarea filled v-model="narrativeText" hint="Write a narrative "> </v-textarea>
       </v-card-text>
     </v-card>
     <v-card dense flat tile class="flex-card" style="background: transparent">
@@ -83,7 +83,6 @@ import _ from "lodash";
 })
 export default class ScenarioGenerator extends Vue {
   private scenario?: Partial<IScenario> = {};
-  private scenariotext: string = "";
   private rows: Array<CollectionNames> = [];
   private collections: CollectionsModel<IContent> | null = null;
   private categoryNames: ContentCategory[] = [];
@@ -93,6 +92,17 @@ export default class ScenarioGenerator extends Vue {
   private answers: { [key in CollectionNames]: string } = {} as { [key in CollectionNames]: string };
   private generated: boolean = false;
   private narrativeName: string = "";
+  private narrativeText: string = "";
+  private narrative: INarrative = {} as INarrative;
+
+  @Watch("narrative")
+  private narrativeChanged(nar: INarrative) {
+    if (!nar) return;
+    console.log(`narrativeChanged to ${nar.id}`);
+    this.narrativeName = nar.name || "";
+    this.narrativeText = nar.narrative || "";
+    this.answers = this.narrative.components;
+  }
 
   constructor() {
     super();
@@ -108,6 +118,7 @@ export default class ScenarioGenerator extends Vue {
       this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
       this.collections = s;
+      this.narrative = s.app.narrative;
     });
   }
 
@@ -120,7 +131,7 @@ export default class ScenarioGenerator extends Vue {
       return "None";
     } else {
       const r = _.random(this.collections[cat].list!.length - 1);
-      return this.collections[cat].list![r].name!;
+      return this.collections[cat].list![r].id!;
     }
   }
 
@@ -137,15 +148,18 @@ export default class ScenarioGenerator extends Vue {
   }
 
   private async pinNarrative() {
-    console.log("pin narrative");
+    console.log("Pin narrative");
     if (!this.scenario) return;
-    if (!this.scenario.narratives) this.scenario.narratives = [];
-    this.scenario.narratives.length = 0;
+    if (!this.scenario.narratives) {
+      this.scenario.narratives = [];
+    } else {
+      this.scenario.narratives = this.scenario.narratives.filter(n => n.id != this.narrativeName);
+    }
     const n: INarrative = {
       id: this.narrativeName,
       name: this.narrativeName,
       components: this.answers,
-      narrative: this.scenariotext,
+      narrative: this.narrativeText,
     };
     this.scenario.narratives!.push(n);
     await this.$store.actions["scenarios"].save(this.scenario);

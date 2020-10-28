@@ -10,10 +10,11 @@ export const ContextTypes = ["NONE", "LOCATION", "LOCATIONTYPE"] as const;
 export type ContextType = typeof ContextTypes[number];
 export const LocationTypes = ["NAME", "COORDINATES"] as const;
 export type LocationType = typeof LocationTypes[number];
+export type LocationContext = { [key in LocationType]: string };
 
 export interface IContext {
   type: ContextType;
-  data: Record<string, any>;
+  data: LocationContext | Record<string, any>;
 }
 
 export interface IContent extends IBasicContent {

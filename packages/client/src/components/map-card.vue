@@ -52,7 +52,7 @@ import { createStyle } from "vuelayers/lib/ol-ext/style";
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
 import center from "@turf/center";
-import { IContent, IContext, INarrative, IScenario } from "../models";
+import { IContent, IContext, INarrative, IScenario, LocationContext } from "../models";
 import { ICollectionRecord } from "../services/meiosis";
 import { CollectionType } from "../services/states/collection-state";
 
@@ -60,7 +60,7 @@ import { CollectionType } from "../services/states/collection-state";
   components: {},
 })
 export default class MapCard extends Vue {
-  private pointer: string = "";
+  private narrative: INarrative = {} as INarrative;
   private scenario: Partial<IScenario> = {};
   private locations: CollectionType<IContent> = {};
 
@@ -72,6 +72,7 @@ export default class MapCard extends Vue {
   private zoom: number = 2;
   private center: number[] = [0, 12];
   private features: any[] = [];
+  private pointer: string = "";
 
   private toggleMapLayer() {
     if (this.url === this.urls[0]) {
@@ -103,17 +104,21 @@ export default class MapCard extends Vue {
 
   private async updateMap() {
     console.log(`Request map data`);
-    if (this.scenario && this.scenario.narratives && this.scenario.narratives.length > 0) {
-      const n: INarrative | undefined = this.scenario.narratives[0];
-      if (!n) return;
-      const l = _.pick(n.components, "Location");
-      if (!l) return;
-      const loc = _.find(this.locations.list!, val => val.name === l.Location);
-      if (!loc) return;
-      // const context: IContext = loc.context;
-      // if (context.type === "LOCATION") {
-      // }
-      const data = this.$overpass.getGeojson(Object.values(loc!.context!.data)[0], this.addFeature);
+    if (this.narrative && this.narrative.id) {
+      const locId = _.pick(this.narrative.components, "Location");
+      const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
+      const context: IContext = loc && loc.context;
+      if (!context) return console.log(`Could not find loc in narrative ${this.narrative.name}`);
+      if (context.type === "LOCATION") {
+        const data = context.data as LocationContext;
+        if (data.NAME) {
+          this.$overpass.getGeojsonFromQuery(data.NAME, this.addFeature);
+        } else if (data.COORDINATES) {
+          this.$overpass.getGeojsonFromCoordinates(data.COORDINATES.split(',').map(c => +c), this.addFeature);
+        }
+      } else {
+        console.log('No location context found');
+      }
     }
   }
 
@@ -121,6 +126,7 @@ export default class MapCard extends Vue {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current!;
       this.locations = s.Location;
+      this.narrative = s.app.narrative || ({} as INarrative);
     });
   }
 
