@@ -1,7 +1,7 @@
 {
   "gb": {
     "APP": {
-      "ACTIVE_SCENARIO": "active scenario",
+      "ACTIVE": "active {item}",
       "ADD": "Add {item}",
       "ADD_COMPONENTS": "Add components",
       "ADD_CONTEXT": "add context",
@@ -13,6 +13,7 @@
       "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
       "DONE": "done",
+      "EDIT": "Edit {item}",
       "EXPORT": "Export file",
       "FILL_SENTENCE": "Fill the sentence",
       "GENERATE": "Generate {item}",
@@ -43,6 +44,7 @@
       "LOCATION": "location | locations",
       "MODUSOPERANDI": "modus operandus | modus operandi",
       "MOTIVATION": "motivation | motivations",
+      "NARRATIVE": "narrative | narratives",
       "OBJECT": "object | objects",
       "OPENCOMPARTMENTS": "open compartment | open compartments",
       "PHYSICAL_ANGLE": "physical angle | physical angles",

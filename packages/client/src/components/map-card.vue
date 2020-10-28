@@ -10,9 +10,11 @@
     <v-card-text class="text-description full-height">
       <v-row class="no-gutters full-height">
         <v-col md="12" class="full-height">
+          <div class="map-overlay-coords">{{ pointer }}</div>
           <vl-map
             :load-tiles-while-animating="true"
             :load-tiles-while-interacting="true"
+            @pointermove="pointerMove"
             data-projection="EPSG:4326"
             style="height: 85%"
           >
@@ -58,6 +60,7 @@ import { CollectionType } from "../services/states/collection-state";
   components: {},
 })
 export default class MapCard extends Vue {
+  private pointer: string = "";
   private scenario: Partial<IScenario> = {};
   private locations: CollectionType<IContent> = {};
 
@@ -87,6 +90,12 @@ export default class MapCard extends Vue {
     this.zoom = 14;
   }
 
+  private pointerMove = _.throttle(this.pointerMoveThrottled, 50);
+
+  private pointerMoveThrottled(evt: any) {
+    this.pointer = `Lat: ${evt.coordinate[1].toFixed(4)}, Lon: ${evt.coordinate[0].toFixed(4)}`;
+  }
+
   private async addFeature(f: Feature<Point>) {
     this.features.push(f);
     this.zoomMap();
@@ -99,14 +108,17 @@ export default class MapCard extends Vue {
       if (!n) return;
       const l = _.pick(n.components, "Location");
       if (!l) return;
-      const loc = _.find(this.locations.list!, (val) => val.name === l.Location);
+      const loc = _.find(this.locations.list!, val => val.name === l.Location);
       if (!loc) return;
+      // const context: IContext = loc.context;
+      // if (context.type === "LOCATION") {
+      // }
       const data = this.$overpass.getGeojson(Object.values(loc!.context!.data)[0], this.addFeature);
     }
   }
 
   private init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.scenario = s.scenarios.current!;
       this.locations = s.Location;
     });
@@ -122,5 +134,13 @@ export default class MapCard extends Vue {
 <style lang="css">
 .full-height {
   height: 100%;
+}
+.map-overlay-coords {
+  position: absolute;
+  text-align: center;
+  top: 6px;
+  width: 100%;
+  z-index: 100;
+  pointer-events: none;
 }
 </style>

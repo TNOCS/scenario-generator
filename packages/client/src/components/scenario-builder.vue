@@ -2,7 +2,7 @@
   <v-card dense flat tile class="flex-card" style="background: transparent">
     <div class="overline px-2 py-0">{{ `2. ${$t("APP.WRITE_NARRATIVE")}` }}</div>
     <v-card-text class="text-description ma-0 pa-1">
-      <v-textarea filled v-model="scenariotext" hint="Write a narrative "> </v-textarea>
+      <v-textarea filled v-model="scenariotext" :hint="`${$t('APP.WRITE_NARRATIVE')}`"> </v-textarea>
     </v-card-text>
   </v-card>
 </template>
@@ -11,7 +11,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { IBlock, IContent, IScenario, ISentence } from "../models";
+import { IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import ScenarioText from "../components/scenario-text.vue";
@@ -37,10 +37,10 @@ export default class ScenarioBuilder extends Vue {
   }
 
   private async init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
       const columns = {} as Record<CollectionNames, Partial<IContent>[]>;
-      CollectionNamesArr.forEach((n) => {
+      CollectionNamesArr.forEach(n => {
         columns[n] = s[n].list!;
       });
       Vue.set(this, "columns", columns);

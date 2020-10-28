@@ -6,7 +6,7 @@
     <v-card-text class="pb-0">
       <v-select v-model="activeType" :items="types" @change="typeSelected"></v-select>
       <div v-if="activeType == 'LOCATION'">
-        <v-select v-model="activeLocationType" :items="locationTypes" @change="locationTypeSelected"></v-select>
+        <v-select v-model="activeLocationType" :items="locationTypes"></v-select>
         <div v-if="activeLocationType == 'NAME'">
           <v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
         </div>

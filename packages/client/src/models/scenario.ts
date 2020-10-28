@@ -10,6 +10,7 @@ export interface Inconsistency {
 }
 
 export interface INarrative {
+  id: string;
   name: string;
   components: { [key in CollectionNames]: string };
   narrative: string;

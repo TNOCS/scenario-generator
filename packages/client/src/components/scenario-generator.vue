@@ -15,7 +15,7 @@
                     {{ catName }}
                   </v-card-title>
                   <v-card-text class="pb-0">
-                    <v-simple-table dense>
+                    <v-simple-table dense v-if="collections">
                       <template v-slot:default>
                         <thead>
                           <tr>
@@ -27,7 +27,10 @@
                           <template>
                             <tr v-for="cat in categories[catName]" :key="cat">
                               <td>{{ cat }}</td>
-                              <td class="more-padding">{{ answers[cat] }}</td>
+                              <td class="py-1">
+                                <!-- prettier-ignore -->
+                                <v-select :items="collections[cat].list" item-text="name" item-value="name" v-model="answers[cat]" solo dense hide-details></v-select>
+                              </td>
                             </tr>
                           </template>
                         </tbody>
@@ -50,9 +53,15 @@
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <div class="overline px-2 py-0">{{ `3. ${$t("APP.PIN", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
-        <v-btn @click="pinScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
-          {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
-        </v-btn>
+        <v-text-field
+          class="name-field"
+          v-model="narrativeName"
+          :label="$t('APP.NAME') | capitalize"
+          append-outer-icon="mdi-content-save"
+          @click:append-outer="pinNarrative"
+          v-on:keyup.enter="pinNarrative"
+        >
+        </v-text-field>
       </v-card-text>
     </v-card>
     <v-row class="mt-1"> </v-row>
@@ -63,7 +72,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { ContentCategory, IContent, IScenario, ISentence } from "../models";
+import { ContentCategory, IContent, INarrative, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { CollectionsModel } from "../services/states/collection-state";
 import { getUuid } from "../utils/constants";
@@ -83,16 +92,17 @@ export default class ScenarioGenerator extends Vue {
   };
   private answers: { [key in CollectionNames]: string } = {} as { [key in CollectionNames]: string };
   private generated: boolean = false;
+  private narrativeName: string = "";
 
   constructor() {
     super();
   }
 
   private async init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
       this.rows.length = 0;
-      CollectionNamesArr.forEach((n) => {
+      CollectionNamesArr.forEach(n => {
         this.rows.push(n);
       });
       this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
@@ -102,7 +112,7 @@ export default class ScenarioGenerator extends Vue {
   }
 
   private getCategoryRows(cat: ContentCategory): CollectionNames[] {
-    return this.rows.filter((r) => this.categories[cat].includes(r));
+    return this.rows.filter(r => this.categories[cat].includes(r));
   }
 
   private getRandom(cat: CollectionNames): string {
@@ -126,16 +136,21 @@ export default class ScenarioGenerator extends Vue {
     this.generated = !this.generated;
   }
 
-  private pinScenario() {
-    console.log("pin");
+  private async pinNarrative() {
+    console.log("pin narrative");
     if (!this.scenario) return;
     if (!this.scenario.narratives) this.scenario.narratives = [];
     this.scenario.narratives.length = 0;
-    this.scenario.narratives!.push({
-      name: `${Date.now()}`,
+    const n: INarrative = {
+      id: this.narrativeName,
+      name: this.narrativeName,
       components: this.answers,
       narrative: this.scenariotext,
-    });
+    };
+    this.scenario.narratives!.push(n);
+    await this.$store.actions["scenarios"].save(this.scenario);
+    await this.$store.actions["scenarios"].load(this.scenario!.id!);
+    await this.$store.actions.changeNarrative(n);
   }
 
   mounted() {
@@ -168,5 +183,8 @@ export default class ScenarioGenerator extends Vue {
 }
 .sentence-col .v-input--selection-controls {
   margin-top: 8px;
+}
+.name-field {
+  max-width: 300px;
 }
 </style>

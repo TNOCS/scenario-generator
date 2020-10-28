@@ -39,7 +39,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { ContentCategory, IBlock, IContent, IScenario, ISentence } from "../models";
+import { ContentCategory, IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 import TableCard from "../components/table-card.vue";

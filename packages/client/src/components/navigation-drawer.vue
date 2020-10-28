@@ -7,21 +7,24 @@
     <v-card flat tile class="" style="background: transparent">
       <div class="overline px-2 py-2">
         {{ $t("APP.SCENARIO") }}
-        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab x-small elevation="2" class="mr-1 add-button">
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </template>
-          <AddComponentCard itemkey="scenarios" @close="closeMenu"></AddComponentCard>
-        </v-menu>
       </div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
-        <v-select v-model="activeScenario" :items="scenarios" item-text="name" return-object @change="scenarioSelected"></v-select>
         <div class="blue--text">
-          {{ $t("APP.ACTIVE_SCENARIO") | capitalize }}:
-          <span class="bold--text">{{ this.activeScenario.name || '-' }} </span>
+          {{ $t("APP.ACTIVE", { item: $tc("COMP.SCENARIOS") }) | capitalize }}:
+          <span class="bold--text">{{ this.activeScenario.name || "-" }} </span>
+          <span>
+            <v-menu v-if="activeScenario" v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-on="on" v-bind="attrs" color="blue" icon x-small elevation="2" class="mr-1 add-button">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+              <!-- prettier-ignore -->
+              <EditComponentCard itemkey="scenarios" :itemid="activeScenario.id" @close="closeMenu" 
+                :itemname="activeScenario.name"></EditComponentCard>
+            </v-menu>
+          </span>
         </div>
       </v-card-text>
     </v-card>
@@ -35,6 +38,19 @@
         <ImportExportCard @close="closeImportMenu"></ImportExportCard>
       </v-menu>
     </v-row>
+    <v-card flat tile class="" style="background: transparent" v-if="activeScenario">
+      <div class="overline px-2 py-2">{{ $tc("COMP.NARRATIVE", 2) }}</div>
+      <v-divider />
+      <v-card-text class="text-description px-4 py-1">
+        <div class="blue--text">
+          {{ $t("APP.ACTIVE", { item: $tc("COMP.NARRATIVE") }) | capitalize }}:
+          <span class="bold--text">{{ this.activeNarrative.name || "-" }} </span>
+        </div>
+        <!-- prettier-ignore -->
+        <v-select v-model="activeNarrative" :items="activeScenario.narratives" item-text="name" return-object 
+          @change="narrativeSelected"></v-select>
+      </v-card-text>
+    </v-card>
     <v-card flat tile class="" style="background: transparent">
       <div class="overline px-2 py-2">{{ $t("APP.LANGUAGE") }}</div>
       <v-divider />
@@ -64,12 +80,12 @@
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { languageStorageKey } from "../i18n";
 import CountryFlag from "@dzangolab/vue-country-flag-icon";
-import { IScenario } from "../models";
-import AddComponentCard from "./add-component-card.vue";
+import { INarrative, IScenario } from "../models";
+import EditComponentCard from "./edit-component-card.vue";
 import ImportExportCard from "./import-export-card.vue";
 
 @Component({
-  components: { CountryFlag, AddComponentCard, ImportExportCard },
+  components: { CountryFlag, EditComponentCard, ImportExportCard },
 })
 export default class NavigationDrawer extends Vue {
   private languages: string[] = ["gb", "nl"];
@@ -78,6 +94,7 @@ export default class NavigationDrawer extends Vue {
   private scenarios: Partial<IScenario>[] = [];
   private activeTheme: string = "";
   private activeScenario: Partial<IScenario> = {};
+  private activeNarrative: INarrative = {} as INarrative;
   private menu: boolean = false;
   private importMenu: boolean = false;
 
@@ -89,8 +106,8 @@ export default class NavigationDrawer extends Vue {
     this.$store.actions.changeTheme(this.activeTheme);
   }
 
-  private async scenarioSelected() {
-    this.$store.actions[this.activeScenario.type!].load(this.activeScenario.id!);
+  private async narrativeSelected() {
+    this.$store.actions.changeNarrative(this.activeNarrative);
   }
 
   private async closeMenu() {
@@ -102,16 +119,17 @@ export default class NavigationDrawer extends Vue {
   }
 
   private activeScenarioName() {
-    this.activeScenario.name ? this.activeScenario.name : '-';
+    this.activeScenario.name ? this.activeScenario.name : "-";
   }
 
   async mounted() {
     console.log(`navigation mounted`);
-    this.$store.states.map((a) => {
+    this.$store.states.map(a => {
       this.activeLanguage = a.app.language;
       this.activeTheme = a.app.theme;
       this.scenarios = a.scenarios.list || [];
       this.activeScenario = a.scenarios.current || {};
+      this.activeNarrative = a.app.narrative || ({} as INarrative);
     });
   }
 }

@@ -19,7 +19,7 @@
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { Container, Draggable } from "vue-smooth-dnd";
-import { IBlock, IContent, IScenario, ISentence } from "../models";
+import { IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
@@ -34,7 +34,7 @@ export default class ScenarioText extends Vue {
   }
 
   private async init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
     });
   }

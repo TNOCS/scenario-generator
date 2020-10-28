@@ -28,6 +28,6 @@
   "WeatherBehaviour": ["Stable", "Changing"],
   "TypeOfObject": ["Church", "Park", "Palace", "Airport"],
   "AvailableBudget": ["Knowledge", "Water"],
-  "OpenCompartments": ["Lawn mower", "Knife", "Rifle"],
+  "OpenCompartments": ["Open", "Closed"],
   "Location": ["Vietnam", "Washington", "Buitenpost"]
 }

@@ -1,7 +1,7 @@
 {
   "nl": {
     "APP": {
-      "ACTIVE_SCENARIO": "actief scenario",
+      "ACTIVE": "actief {item}",
       "ADD": "{item} toevoegen",
       "ADD_COMPONENTS": "voeg componenten toe",
       "ADD_CONTEXT": "voeg context toe",
@@ -13,6 +13,7 @@
       "CREATE_SCENARIO": "creëer scenario",
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "DONE": "klaar",
+      "EDIT": "{item} bewerken",
       "EXPORT": "Exporteer bestand",
       "FILL_SENTENCE": "Vul de zin in",
       "GENERATE": "Genereer {item}",
@@ -43,6 +44,7 @@
       "LOCATION": "locatie | locaties",
       "MODUSOPERANDI": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
+      "NARRATIVE": "narratief | narratieven",
       "OBJECT": "object | objecten",
       "OPENCOMPARTMENTS": "open compartiment | open compartimenten",
       "PHYSICAL_ANGLE": "fysieke hoek | fysieke hoek",

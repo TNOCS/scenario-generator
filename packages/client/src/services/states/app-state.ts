@@ -1,7 +1,7 @@
 import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
-import { Inconsistency, ISentence } from "../../models";
+import { INarrative, Inconsistency, ISentence } from "../../models";
 import _ from "lodash";
 
 const log = console.log;
@@ -12,7 +12,7 @@ export interface IAppStateModel {
     route: string;
     language: string;
     theme: string;
-    sentence: ISentence;
+    narrative: INarrative;
     //   page?: Dashboards;
   };
 }
@@ -24,7 +24,7 @@ export interface IAppStateActions {
   changeTheme: (theme: string) => void;
   importState: (state: string) => void;
   exportState: () => string;
-  changeSentence: (sentence: ISentence) => void;
+  changeNarrative: (narrative: INarrative) => void;
   updateInconsistencies: (inconsistencies: Inconsistency[]) => void;
 }
 
@@ -41,7 +41,7 @@ export const appStateMgmt = {
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
       theme: localStorage.getItem(themeStorageKey) || "light",
-      sentence: { id: getUuid(), blockids: [] },
+      narrative: {} as INarrative,
     },
   },
   actions: (update, _states) => {
@@ -70,16 +70,16 @@ export const appStateMgmt = {
       exportState: () => {
         log("Export state");
         return JSON.stringify(
-          _states.map((s) =>
+          _states.map(s =>
             _.pickBy(s, (val, key) => {
               return key != "app";
             })
           )
         );
       },
-      changeSentence: (sentence: ISentence) => {
-        log("Set sentence " + sentence.id);
-        update({ app: { sentence } });
+      changeNarrative: (narrative: INarrative) => {
+        log("Set narrative " + narrative.id);
+        update({ app: { narrative } });
       },
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {
         log("Set inconsistencies");
