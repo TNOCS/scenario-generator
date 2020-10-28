@@ -116,11 +116,11 @@ export default class MapCard extends Vue {
     if (this.narrative && this.narrative.id) {
       const locId = _.pick(this.narrative.components, "Location");
       const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
-      const locContext: IContext = loc && loc.context;
+      const locContext: IContext | undefined = loc && loc.context;
       if (!locContext) return console.log(`Could not find loc in narrative ${this.narrative.name}`);
       const typeId = _.pick(this.narrative.components, "TypeOfObject");
       const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
-      const typeContext: IContext = type && type.context;
+      const typeContext: IContext | undefined = type && type.context;
       if (!typeContext) return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
       const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
       if (locContext.type === "LOCATION") {

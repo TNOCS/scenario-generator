@@ -17,7 +17,7 @@ export type LocationTypeContext = { [key in LocationTypeType]: string };
 
 export interface IContext {
   type: ContextType;
-  data: LocationContext | Record<string, any>;
+  data: Record<string, any>;
 }
 
 export interface IContent extends IBasicContent {
