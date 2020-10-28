@@ -16,12 +16,18 @@
         </div>
       </div>
       <div v-else-if="activeType == 'LOCATIONTYPE'">
-        <v-text-field :label="`${$t('APP.KEY')}` | capitalize" v-model="activeKey" autofocus></v-text-field
-        ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
+        <v-select v-model="activeLocationTypeType" :items="locationTypeTypes"></v-select>
+        <div v-if="activeLocationTypeType == 'LIST'">
+          <v-select v-model="activeOsmType" :items="osmTypes" item-text="name" return-object></v-select>
+        </div>
+        <div v-else-if="activeLocationTypeType == 'CUSTOM'">
+          <v-text-field :label="$t('APP.KEY') | capitalize" v-model="activeKey"></v-text-field>
+          <v-text-field :label="$t('APP.VALUE') | capitalize" v-model="activeVal" v-on:keyup.enter="addItem"></v-text-field>
+        </div>
       </div>
       <div v-else>
-        <v-text-field :label="`${$t('APP.KEY')}` | capitalize" disabled></v-text-field
-        ><v-text-field :label="`${$t('APP.VALUE')}` | capitalize" disabled></v-text-field>
+        <v-text-field :label="$t('APP.KEY') | capitalize" disabled></v-text-field
+        ><v-text-field :label="$t('APP.VALUE') | capitalize" disabled></v-text-field>
       </div>
     </v-card-text>
     <v-card-actions>
@@ -35,7 +41,8 @@
 <script lang="ts">
 import { lightFormat } from "date-fns";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ContextType, ContextTypes, IContent, IContext, IScenario, LocationType, LocationTypes } from "../models";
+// prettier-ignore
+import { ContextType, ContextTypes, IContent, IContext, IScenario, LocationType, LocationTypes, LocationTypeType, LocationTypeTypes, OsmType, OsmTypes, } from "../models";
 import { CollectionNames } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
 
@@ -47,6 +54,10 @@ export default class AddContextCard extends Vue {
   private types: ContextType[] = [...ContextTypes];
   private locationTypes: LocationType[] = [...LocationTypes];
   private activeLocationType: LocationType = "NAME";
+  private locationTypeTypes: LocationTypeType[] = [...LocationTypeTypes];
+  private activeLocationTypeType: LocationTypeType = "LIST";
+  private osmTypes = OsmTypes;
+  private activeOsmType: OsmType = {} as OsmType;
   private activeType: ContextType = "NONE";
   private activeLat: number = 0.0;
   private activeLon: number = 0.0;
@@ -67,6 +78,10 @@ export default class AddContextCard extends Vue {
           this.activeLat = this.activeVal.includes(",") ? +this.activeVal.split(",")!.shift()! : 0;
           this.activeLon = this.activeVal.includes(",") ? +this.activeVal.split(",")!.pop()! : 0;
         }
+      } else if (this.activeType === "LOCATIONTYPE") {
+        this.activeLocationTypeType = "CUSTOM";
+        this.activeKey = Object.keys(this.item.context.data).shift() || "";
+        this.activeVal = Object.values(this.item.context.data).shift() || "";
       } else {
         this.activeKey = Object.keys(this.item.context.data).shift() || "";
         this.activeVal = Object.values(this.item.context.data).shift() || "";
@@ -89,6 +104,12 @@ export default class AddContextCard extends Vue {
         this.newContext.data[this.activeLocationType] = `${this.activeLat},${this.activeLon}`;
       } else {
         this.newContext.data[this.activeLocationType] = this.activeVal;
+      }
+    } else if (this.activeType === "LOCATIONTYPE") {
+      if (this.activeLocationTypeType === 'CUSTOM') {
+        this.newContext.data[this.activeKey] = this.activeVal;
+      } else if (this.activeLocationTypeType ==='LIST') {
+        this.newContext.data[this.activeOsmType.key] = this.activeOsmType.value;
       }
     } else {
       this.newContext.data[this.activeKey] = this.activeVal;

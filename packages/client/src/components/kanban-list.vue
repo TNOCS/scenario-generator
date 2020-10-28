@@ -15,9 +15,9 @@
           </v-menu>
         </v-col>
         <v-col cols="10" class="py-1 pl-1">
-          <div class="text-description px-2">
+          <div class="text-description px-2 hor-overflow">
             <Container orientation="horizontal">
-              <Draggable v-for="(item, id) in items" :key="id">
+              <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
                 <KanbanCard :item="item" />
               </Draggable>
             </Container>
@@ -60,7 +60,7 @@ export default class KanbanList extends Vue {
     if (!this.itemkey || !this.itemkey.length) return;
     this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2);
     await this.$store.actions[this.itemkey].updateList();
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.items = s[this.itemkey].list!;
     });
   }
@@ -88,5 +88,11 @@ export default class KanbanList extends Vue {
 }
 .theme--dark .divider-r {
   border-right: rgb(80, 80, 80) 1px solid;
+}
+.min-width-card {
+  min-width: 180px;
+}
+.hor-overflow {
+  overflow-x: auto;
 }
 </style>

@@ -63,6 +63,7 @@ export default class MapCard extends Vue {
   private narrative: INarrative = {} as INarrative;
   private scenario: Partial<IScenario> = {};
   private locations: CollectionType<IContent> = {};
+  private typeOfObjects: CollectionType<IContent> = {};
 
   private url: string = "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   private urls: string[] = [
@@ -115,15 +116,20 @@ export default class MapCard extends Vue {
     if (this.narrative && this.narrative.id) {
       const locId = _.pick(this.narrative.components, "Location");
       const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
-      const context: IContext = loc && loc.context;
-      if (!context) return console.log(`Could not find loc in narrative ${this.narrative.name}`);
-      if (context.type === "LOCATION") {
-        const data = context.data as LocationContext;
+      const locContext: IContext = loc && loc.context;
+      if (!locContext) return console.log(`Could not find loc in narrative ${this.narrative.name}`);
+      const typeId = _.pick(this.narrative.components, "TypeOfObject");
+      const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
+      const typeContext: IContext = type && type.context;
+      if (!typeContext) return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
+      const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
+      if (locContext.type === "LOCATION") {
+        const data = locContext.data as LocationContext;
         if (data.NAME) {
-          this.$overpass.getGeojsonFromQuery(data.NAME, "amenity=restaurant", this.addFeatures);
+          this.$overpass.getGeojsonFromQuery(data.NAME, amenity, this.addFeatures);
         } else if (data.COORDINATES) {
           const coords = data.COORDINATES.split(",").map(c => +c);
-          this.$overpass.getGeojsonFromCoordinates(coords, "amenity=restaurant", this.addFeatures);
+          this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
         }
       } else {
         console.log("No location context found");
@@ -135,6 +141,7 @@ export default class MapCard extends Vue {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current!;
       this.locations = s.Location;
+      this.typeOfObjects = s.TypeOfObject;
       this.narrative = s.app.narrative || ({} as INarrative);
     });
   }

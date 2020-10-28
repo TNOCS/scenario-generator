@@ -47,7 +47,11 @@ export default class OverpassService {
   }
 
   private async getGeojson(bb: any, type: string, cb: (...args: any) => any) {
-    const q = `[out:json];node(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];out center 10;`;
+    const q = `[out:json];(` + 
+    `node(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];` + 
+    `way(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];` + 
+    `relation(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];` + 
+    `);out center 10;`;
     console.log(q);
     const data = this.overpass(q, cb);
   }
