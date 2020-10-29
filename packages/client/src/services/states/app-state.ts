@@ -1,7 +1,7 @@
 import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
 import { IAppModel, UpdateStream } from "../meiosis";
-import { INarrative, Inconsistency, ISentence } from "../../models";
+import { INarrative, Inconsistency } from "../../models";
 import _ from "lodash";
 
 const log = console.log;

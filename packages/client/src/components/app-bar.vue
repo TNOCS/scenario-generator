@@ -33,7 +33,13 @@ import { IScenario } from "../models";
   components: {},
 })
 export default class AppBar extends Vue {
-  async mounted() {}
+  private scenario: Partial<IScenario> = {};
+
+  async mounted() {
+    this.$store.states.map(s => {
+      this.scenario = s.scenarios.current!;
+    });
+  }
 }
 </script>
 
@@ -57,7 +63,7 @@ export default class AppBar extends Vue {
 .v-toolbar__content {
   padding-right: 0;
 }
-.tno-link{
+.tno-link {
   display: flex;
   vertical-align: middle;
 }

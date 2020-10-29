@@ -14,6 +14,7 @@ import AppBar from "./components/app-bar.vue";
 import NavigationDrawer from "./components/navigation-drawer.vue";
 import { Route } from "vue-router";
 import { CollectionNamesPlusArr } from "./services/meiosis";
+import { IScenario } from "./models";
 
 @Component({
   components: {
@@ -23,13 +24,33 @@ import { CollectionNamesPlusArr } from "./services/meiosis";
 })
 export default class App extends Vue {
   private theme: string = "";
+  private scenarios?: Partial<IScenario>[] = [];
+  private activeScenario?: Partial<IScenario> = {};
 
   constructor() {
     super();
     console.log(CollectionNamesPlusArr);
-    CollectionNamesPlusArr.forEach(async (n) => {
+    CollectionNamesPlusArr.forEach(async n => {
       if (this.$store.actions.hasOwnProperty(n)) await this.$store.actions[n].updateList();
     });
+  }
+
+  @Watch("scenarios")
+  private scenariosUpdated() {
+    if (!this.activeScenario && this.scenarios && this.scenarios.length > 0) {
+      this.$store.actions["scenarios"].load(this.scenarios![0]!.id!);
+    }
+  }
+
+  @Watch("activeScenario")
+  private activeScenarioUpdated() {
+    if (this.activeScenario && this.activeScenario.id) {
+      if (!this.$store.states().app.narrative || !this.$store.states().app.narrative.id) {
+        if (this.activeScenario.narratives && this.activeScenario.narratives.length > 0) {
+          this.$store.actions.changeNarrative(this.activeScenario.narratives[0]!);
+        }
+      }
+    }
   }
 
   @Watch("theme")
@@ -45,8 +66,10 @@ export default class App extends Vue {
   }
 
   public mounted() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.theme = s.app.theme;
+      this.scenarios = s.scenarios.list;
+      this.activeScenario = s.scenarios.current;
     });
   }
 }
