@@ -127,7 +127,7 @@ export default class MapCard extends Vue {
       if (locContext.type === "LOCATION") {
         const data = locContext.data as LocationContext;
         if (data.hasOwnProperty("NAME")) {
-          this.$overpass.getGeojsonFromQuery(data.NAME || loc.name, amenity, this.addFeatures);
+          this.$overpass.getGeojsonFromQuery(data.NAME || loc!.name!, amenity, this.addFeatures);
         } else if (data.hasOwnProperty("COORDINATES")) {
           const coords = data.COORDINATES.split(",").map(c => +c);
           this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
