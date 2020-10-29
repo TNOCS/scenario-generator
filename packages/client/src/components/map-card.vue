@@ -8,6 +8,9 @@
     </div>
     <v-divider />
     <v-card-text class="text-description full-height">
+      <div class="pr-cir">
+        <v-progress-circular indeterminate :size="150" color="primary" v-if="!loading"></v-progress-circular>
+      </div>
       <v-row class="no-gutters full-height">
         <v-col md="12" class="full-height">
           <div class="map-overlay-coords">{{ pointer }}</div>
@@ -26,17 +29,17 @@
 
             <vl-layer-vector :z-index="99">
               <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
-              <vl-source-vector>
-                <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties">
-                  <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point>
-                  <vl-style-box>
-                    <!-- <vl-style-circle :radius="10">
+              <vl-source-vector :features="features">
+                <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
+                <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
+                <vl-style-box>
+                  <!-- <vl-style-circle :radius="10">
                       <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
                       <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
                     </vl-style-circle> -->
-                    <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
-                  </vl-style-box>
-                </vl-feature>
+                  <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
+                </vl-style-box>
+                <!-- </vl-feature> -->
               </vl-source-vector>
             </vl-layer-vector>
           </vl-map>
@@ -68,6 +71,7 @@ export default class MapCard extends Vue {
   private locations: CollectionType<IContent> = {};
   private typeOfObjects: CollectionType<IContent> = {};
   private iconUrl: string = "https://github.com/rinzeb/osm-icons/raw/master/png/osmairport.png";
+  private loading: boolean = false;
 
   private url: string = "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   private urls: string[] = [
@@ -108,7 +112,7 @@ export default class MapCard extends Vue {
   private zoomMap = _.throttle(this.zoomMapThrottled, 500, { trailing: true });
 
   private zoomMapThrottled() {
-    if (!this.features) return;
+    if (!this.features || this.features.length < 1) return;
     const c: Feature<any> = center(
       bboxPolygon(bbox({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>))
     );
@@ -123,20 +127,28 @@ export default class MapCard extends Vue {
   }
 
   private async addFeatures(error: Error | undefined, fc: FeatureCollection<Point>) {
+    this.loading = false;
     if (error) {
       console.log(error);
     } else {
       console.log(`Received ${fc.features.length} features`);
-      this.features.length = 0;
+      const features: Feature<Point>[] = [];
       fc.features.forEach(f => {
-        this.features.push(f);
+        features.push(f);
       });
-      this.zoomMap();
+      setTimeout(() => {
+        Vue.set(this, "features", features);
+        this.zoomMap();
+      }, 100);
     }
   }
 
   private async updateMap() {
     console.log(`Update map data`);
+    this.loading = true;
+    if (this.features.length > 0) {
+      this.features.splice(0, this.features.length);
+    }
     if (this.narrative && this.narrative.id) {
       const locId = _.pick(this.narrative.components, "Location");
       const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
@@ -189,5 +201,14 @@ export default class MapCard extends Vue {
   width: 100%;
   z-index: 100;
   pointer-events: none;
+}
+.pr-cir {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  align-self: center;
+  justify-content: center;
+  top: 100px;
+  z-index: 1000;
 }
 </style>
