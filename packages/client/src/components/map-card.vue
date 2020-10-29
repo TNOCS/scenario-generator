@@ -30,10 +30,11 @@
                 <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties">
                   <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point>
                   <vl-style-box>
-                    <vl-style-circle :radius="10">
+                    <!-- <vl-style-circle :radius="10">
                       <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
                       <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
-                    </vl-style-circle>
+                    </vl-style-circle> -->
+                    <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
                   </vl-style-box>
                 </vl-feature>
               </vl-source-vector>
@@ -56,6 +57,8 @@ import { IContent, IContext, INarrative, IScenario, LocationContext } from "../m
 import { ICollectionRecord } from "../services/meiosis";
 import { CollectionType } from "../services/states/collection-state";
 
+const ICON_URL: string = "https://github.com/rinzeb/osm-icons/raw/master/png/osm{{ITEM}}.png";
+
 @Component({
   components: {},
 })
@@ -64,6 +67,7 @@ export default class MapCard extends Vue {
   private scenario: Partial<IScenario> = {};
   private locations: CollectionType<IContent> = {};
   private typeOfObjects: CollectionType<IContent> = {};
+  private iconUrl: string = "https://github.com/rinzeb/osm-icons/raw/master/png/osmairport.png";
 
   private url: string = "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   private urls: string[] = [
@@ -75,6 +79,11 @@ export default class MapCard extends Vue {
   private features: any[] = [];
   private pointer: string = "";
 
+  @Watch("narrative")
+  private narrChanged() {
+    this.updateMap();
+  }
+
   private toggleMapLayer() {
     if (this.url === this.urls[0]) {
       this.url = this.urls[1];
@@ -83,7 +92,20 @@ export default class MapCard extends Vue {
     }
   }
 
-  private zoomMap = _.throttle(this.zoomMapThrottled, 500);
+  private getIcon(n: INarrative): string {
+    let result = "building";
+    if (n && n.components) {
+      const typeId = _.pick(n.components, "TypeOfObject");
+      const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
+      const typeContext: IContext | undefined = type && type.context;
+      if (typeContext) {
+        result = `${Object.values(typeContext.data).pop()!}`;
+      }
+    }
+    return ICON_URL.replace("{{ITEM}}", result);
+  }
+
+  private zoomMap = _.throttle(this.zoomMapThrottled, 500, { trailing: true });
 
   private zoomMapThrottled() {
     if (!this.features) return;
@@ -105,15 +127,16 @@ export default class MapCard extends Vue {
       console.log(error);
     } else {
       console.log(`Received ${fc.features.length} features`);
+      this.features.length = 0;
       fc.features.forEach(f => {
         this.features.push(f);
-        this.zoomMap();
       });
+      this.zoomMap();
     }
   }
 
   private async updateMap() {
-    console.log(`Request map data`);
+    console.log(`Update map data`);
     if (this.narrative && this.narrative.id) {
       const locId = _.pick(this.narrative.components, "Location");
       const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
@@ -144,6 +167,7 @@ export default class MapCard extends Vue {
       this.locations = s.Location;
       this.typeOfObjects = s.TypeOfObject;
       this.narrative = s.app.narrative || ({} as INarrative);
+      this.iconUrl = this.getIcon(s.app.narrative);
     });
   }
 
