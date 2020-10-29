@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card dense flat tile class="flex-card" style="background: transparent; overflow: auto">
+    <v-card dense flat tile class="flex-card generate-card" style="background: transparent; overflow: auto">
       <div class="overline px-2 py-0">{{ `1. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid class="">
@@ -9,12 +9,12 @@
           </v-btn>
           <div>
             <v-row class="mt-1">
-              <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6">
+              <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6" cols="6">
                 <v-card>
-                  <v-card-title dense class="add-context-card">
+                  <v-card-title dense>
                     {{ catName }}
                   </v-card-title>
-                  <v-card-text class="pb-0">
+                  <v-card-text class="pa-0">
                     <v-simple-table dense v-if="collections">
                       <template v-slot:default>
                         <thead>
@@ -26,10 +26,11 @@
                         <tbody class="category-table">
                           <template>
                             <tr v-for="cat in categories[catName]" :key="cat">
-                              <td>{{ cat }}</td>
+                              <td class="catname">{{ cat }}</td>
                               <td class="py-1">
                                 <!-- prettier-ignore -->
-                                <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]" solo dense hide-details></v-select>
+                                <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
+                                  clearable solo dense hide-details></v-select>
                               </td>
                             </tr>
                           </template>
@@ -101,7 +102,7 @@ export default class ScenarioGenerator extends Vue {
     console.log(`narrativeChanged to ${nar.id}`);
     this.narrativeName = nar.name || "";
     this.narrativeText = nar.narrative || "";
-    this.answers = this.narrative.components;
+    this.answers = this.narrative.components || ({} as { [key in CollectionNames]: string });
   }
 
   constructor() {
@@ -141,7 +142,7 @@ export default class ScenarioGenerator extends Vue {
       const names: CollectionNames[] = this.categories[c as ContentCategory];
       for (const n in names) {
         const name = names[n];
-        this.answers[name] = this.getRandom(name);
+        Vue.set(this.answers, name, this.getRandom(name));
       }
     }
     this.generated = !this.generated;
@@ -200,5 +201,20 @@ export default class ScenarioGenerator extends Vue {
 }
 .name-field {
   max-width: 300px;
+}
+.generate-card,
+.generate-card .v-data-table__wrapper,
+.generate-card thead,
+.generate-card tbody {
+  max-width: 100%;
+}
+
+.generate-card table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.v-data-table > .v-data-table__wrapper > table > tbody.category-table > tr > td {
+  padding: 4px 0px 4px 16px;
 }
 </style>

@@ -7,4 +7,5 @@ export const OsmTypes: OsmType[] = [
   { name: "Parking", key: "amenity", value: "parking" },
   { name: "Church", key: "building", value: "church" },
   { name: "Airport", key: "aeroway", value: "aerodrome" },
+  { name: "Hotel", key: "tourism", value: "hotel" },
 ];

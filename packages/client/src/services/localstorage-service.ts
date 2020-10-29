@@ -1,5 +1,6 @@
 import { IContent, IScenario } from "../models";
-import demo from "../assets/demo.json";
+// import demo from "../assets/demo.json";
+import demo from "../../_morf.json";
 import { getUuid } from "../utils/constants";
 import { CollectionNames, CollectionNamesPlus } from "./meiosis";
 

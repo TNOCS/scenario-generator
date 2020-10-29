@@ -1,19 +1,19 @@
 <template>
-  <v-card class="full-width">
-    <v-card-title dense class="table-card">
+  <v-card class="full-width full-height table-card">
+    <v-card-title dense>
       {{ $t("APP.CONSISTENCIES") }}
     </v-card-title>
-    <v-card-text class="pa-0 full-width">
-      <v-container fluid class="ma-0 pa-0">
-        <v-row no-gutters>
-          <v-col v-if="collections">
-            <v-simple-table dense>
+    <v-card-text class="pa-0 full-width full-height-min-title">
+      <v-container fluid class="ma-0 pa-0 full-height">
+        <v-row no-gutters class="full-height">
+          <v-col v-if="collections" class="full-height">
+            <v-simple-table dense fixed-header height="100%" class="full-height">
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <td class="text-left bold--text">Dimension</td>
-                    <td class="text-left bold--text more-padding">Name</td>
-                    <td class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name }}</td>
+                    <th class="text-left bold--text">Dimension</th>
+                    <th class="text-left bold--text more-padding">Name</th>
+                    <th class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name }}</th>
                   </tr>
                 </thead>
                 <tbody class="consistency-table">
@@ -85,7 +85,7 @@ export default class TableCard extends Vue {
   }
 
   private otherCategoriesWithoutSelected() {
-    return this.othercategories.filter((c) => c != this.category);
+    return this.othercategories.filter(c => c != this.category);
   }
 
   constructor() {
@@ -93,7 +93,7 @@ export default class TableCard extends Vue {
   }
 
   private incons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
-    const found = this.inconsistencies.filter((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
+    const found = this.inconsistencies.filter(ic => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
     if (found) {
       return found.type === inconstistency;
     } else {
@@ -104,11 +104,11 @@ export default class TableCard extends Vue {
   private setcons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
     if (!inconstistency) {
       // If combination should be removed
-      const indexToDelete = this.inconsistencies.findIndex((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId));
+      const indexToDelete = this.inconsistencies.findIndex(ic => ic.ids.includes(fromId) && ic.ids.includes(toId));
       if (indexToDelete >= 0) this.inconsistencies.splice(indexToDelete, 1);
     } else {
       // If combination should not be removed
-      const found = this.inconsistencies.filter((ic) => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
+      const found = this.inconsistencies.filter(ic => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
       if (found) {
         // If combination already exists
         found.type = inconstistency;
@@ -147,5 +147,12 @@ export default class TableCard extends Vue {
 }
 .consistency-table td.more-padding {
   padding-right: 48px !important;
+}
+.full-height-min-title {
+  height: calc(100% - 72px);
+}
+.table-card tbody,
+.table-card table {
+  height: 100%;
 }
 </style>

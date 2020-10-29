@@ -104,6 +104,7 @@ export default class MapCard extends Vue {
     if (error) {
       console.log(error);
     } else {
+      console.log(`Received ${fc.features.length} features`);
       fc.features.forEach(f => {
         this.features.push(f);
         this.zoomMap();
@@ -125,9 +126,9 @@ export default class MapCard extends Vue {
       const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
       if (locContext.type === "LOCATION") {
         const data = locContext.data as LocationContext;
-        if (data.NAME) {
-          this.$overpass.getGeojsonFromQuery(data.NAME, amenity, this.addFeatures);
-        } else if (data.COORDINATES) {
+        if (data.hasOwnProperty("NAME")) {
+          this.$overpass.getGeojsonFromQuery(data.NAME || loc.name, amenity, this.addFeatures);
+        } else if (data.hasOwnProperty("COORDINATES")) {
           const coords = data.COORDINATES.split(",").map(c => +c);
           this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
         }

@@ -1,9 +1,11 @@
 <template>
   <v-card tile class="flex-card ma-1 kanban-card" elevation="2" color="accent">
-    <v-card-title class="px-4 pt-2 pb-0">
-      {{ item.name }}
+    <v-card-title class="px-4 pt-2 pb-0 k-c-title">
+      <div class="k-c-title-text">
+        {{ item.name }}
+      </div>
       <v-spacer />
-      <v-btn @click="deleteItem" color="secondary" icon x-small class="mr-2">
+      <v-btn @click="deleteItem" color="secondary" icon x-small class="k-c-btn">
         <v-icon>mdi-delete</v-icon>
       </v-btn>
     </v-card-title>
@@ -39,8 +41,7 @@ export default class KanbanCard extends Vue {
   }
 
   private getContext(item: Partial<IContent>): string {
-    if (!item || !item.context || !item.context.type)
-      return this.$options.filters!.capitalize(this.$t("APP.ADD_CONTEXT"));
+    if (!item || !item.context || !item.context.type) return this.$options.filters!.capitalize(this.$t("APP.ADD_CONTEXT"));
     return item.context.type;
   }
 
@@ -63,8 +64,20 @@ export default class KanbanCard extends Vue {
 <style scoped lang="css">
 .kanban-card {
   cursor: initial;
+  max-width: 240px;
+  min-width: 200px;
 }
 .kanban-context {
   cursor: pointer;
+}
+.k-c-title-text {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: calc(100% - 20px);
+}
+.k-c-btn {
+  margin: 0px;
+  padding: 0px;
 }
 </style>

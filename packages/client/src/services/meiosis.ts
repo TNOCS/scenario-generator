@@ -21,6 +21,8 @@ export type CollectionNames =
   | "ModusOperandi"
   | "Equipment"
   | "TargetType"
+  | "Location"
+  | "TypeOfObject"
   | "Responsibility"
   | "WeatherType"
   | "WeatherBehaviour"
@@ -30,12 +32,10 @@ export type CollectionNames =
   | "ExistingInfra"
   | "PrivacyAwareness"
   | "SecurityAwareness"
-  | "TypeOfObject"
   | "AvailableBudget"
   | "CompartmentsPresent"
   | "OpenCompartments"
-  | "RelationOwnerObjectAndOwnerSecuritySystem"
-  | "Location";
+  | "RelationOwnerObjectAndOwnerSecuritySystem";
 
 export type CollectionNamesPlus = CollectionNames | "scenarios";
 
@@ -50,6 +50,8 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "ModusOperandi",
   "Equipment",
   "TargetType",
+  "Location",
+  "TypeOfObject",
   "Responsibility",
   "WeatherType",
   "WeatherBehaviour",
@@ -59,12 +61,10 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "ExistingInfra",
   "PrivacyAwareness",
   "SecurityAwareness",
-  "TypeOfObject",
   "AvailableBudget",
   "CompartmentsPresent",
   "OpenCompartments",
   "RelationOwnerObjectAndOwnerSecuritySystem",
-  "Location",
 ];
 export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, "scenarios"];
 

@@ -3,7 +3,7 @@ import { Feature, GeoJsonProperties, Point } from "geojson";
 import query_overpass from "query-overpass";
 // const overpass = require("overpass-frontend");
 import queryString from "query-string";
-import { bbox, buffer } from "@turf/turf";
+import { bbox, buffer, center } from "@turf/turf";
 import Axios from "axios";
 
 export default class OverpassService {
@@ -37,13 +37,21 @@ export default class OverpassService {
       return;
     }
     const found: NominatimResult = result.shift()!;
-    const foundBbox = {
-      minlat: +found.boundingbox[0],
-      maxlat: +found.boundingbox[1],
-      minlon: +found.boundingbox[2],
-      maxlon: +found.boundingbox[3],
+    // const foundBbox = {
+    //   minlat: +found.boundingbox[0],
+    //   maxlat: +found.boundingbox[1],
+    //   minlon: +found.boundingbox[2],
+    //   maxlon: +found.boundingbox[3],
+    // };
+    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), 5, { units: "kilometers" });
+    const bufferBox = bbox(buffered);
+    const queryBox = {
+      minlat: +bufferBox[0],
+      minlon: +bufferBox[1],
+      maxlat: +bufferBox[2],
+      maxlon: +bufferBox[3],
     };
-    this.getGeojson(foundBbox, type, callbackFcn);
+    this.getGeojson(queryBox, type, callbackFcn);
   }
 
   private async getGeojson(bb: any, type: string, cb: (...args: any) => any) {

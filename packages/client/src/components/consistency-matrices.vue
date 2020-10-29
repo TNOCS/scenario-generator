@@ -1,26 +1,31 @@
 <template>
-  <div>
+  <div class="full-height">
     <v-tabs v-model="tab" @change="tabChanged">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab v-for="catName in categoryNames" :key="catName">
         {{ catName }}
       </v-tab>
     </v-tabs>
-    <v-tabs-items v-model="tab">
-      <v-tab-item v-for="(val, cat) in categories" :key="cat">
-        <v-card dense flat tile class="flex-card" style="background: transparent">
+    <v-tabs-items v-model="tab" class="full-height">
+      <v-tab-item v-for="(val, cat) in categories" :key="cat" class="full-height">
+        <v-card dense flat tile class="flex-card full-height" style="background: transparent">
           <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
-          <v-card-text class="text-description ma-0 pa-2">
-            <v-container fluid class="ma-0 pa-0">
+          <v-card-text class="text-description ma-0 pa-2 full-height">
+            <v-container fluid class="ma-0 pa-0 full-height">
               <v-row no-gutters>
                 <v-col xs="12" md="6" class="">
-                  <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span>
+                  <!-- <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span> -->
                   <span>
-                    <v-select :items="getCategoryRows(cat)" v-model="selectedCategory"> </v-select>
+                    <v-select
+                      :label="$t('APP.SELECT_DIMENSION') | capitalize"
+                      :items="getCategoryRows(cat)"
+                      v-model="selectedCategory"
+                    >
+                    </v-select>
                   </span>
                 </v-col>
               </v-row>
-              <v-row no-gutters v-if="scenario">
+              <v-row no-gutters v-if="scenario" class="full-height-min-select">
                 <TableCard
                   :category="selectedCategory"
                   :othercategories="getCategoryRows(cat)"
@@ -67,15 +72,15 @@ export default class ConsistencyMatrices extends Vue {
   }
 
   private getCategoryRows(cat: ContentCategory): CollectionNames[] {
-    return this.rows.filter((r) => this.categories[cat].includes(r));
+    return this.rows.filter(r => this.categories[cat].includes(r));
   }
 
   private async init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
       if (this.scenario && !this.scenario.inconsistencies) this.scenario.inconsistencies = [];
       this.rows.length = 0;
-      CollectionNamesArr.forEach((n) => {
+      CollectionNamesArr.forEach(n => {
         this.rows.push(n);
       });
       this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
@@ -96,5 +101,17 @@ export default class ConsistencyMatrices extends Vue {
   display: inline;
   font-size: 150%;
   padding-right: 6px;
+}
+.text-description.full-height {
+  height: calc(100% - 32px);
+}
+.full-height-min-tab {
+  height: calc(100% - 48px);
+}
+.full-height-min-select {
+  height: calc(100% - 32px);
+}
+.v-tabs-items.v-window.full-height {
+  height: calc(100% - 48px);
 }
 </style>
