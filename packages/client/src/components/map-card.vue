@@ -9,7 +9,7 @@
     <v-divider />
     <v-card-text class="text-description full-height">
       <div class="pr-cir">
-        <v-progress-circular indeterminate :size="150" color="primary" v-if="!loading"></v-progress-circular>
+        <v-progress-circular indeterminate :size="150" color="primary" v-if="loading"></v-progress-circular>
       </div>
       <v-row class="no-gutters full-height">
         <v-col md="12" class="full-height">
