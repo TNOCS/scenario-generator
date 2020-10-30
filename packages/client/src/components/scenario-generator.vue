@@ -4,9 +4,14 @@
       <div class="overline px-2 py-0">{{ `1. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid class="">
-          <v-btn @click="generateScenario" color="accent darken-1" elevation="2" class="d-flex ma-4">
-            {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
-          </v-btn>
+          <v-row no-gutters class="d-flex">
+            <v-btn @click="generateNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
+              {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
+            </v-btn>
+            <v-btn @click="newNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
+              {{ $t("APP.EMPTY", { item: $tc("APP.SCENARIO") }) }}
+            </v-btn>
+          </v-row>
           <div>
             <v-row class="mt-1">
               <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6" cols="6">
@@ -136,7 +141,13 @@ export default class ScenarioGenerator extends Vue {
     }
   }
 
-  private generateScenario() {
+  private newNarrative() {
+    this.narrativeName = "";
+    this.narrativeText = "";
+    this.answers = {} as { [key in CollectionNames]: string };
+  }
+
+  private generateNarrative() {
     console.log("generate");
     for (const c in this.categories) {
       const names: CollectionNames[] = this.categories[c as ContentCategory];

@@ -18,9 +18,9 @@ import KanbanLists from "../components/kanban-lists.vue";
 @Component({
   components: { KanbanLists },
 })
-export default class ComponentsView extends Vue {
+export default class DimensionsView extends Vue {
   mounted() {
-    console.log(`ComponentsView mounted`);
+    console.log(`DimensionsView mounted`);
   }
 }
 </script>

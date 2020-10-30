@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer width="240px" app clipped floating permanent class="noselect">
+  <v-navigation-drawer width="240px" app clipped floating permanent class="noselect no-print">
     <v-subheader class="font-weight-thin"></v-subheader>
     <v-row no-gutters class="mb-4" align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="100" contain />

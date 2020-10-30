@@ -153,11 +153,17 @@ export default class MapCard extends Vue {
       const locId = _.pick(this.narrative.components, "Location");
       const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
       const locContext: IContext | undefined = loc && loc.context;
-      if (!locContext) return console.log(`Could not find loc in narrative ${this.narrative.name}`);
+      if (!locContext) {
+        this.loading = false;
+        return console.log(`Could not find loc in narrative ${this.narrative.name}`);
+      }
       const typeId = _.pick(this.narrative.components, "TypeOfObject");
       const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
       const typeContext: IContext | undefined = type && type.context;
-      if (!typeContext) return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
+      if (!typeContext) {
+        this.loading = false;
+        return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
+      }
       const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
       if (locContext.type === "LOCATION") {
         const data = locContext.data as LocationContext;
@@ -169,6 +175,7 @@ export default class MapCard extends Vue {
         }
       } else {
         console.log("No location context found");
+        this.loading = false;
       }
     }
   }

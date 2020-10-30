@@ -2,6 +2,16 @@
   height: 100%;
 }
 
+@media print {
+  main {
+    padding: 0px !important;
+  }
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+}
+
 ::-webkit-scrollbar {
   height: 10px;
   width: 10px;
@@ -21,7 +31,7 @@
 }
 
 .bold--text {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .cardcontent {

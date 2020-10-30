@@ -1,7 +1,7 @@
 <template>
   <v-card dense flat tile class="flex-card" style="background: transparent">
     <div class="overline px-2 py-0">
-      {{ `3. ${$t("APP.SHOW_SCENARIO")}` }}
+      {{ `${$t("APP.SHOW_SCENARIO")}` }}
       <span style="float: right">
         <v-btn icon><v-icon>mdi-info</v-icon></v-btn>
       </span>

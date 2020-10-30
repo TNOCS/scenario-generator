@@ -9,7 +9,6 @@
     <v-tabs-items v-model="tab" class="full-height">
       <v-tab-item v-for="(val, cat) in categories" :key="cat" class="full-height">
         <v-card dense flat tile class="flex-card full-height" style="background: transparent">
-          <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2 full-height">
             <v-container fluid class="ma-0 pa-0 full-height">
               <v-row no-gutters>
@@ -20,6 +19,7 @@
                       :label="$t('APP.SELECT_DIMENSION') | capitalize"
                       :items="getCategoryRows(cat)"
                       v-model="selectedCategory"
+                      class="sel-dim"
                     >
                     </v-select>
                   </span>
@@ -113,5 +113,8 @@ export default class ConsistencyMatrices extends Vue {
 }
 .v-tabs-items.v-window.full-height {
   height: calc(100% - 48px);
+}
+.sel-dim{
+  max-width: 400px;
 }
 </style>

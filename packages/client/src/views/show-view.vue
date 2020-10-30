@@ -6,8 +6,11 @@
           <pane min-size="10" size="20" class="pa-2">
             <ScenarioText></ScenarioText>
           </pane>
-          <pane min-size="10" size="80" class="pa-2">
+          <pane min-size="10" size="55" class="pa-2">
             <MapCard></MapCard>
+          </pane>
+          <pane min-size="10" size="25" class="pa-2">
+            <NarrativeComponents></NarrativeComponents>
           </pane>
         </splitpanes>
       </v-col>
@@ -22,10 +25,10 @@ import { Splitpanes, Pane } from "splitpanes";
 import MapCard from "../components/map-card.vue";
 import DescriptionCard from "../components/description-card.vue";
 import ScenarioText from "../components/scenario-text.vue";
-import ChartCard from "../components/chart-card.vue";
+import NarrativeComponents from "../components/narrative-components.vue";
 
 @Component({
-  components: { Splitpanes, Pane, DescriptionCard, ChartCard, MapCard, ScenarioText },
+  components: { Splitpanes, Pane, DescriptionCard, NarrativeComponents, MapCard, ScenarioText },
 })
 export default class ShowView extends Vue {
   mounted() {

@@ -9,7 +9,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="(val, cat) in categories" :key="cat">
         <v-card dense flat tile class="flex-card" style="background: transparent">
-          <div class="overline px-2 py-0">{{ $tc("APP.COMPONENT", 2) }}</div>
+          <div class="overline px-2 py-0">{{ $tc("APP.DIMENSION", 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2">
             <v-container fluid class="ma-0 pa-0">
               <v-row no-gutters v-for="(val, i) in getCategoryRows(cat)" :key="i" class="kanban-col">
