@@ -9,7 +9,7 @@
     <v-divider />
     <v-card-text class="text-description ma-0 pa-1">
       <div v-if="narrative && narrative.id">
-        <span class="scenario-narrative">{{ narrative.narrative }}</span>
+        <span class="scenario-narrative" v-html="getMarkdown(narrative.narrative)"></span>
       </div>
     </v-card-text>
   </v-card>
@@ -22,6 +22,8 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { IContent, INarrative, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
+import marked from "marked";
+import dompurify from "dompurify";
 
 @Component({
   components: {},
@@ -37,6 +39,10 @@ export default class ScenarioText extends Vue {
     this.$store.states.map(s => {
       this.narrative = s.app.narrative;
     });
+  }
+
+  private getMarkdown(text: string): string {
+    return marked(text, { sanitizer: dompurify.sanitize });
   }
 
   mounted() {
