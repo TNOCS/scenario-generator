@@ -38,20 +38,31 @@
         <ImportExportCard @close="closeImportMenu"></ImportExportCard>
       </v-menu>
     </v-row>
-    <v-card flat tile class="" style="background: transparent" v-if="activeScenario">
+    <v-card flat tile class="mb-0" style="background: transparent" v-if="activeScenario">
       <div class="overline px-2 py-2">{{ $tc("COMP.NARRATIVE", 2) }}</div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
         <div class="blue--text">
           {{ $t("APP.ACTIVE", { item: $tc("COMP.NARRATIVE") }) | capitalize }}:
           <span class="bold--text">{{ this.activeNarrative.name || "-" }} </span>
+          <span>
+            <v-menu v-if="activeNarrative" v-model="narMenu" :close-on-content-click="false" :nudge-width="200" offset-x>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn v-on="on" v-bind="attrs" color="blue" icon x-small elevation="2" class="mr-1 add-button">
+                  <v-icon>mdi-trash-can-outline</v-icon>
+                </v-btn>
+              </template>
+            </v-menu>
+          </span>
         </div>
-        <!-- prettier-ignore -->
-        <v-select v-model="activeNarrative" :items="activeScenario.narratives" item-text="name" return-object 
-          @change="narrativeSelected"></v-select>
       </v-card-text>
     </v-card>
-    <v-card flat tile class="" style="background: transparent">
+    <v-row no-gutters class="my-0 ml-4">
+      <!-- prettier-ignore -->
+      <v-select v-model="activeNarrative" :items="activeScenario.narratives" item-text="name" return-object 
+          dense hide-details @change="narrativeSelected"></v-select>
+    </v-row>
+    <v-card flat tile class="mt-6" style="background: transparent">
       <div class="overline px-2 py-2">{{ $t("APP.LANGUAGE") }}</div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
@@ -97,6 +108,7 @@ export default class NavigationDrawer extends Vue {
   private activeNarrative: INarrative = {} as INarrative;
   private menu: boolean = false;
   private importMenu: boolean = false;
+  private narMenu: boolean = false;
 
   private async languageChanged() {
     this.$store.actions.changeLanguage(this.activeLanguage);

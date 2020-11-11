@@ -59,15 +59,19 @@
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <div class="overline px-2 py-0">{{ `3. ${$t("APP.PIN", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
-        <v-text-field
-          class="name-field"
-          v-model="narrativeName"
-          :label="$t('APP.NAME') | capitalize"
-          append-outer-icon="mdi-content-save"
-          @click:append-outer="pinNarrative"
-          v-on:keyup.enter="pinNarrative"
-        >
-        </v-text-field>
+        <div class="d-flex">
+          <v-text-field
+            class="name-field"
+            v-model="narrativeName"
+            :label="$t('APP.NAME') | capitalize"
+            v-on:keyup.enter="pinNarrative"
+          >
+          </v-text-field>
+          <v-btn @click="pinNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
+            <v-icon class="pr-2">mdi-content-save</v-icon>
+            {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
+          </v-btn>
+        </div>
       </v-card-text>
     </v-card>
     <v-row class="mt-1"> </v-row>
@@ -83,6 +87,8 @@ import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { CollectionsModel } from "../services/states/collection-state";
 import { getUuid } from "../utils/constants";
 import _ from "lodash";
+
+const MAX_GENERATIONS = 500;
 
 @Component({
   components: {},
@@ -149,14 +155,36 @@ export default class ScenarioGenerator extends Vue {
 
   private generateNarrative() {
     console.log("generate");
-    for (const c in this.categories) {
-      const names: CollectionNames[] = this.categories[c as ContentCategory];
-      for (const n in names) {
-        const name = names[n];
-        Vue.set(this.answers, name, this.getRandom(name));
+    let narrativeValid = false;
+    let count = 0;
+    while (!narrativeValid && count < MAX_GENERATIONS) {
+      count += 1;
+      for (const c in this.categories) {
+        const names: CollectionNames[] = this.categories[c as ContentCategory];
+        for (const n in names) {
+          const name = names[n];
+          Vue.set(this.answers, name, this.getRandom(name));
+        }
+      }
+      narrativeValid = this.isScenarioValid();
+      if (narrativeValid) {
+        console.log(`Valid scenario generated in iteration ${count}`);
+      } else if (count == MAX_GENERATIONS) {
+        console.log(`No valid scenario generated after ${count} iterations. Giving up...`);
+        this.$store.actions.notify(this.$t(`APP.NO_VALID_SCENARIO`, { count: count }).toString());
+        this.answers = {} as { [key in CollectionNames]: string };
       }
     }
     this.generated = !this.generated;
+  }
+
+  private isScenarioValid(): boolean {
+    const inconsistencies = this.scenario.inconsistencies;
+    const answerIds = Object.values(this.answers).filter(a => !!a);
+    const inconsistenciesFound = inconsistencies.filter(i => answerIds.includes(i.ids[0]) && answerIds.includes(i.ids[1]));
+    // Always invalidate totally incompatible combinations, and invalidate 50% of partly incompatible combinations.
+    const finalInconsistencyFound = inconsistenciesFound.some(i => i.type === 'totally' || i.type === 'partly' && Math.random() < 0.5);
+    return !finalInconsistencyFound;
   }
 
   private async pinNarrative() {

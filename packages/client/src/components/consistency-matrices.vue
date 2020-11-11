@@ -12,9 +12,13 @@
           <v-card-text class="text-description ma-0 pa-2 full-height">
             <v-container fluid class="ma-0 pa-0 full-height">
               <v-row no-gutters>
-                <v-col xs="12" md="6" class="">
+                <v-col xs="12" md="6" class="d-flex">
                   <!-- <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span> -->
-                  <span>
+                  <span class="title pt-4">
+                    <!-- {{ $t("APP.CONSISTENCIES") }} -->
+                    {{ $t("APP.COMBINATIONS") | capitalize }}
+                  </span>
+                  <span class="ml-8 mb-2">
                     <v-select
                       :label="$t('APP.SELECT_DIMENSION') | capitalize"
                       :items="getCategoryRows(cat)"
@@ -23,6 +27,15 @@
                     >
                     </v-select>
                   </span>
+                </v-col>
+                <v-col xs="12" md="6" class="d-flex">
+                  <div class="d-block pb-4">
+                    <span class="d-block"><v-icon class="pr-1">mdi-checkbox-blank</v-icon>{{ $t("APP.CONSISTENT") }}</span>
+                    <span class="d-block"
+                      ><v-icon class="pr-1">mdi-checkbox-blank-outline</v-icon>{{ $t("APP.INCONSISTENT") }}</span
+                    >
+                    <span class="d-block"><v-icon class="pr-1">mdi-checkerboard</v-icon>{{ $t("APP.PARTLY_CONSISTENT") }} </span>
+                  </div>
                 </v-col>
               </v-row>
               <v-row no-gutters v-if="scenario" class="full-height-min-select">
@@ -64,6 +77,11 @@ export default class ConsistencyMatrices extends Vue {
 
   constructor() {
     super();
+  }
+
+  @Watch("scenario.inconsistencies")
+  private inconsistenciesChanged() {
+    this.$store.actions["scenarios"].save(this.scenario);
   }
 
   private tabChanged(newTab: number) {
@@ -114,7 +132,7 @@ export default class ConsistencyMatrices extends Vue {
 .v-tabs-items.v-window.full-height {
   height: calc(100% - 48px);
 }
-.sel-dim{
+.sel-dim {
   max-width: 400px;
 }
 </style>

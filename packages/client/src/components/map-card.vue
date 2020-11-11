@@ -113,11 +113,16 @@ export default class MapCard extends Vue {
 
   private zoomMapThrottled() {
     if (!this.features || this.features.length < 1) return;
-    const c: Feature<any> = center(
-      bboxPolygon(bbox({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>))
-    );
-    this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
-    this.zoom = 14;
+    let c: Feature<any>;
+    if (this.features.length === 1) {
+      c = this.features[0];
+    } else {
+      c = center(bboxPolygon(bbox({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>)));
+    }
+    if (c && c.geometry && c.geometry.coordinates) {
+      this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
+      this.zoom = 14;
+    }
   }
 
   private pointerMove = _.throttle(this.pointerMoveThrottled, 50, { trailing: true });
@@ -126,24 +131,22 @@ export default class MapCard extends Vue {
     this.pointer = `Lat: ${evt.coordinate[1].toFixed(4)}, Lon: ${evt.coordinate[0].toFixed(4)}`;
   }
 
-  private async addFeatures(error: Error | undefined, fc: FeatureCollection<Point>) {
+  private async addFeatures(fc: FeatureCollection<Point>) {
     this.loading = false;
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(`Received ${fc.features.length} features`);
-      const features: Feature<Point>[] = [];
-      fc.features.forEach(f => {
-        features.push(f);
-      });
-      setTimeout(() => {
-        Vue.set(this, "features", features);
-        this.zoomMap();
-      }, 100);
-    }
+    console.log(`Received ${fc.features.length} features`);
+    const features: Feature<Point>[] = [];
+    fc.features.forEach(f => {
+      features.push(f);
+    });
+    setTimeout(() => {
+      Vue.set(this, "features", features);
+      this.zoomMap();
+    }, 100);
   }
 
-  private async updateMap() {
+  private updateMap = _.debounce(this.updateMapThrottled, 500);
+
+  private updateMapThrottled() {
     console.log(`Update map data`);
     this.loading = true;
     if (this.features.length > 0) {
@@ -155,6 +158,7 @@ export default class MapCard extends Vue {
       const locContext: IContext | undefined = loc && loc.context;
       if (!locContext) {
         this.loading = false;
+        this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
         return console.log(`Could not find loc in narrative ${this.narrative.name}`);
       }
       const typeId = _.pick(this.narrative.components, "TypeOfObject");
@@ -162,6 +166,7 @@ export default class MapCard extends Vue {
       const typeContext: IContext | undefined = type && type.context;
       if (!typeContext) {
         this.loading = false;
+        this.$store.actions.notify(this.$t(`APP.NO_LOCATION_TYPE_CONTEXT`).toString());
         return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
       }
       const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
@@ -174,6 +179,7 @@ export default class MapCard extends Vue {
           this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
         }
       } else {
+        this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
         console.log("No location context found");
         this.loading = false;
       }

@@ -1,8 +1,5 @@
 <template>
   <v-card class="full-width full-height table-card">
-    <v-card-title dense>
-      {{ $t("APP.CONSISTENCIES") }}
-    </v-card-title>
     <v-card-text class="pa-0 full-width full-height-min-title">
       <v-container fluid class="ma-0 pa-0 full-height">
         <v-row no-gutters class="full-height">
@@ -13,7 +10,7 @@
                   <tr>
                     <th class="text-left bold--text">Dimension</th>
                     <th class="text-left bold--text more-padding">Name</th>
-                    <th class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name }}</th>
+                    <th class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name | capitalize }}</th>
                   </tr>
                 </thead>
                 <tbody class="consistency-table">
@@ -22,7 +19,8 @@
                       <td>{{ cat }}</td>
                       <td class="more-padding">{{ content.name }}</td>
                       <td v-for="hi in items" :key="hi.id">
-                        <v-tooltip right v-if="incons(content.id, hi.id, 'partly')">
+                        <!-- Partly inconsistent; combination improbable -->
+                        <v-tooltip right v-if="incons(content.id, hi.id, 'partly')" open-delay="1000">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, undefined)">
                               <v-icon>mdi-checkerboard</v-icon>
@@ -30,18 +28,20 @@
                           >
                           <span>{{ $t("APP.PARTLY_CONSISTENT") }}</span>
                         </v-tooltip>
-                        <v-tooltip right v-if="incons(content.id, hi.id, 'totally')">
+                        <!-- Totally inconsistent; combination impossible -->
+                        <v-tooltip right v-if="incons(content.id, hi.id, 'totally')" open-delay="1000">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'partly')">
-                              <v-icon>mdi-checkbox-blank</v-icon>
+                              <v-icon>mdi-checkbox-blank-outline</v-icon>
                             </v-btn>
                           </template>
                           <span>{{ $t("APP.INCONSISTENT") }}</span>
                         </v-tooltip>
-                        <v-tooltip right v-if="incons(content.id, hi.id, undefined)">
+                        <!-- No inconsistency; combination possible -->
+                        <v-tooltip right v-if="incons(content.id, hi.id, undefined)" open-delay="1000">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'totally')">
-                              <v-icon>mdi-checkbox-blank-outline</v-icon>
+                              <v-icon>mdi-checkbox-blank</v-icon>
                             </v-btn>
                           </template>
                           <span>{{ $t("APP.CONSISTENT") }}</span>
@@ -149,7 +149,7 @@ export default class TableCard extends Vue {
   padding-right: 48px !important;
 }
 .full-height-min-title {
-  height: calc(100% - 72px);
+  height: calc(100% - 24px);
 }
 .table-card tbody,
 .table-card table {

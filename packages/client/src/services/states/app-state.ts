@@ -12,6 +12,7 @@ export interface IAppStateModel {
     route: string;
     language: string;
     theme: string;
+    note: string;
     narrative: INarrative;
     //   page?: Dashboards;
   };
@@ -26,6 +27,7 @@ export interface IAppStateActions {
   exportState: () => string;
   changeNarrative: (narrative: INarrative) => void;
   updateInconsistencies: (inconsistencies: Inconsistency[]) => void;
+  notify: (note: string) => void;
 }
 
 export interface IAppState {
@@ -41,6 +43,7 @@ export const appStateMgmt = {
       route: "/",
       language: localStorage.getItem(languageStorageKey) || "gb",
       theme: localStorage.getItem(themeStorageKey) || "light",
+      note: "",
       narrative: {} as INarrative,
     },
   },
@@ -84,6 +87,10 @@ export const appStateMgmt = {
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {
         log("Set inconsistencies");
         update({ scenarios: { current: { inconsistencies: inconsistencies } } });
+      },
+      notify: (note: string) => {
+        log("Set notification");
+        update({ app: { note } });
       },
     };
   },

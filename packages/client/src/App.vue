@@ -4,6 +4,12 @@
     <NavigationDrawer />
     <v-main id="content">
       <router-view />
+      <v-snackbar v-model="snackbar" top color="#942807"
+        >{{ note }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="blue" timeout="3000" text v-bind="attrs" @click="snackbar = false"> <v-icon>mdi-close</v-icon> </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -26,6 +32,8 @@ export default class App extends Vue {
   private theme: string = "";
   private scenarios?: Partial<IScenario>[] = [];
   private activeScenario?: Partial<IScenario> = {};
+  private note: string = "";
+  private snackbar: boolean = false;
 
   constructor() {
     super();
@@ -53,6 +61,20 @@ export default class App extends Vue {
     }
   }
 
+  @Watch("snackbar")
+  snackbarUpdated(active: boolean) {
+    if (!active) {
+      this.$store.actions.notify("");
+    }
+  }
+
+  @Watch("note")
+  noteUpdated(note: string) {
+    if (note && note != "") {
+      this.snackbar = true;
+    }
+  }
+
   @Watch("theme")
   themeUpdated(theme: string) {
     this.$vuetify.theme.dark = theme === "dark" ? true : false;
@@ -68,6 +90,7 @@ export default class App extends Vue {
   public mounted() {
     this.$store.states.map(s => {
       this.theme = s.app.theme;
+      this.note = s.app.note;
       this.scenarios = s.scenarios.list;
       this.activeScenario = s.scenarios.current;
     });
