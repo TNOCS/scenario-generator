@@ -13,6 +13,7 @@
       "CREATE_SCENARIO": "creëer scenario",
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "DIMENSION": "dimensie | dimensies",
+      "DIMENSION_INCLUDED": "dimensie wel of niet gebruiken in scenario",
       "DONE": "klaar",
       "EDIT": "{item} bewerken",
       "EMPTY": "leeg {item}",

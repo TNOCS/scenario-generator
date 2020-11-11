@@ -24,6 +24,7 @@
                       <template v-slot:default>
                         <thead>
                           <tr>
+                            <th class="text-left bold--text incorporated"></th>
                             <th class="text-left bold--text">Dimension</th>
                             <th class="text-left bold--text more-padding">Selected</th>
                           </tr>
@@ -31,6 +32,19 @@
                         <tbody class="category-table">
                           <template>
                             <tr v-for="cat in categories[catName]" :key="cat">
+                              <td class="incorporated">
+                                <v-tooltip right open-delay="1000">
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <span v-on="on" v-bind="attrs">
+                                      <v-icon v-if="neglected.includes(cat)" small @click="toggleNeglected(cat)"
+                                        >mdi-eye-off-outline</v-icon
+                                      >
+                                      <v-icon v-else small @click="toggleNeglected(cat)">mdi-eye-outline</v-icon>
+                                    </span>
+                                  </template>
+                                  <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
+                                </v-tooltip>
+                              </td>
                               <td class="catname">{{ cat }}</td>
                               <td class="py-1">
                                 <!-- prettier-ignore -->
@@ -102,6 +116,8 @@ export default class ScenarioGenerator extends Vue {
     [key in ContentCategory]: Array<CollectionNames>;
   };
   private answers: { [key in CollectionNames]: string } = {} as { [key in CollectionNames]: string };
+  private neglected: CollectionNames[] = [];
+  private fixed: CollectionNames[] = [];
   private generated: boolean = false;
   private narrativeName: string = "";
   private narrativeText: string = "";
@@ -113,7 +129,10 @@ export default class ScenarioGenerator extends Vue {
     console.log(`narrativeChanged to ${nar.id}`);
     this.narrativeName = nar.name || "";
     this.narrativeText = nar.narrative || "";
-    this.answers = this.narrative.components || ({} as { [key in CollectionNames]: string });
+    if (!nar.components) nar.components = {} as { [key in CollectionNames]: string };
+    this.answers = Object.assign({}, nar.components);
+    this.neglected = _.difference(CollectionNamesArr, Object.keys(this.answers)) as CollectionNames[];
+    this.neglected = this.neglected.concat(Object.keys(nar.components).filter(key => !nar.components[key]) as CollectionNames[]);
   }
 
   constructor() {
@@ -153,6 +172,16 @@ export default class ScenarioGenerator extends Vue {
     this.answers = {} as { [key in CollectionNames]: string };
   }
 
+  private toggleNeglected(cat: CollectionNames) {
+    const idx = this.neglected.indexOf(cat);
+    if (idx >= 0) {
+      this.neglected.splice(idx, 1);
+    } else {
+      this.neglected.push(cat);
+      Vue.delete(this.answers, cat);
+    }
+  }
+
   private generateNarrative() {
     console.log("generate");
     let narrativeValid = false;
@@ -163,7 +192,9 @@ export default class ScenarioGenerator extends Vue {
         const names: CollectionNames[] = this.categories[c as ContentCategory];
         for (const n in names) {
           const name = names[n];
-          Vue.set(this.answers, name, this.getRandom(name));
+          if (!this.neglected.includes(name)) {
+            Vue.set(this.answers, name, this.getRandom(name));
+          }
         }
       }
       narrativeValid = this.isScenarioValid();
@@ -183,7 +214,9 @@ export default class ScenarioGenerator extends Vue {
     const answerIds = Object.values(this.answers).filter(a => !!a);
     const inconsistenciesFound = inconsistencies.filter(i => answerIds.includes(i.ids[0]) && answerIds.includes(i.ids[1]));
     // Always invalidate totally incompatible combinations, and invalidate 50% of partly incompatible combinations.
-    const finalInconsistencyFound = inconsistenciesFound.some(i => i.type === 'totally' || i.type === 'partly' && Math.random() < 0.5);
+    const finalInconsistencyFound = inconsistenciesFound.some(
+      i => i.type === "totally" || (i.type === "partly" && Math.random() < 0.5)
+    );
     return !finalInconsistencyFound;
   }
 
@@ -195,10 +228,12 @@ export default class ScenarioGenerator extends Vue {
     } else {
       this.scenario.narratives = this.scenario.narratives.filter(n => n.id != this.narrativeName);
     }
+    let answerObject = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), {});
+    answerObject = Object.assign(answerObject, this.answers);
     const n: INarrative = {
       id: this.narrativeName,
       name: this.narrativeName,
-      components: this.answers,
+      components: answerObject as { [key in CollectionNames]: string },
       narrative: this.narrativeText,
     };
     this.scenario.narratives!.push(n);
@@ -247,13 +282,14 @@ export default class ScenarioGenerator extends Vue {
 .generate-card tbody {
   max-width: 100%;
 }
-
 .generate-card table {
   table-layout: fixed;
   width: 100%;
 }
-
 .v-data-table > .v-data-table__wrapper > table > tbody.category-table > tr > td {
   padding: 4px 0px 4px 16px;
+}
+.incorporated {
+  width: 14px !important;
 }
 </style>

@@ -1,6 +1,6 @@
 import { getUuid, themeStorageKey } from "../../utils/constants";
 import { i18n, languageStorageKey } from "../../i18n";
-import { IAppModel, UpdateStream } from "../meiosis";
+import { CollectionNames, CollectionNamesArr, IAppModel, UpdateStream } from "../meiosis";
 import { INarrative, Inconsistency } from "../../models";
 import _ from "lodash";
 
@@ -82,6 +82,10 @@ export const appStateMgmt = {
       },
       changeNarrative: (narrative: INarrative) => {
         log("Set narrative " + narrative.id);
+        let temp = {} as { [key in CollectionNames]: any };
+        let fullComponents = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), temp);
+        fullComponents = Object.assign(fullComponents, narrative.components);
+        narrative.components = fullComponents;
         update({ app: { narrative } });
       },
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {

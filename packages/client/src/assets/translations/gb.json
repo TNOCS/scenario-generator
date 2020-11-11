@@ -13,6 +13,7 @@
       "CREATE_SCENARIO": "Create scenario",
       "DESCRIPTION": "description | description",
       "DIMENSION": "dimension | dimensions",
+      "DIMENSION_INCLUDED": "do or do not include dimension in scenario",
       "DONE": "done",
       "EDIT": "Edit {item}",
       "EMPTY": "leeg {item}",
