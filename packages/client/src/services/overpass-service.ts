@@ -28,7 +28,7 @@ export default class OverpassService {
     this.getGeojson(queryBox, type, callbackFcn);
   }
 
-  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (error: Error | undefined, data: any) => any) {
+  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (fc: FeatureCollection<Point>) => void) {
     const query = queryString.stringify({ q: name, format: "json" });
     const aresult = await Axios.get(`${this.nominatim}${query}`);
     const result: NominatimResult[] = aresult.data;

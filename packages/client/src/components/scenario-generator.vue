@@ -132,7 +132,8 @@ export default class ScenarioGenerator extends Vue {
     if (!nar.components) nar.components = {} as { [key in CollectionNames]: string };
     this.answers = Object.assign({}, nar.components);
     this.neglected = _.difference(CollectionNamesArr, Object.keys(this.answers)) as CollectionNames[];
-    this.neglected = this.neglected.concat(Object.keys(nar.components).filter(key => !nar.components[key]) as CollectionNames[]);
+    const presentNames = Object.keys(nar.components) as CollectionNames[];
+    this.neglected = this.neglected.concat(presentNames.filter(key => !nar.components[key]));
   }
 
   constructor() {
@@ -210,7 +211,7 @@ export default class ScenarioGenerator extends Vue {
   }
 
   private isScenarioValid(): boolean {
-    const inconsistencies = this.scenario.inconsistencies;
+    const inconsistencies = this.scenario!.inconsistencies || [];
     const answerIds = Object.values(this.answers).filter(a => !!a);
     const inconsistenciesFound = inconsistencies.filter(i => answerIds.includes(i.ids[0]) && answerIds.includes(i.ids[1]));
     // Always invalidate totally incompatible combinations, and invalidate 50% of partly incompatible combinations.
@@ -228,7 +229,8 @@ export default class ScenarioGenerator extends Vue {
     } else {
       this.scenario.narratives = this.scenario.narratives.filter(n => n.id != this.narrativeName);
     }
-    let answerObject = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), {});
+    let temp = {} as { [key in CollectionNames]: any };
+    let answerObject = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), temp);
     answerObject = Object.assign(answerObject, this.answers);
     const n: INarrative = {
       id: this.narrativeName,

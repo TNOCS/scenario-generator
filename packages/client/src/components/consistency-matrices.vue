@@ -67,7 +67,7 @@ import TableCard from "../components/table-card.vue";
 })
 export default class ConsistencyMatrices extends Vue {
   private tab: number = 0;
-  private scenario?: Partial<IScenario> = {};
+  private scenario: Partial<IScenario> = {};
   private rows: Array<CollectionNames> = [];
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
     [key in ContentCategory]: Array<CollectionNames>;
@@ -95,7 +95,7 @@ export default class ConsistencyMatrices extends Vue {
 
   private async init() {
     this.$store.states.map(s => {
-      this.scenario = s.scenarios.current;
+      this.scenario = s.scenarios.current || this.scenario;
       if (this.scenario && !this.scenario.inconsistencies) this.scenario.inconsistencies = [];
       this.rows.length = 0;
       CollectionNamesArr.forEach(n => {

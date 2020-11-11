@@ -131,7 +131,7 @@ export default class MapCard extends Vue {
     this.pointer = `Lat: ${evt.coordinate[1].toFixed(4)}, Lon: ${evt.coordinate[0].toFixed(4)}`;
   }
 
-  private async addFeatures(fc: FeatureCollection<Point>) {
+  private addFeatures(fc: FeatureCollection<Point>) {
     this.loading = false;
     console.log(`Received ${fc.features.length} features`);
     const features: Feature<Point>[] = [];
