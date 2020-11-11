@@ -68,7 +68,11 @@ export default class OverpassService {
         cb({ type: "FeatureCollection", features: [] } as FeatureCollection);
       } else {
         console.log(fc);
-        fc.features.forEach(f => f.properties ? delete f.properties.geometry : undefined);
+        fc.features.forEach(f => {
+          f.properties = f.properties || {};
+          delete f.properties.geometry;
+          f.properties.name = f.properties["tags"] ? f.properties["tags"]["name"] || "?" : "?";
+        });
         cb(fc);
       }
     });

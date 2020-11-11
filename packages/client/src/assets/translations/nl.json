@@ -5,12 +5,14 @@
       "ADD": "{item} toevoegen",
       "ADD_CONTEXT": "voeg context toe",
       "ADD_DIMENSIONS": "voeg dimensies toe",
+      "ARE_YOU_SURE": "ben je zeker?",
       "BUILD_SENTENCE": "Bouw een zinsstructuur",
       "CANCEL": "cancel",
       "COMBINATIONS": "combinaties",
       "CONSISTENCIES": "Consistenties",
       "CONSISTENT": "Combinaties met deze twee items zijn mogelijk",
       "CREATE_SCENARIO": "creëer scenario",
+      "DELETE": "delete {item}",
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "DIMENSION": "dimensie | dimensies",
       "DIMENSION_INCLUDED": "dimensie wel of niet gebruiken in scenario",
@@ -27,6 +29,7 @@
       "LANGUAGE": "taal",
       "LOCATION": "lokatie",
       "NAME": "naam",
+      "NO": "nee",
       "NO_LOCATION_CONTEXT": "Geen locatie gevonden in scenario",
       "NO_LOCATION_TYPE_CONTEXT": "Geen locatie type gevonden in scenario",
       "NO_VALID_SCENARIO": "Geen valide scenario gegenereerd na {count} iteraties.",
@@ -40,7 +43,8 @@
       "STRUCTURE": "structuur",
       "THEME": "thema",
       "VALUE": "value",
-      "WRITE_NARRATIVE": "schrijf een narratief"
+      "WRITE_NARRATIVE": "schrijf een narratief",
+      "YES": "ja"
     },
     "COMP": {
       "AVAILABLEBUDGET": "budget | budget",

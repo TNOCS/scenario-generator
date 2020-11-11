@@ -5,12 +5,14 @@
       "ADD": "Add {item}",
       "ADD_CONTEXT": "add context",
       "ADD_DIMENSIONS": "Add dimensions",
+      "ARE_YOU_SURE": "are you sure?",
       "BUILD_SENTENCE": "Build a sentence structure",
       "CANCEL": "cancel",
       "COMBINATIONS": "combinations",
       "CONSISTENCIES": "Consistencies",
       "CONSISTENT": "Combinations with these two items are possible",
       "CREATE_SCENARIO": "Create scenario",
+      "DELETE": "delete {item}",
       "DESCRIPTION": "description | description",
       "DIMENSION": "dimension | dimensions",
       "DIMENSION_INCLUDED": "do or do not include dimension in scenario",
@@ -27,6 +29,7 @@
       "LANGUAGE": "language",
       "LOCATION": "location",
       "NAME": "name",
+      "NO": "no",
       "NO_LOCATION_CONTEXT": "Geen locatie gevonden in scenario",
       "NO_LOCATION_TYPE_CONTEXT": "Geen locatie type gevonden in scenario",
       "NO_VALID_SCENARIO": "No valid scenario generated after {count} iterations.",
@@ -40,7 +43,8 @@
       "STRUCTURE": "structure",
       "THEME": "theme",
       "VALUE": "value",
-      "WRITE_NARRATIVE": "write a narrative"
+      "WRITE_NARRATIVE": "write a narrative",
+      "YES": "yes"
     },
     "COMP": {
       "AVAILABLEBUDGET": "budget | budget",

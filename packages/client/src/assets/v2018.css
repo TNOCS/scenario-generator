@@ -30,16 +30,17 @@
   font-size: 1.4em;
 }
 
-.bold--text {
-  font-weight: bold !important;
-}
-
 .cardcontent {
   border: black solid 1px;
-  padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.5);
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.75);
   border-radius: 10px;
   font-size: small;
+  cursor: pointer;
+}
+
+.bold--text {
+  font-weight: bold !important;
 }
 
 text.shadow {

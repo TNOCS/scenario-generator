@@ -18,10 +18,21 @@
             :load-tiles-while-animating="true"
             :load-tiles-while-interacting="true"
             @pointermove="pointerMove"
+            @click="mapClick"
             data-projection="EPSG:4326"
             style="height: 85%"
           >
             <vl-view :zoom.sync="zoom" :center.sync="center"></vl-view>
+
+            <!-- selected feature popup -->
+            <vl-interaction-select v-if="active">
+              <!-- prettier-ignore -->
+              <vl-overlay v-if="active.id_" :key="active.id_" :id="active.id_" :position="pointOnSurface(active.getGeometry())" :offset="[2, 2]">
+                  <p class="cardcontent" @click="closePopup" :auto-pan="true">
+                    <strong>{{ active.get('name') }}</strong>
+                  </p>
+                </vl-overlay>
+            </vl-interaction-select>
 
             <vl-layer-tile id="xyz">
               <vl-source-xyz :url="url"></vl-source-xyz>
@@ -39,7 +50,6 @@
                     </vl-style-circle> -->
                   <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
                 </vl-style-box>
-                <!-- </vl-feature> -->
               </vl-source-vector>
             </vl-layer-vector>
           </vl-map>
@@ -53,6 +63,7 @@
 import _, { cloneDeep, random, range, throttle } from "lodash";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import { createStyle } from "vuelayers/lib/ol-ext/style";
+import { findPointOnSurface, pointToLonLat } from "vuelayers/lib/ol-ext";
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { bbox, bboxPolygon, center } from "@turf/turf";
@@ -82,10 +93,34 @@ export default class MapCard extends Vue {
   private center: number[] = [0, 12];
   private features: any[] = [];
   private pointer: string = "";
+  private active: any = null;
 
   @Watch("narrative")
   private narrChanged() {
     this.updateMap();
+  }
+
+  private mapClick($evt: any) {
+    this.toggleFeature($evt.pixel, $evt.map);
+  }
+
+  private toggleFeature(pixel: any, map: any) {
+    map.forEachFeatureAtPixel(pixel, (f: any) => {
+      if (this.active && this.active.id_ == f.id_) {
+        this.active = null;
+      } else {
+        this.active = f;
+      }
+      console.log(`Open ${f.get("name")}`);
+    });
+  }
+
+  private closePopup($evt: any) {
+    this.active = null;
+  }
+
+  private pointOnSurface(...args: any) {
+    return pointToLonLat(args[0].getCoordinates(), "EPSG:3857", "EPSG:4326");
   }
 
   private toggleMapLayer() {

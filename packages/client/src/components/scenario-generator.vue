@@ -24,7 +24,11 @@
                       <template v-slot:default>
                         <thead>
                           <tr>
-                            <th class="text-left bold--text incorporated"></th>
+                            <th class="text-left bold--text incorporated">
+                              <v-icon small @click="toggleNeglected()">
+                                mdi-eye-check
+                              </v-icon>
+                            </th>
                             <th class="text-left bold--text">Dimension</th>
                             <th class="text-left bold--text more-padding">Selected</th>
                           </tr>
@@ -173,7 +177,10 @@ export default class ScenarioGenerator extends Vue {
     this.answers = {} as { [key in CollectionNames]: string };
   }
 
-  private toggleNeglected(cat: CollectionNames) {
+  private toggleNeglected(cat?: CollectionNames) {
+    if (!cat) {
+      this.neglected.length = 0;
+    }
     const idx = this.neglected.indexOf(cat);
     if (idx >= 0) {
       this.neglected.splice(idx, 1);

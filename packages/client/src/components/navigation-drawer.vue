@@ -52,6 +52,7 @@
                   <v-icon>mdi-trash-can-outline</v-icon>
                 </v-btn>
               </template>
+              <DeleteCard @close="closeNarMenu"></DeleteCard>
             </v-menu>
           </span>
         </div>
@@ -94,9 +95,10 @@ import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import { INarrative, IScenario } from "../models";
 import EditComponentCard from "./edit-component-card.vue";
 import ImportExportCard from "./import-export-card.vue";
+import DeleteCard from "./delete-card";
 
 @Component({
-  components: { CountryFlag, EditComponentCard, ImportExportCard },
+  components: { CountryFlag, EditComponentCard, ImportExportCard, DeleteCard },
 })
 export default class NavigationDrawer extends Vue {
   private languages: string[] = ["gb", "nl"];
@@ -128,6 +130,10 @@ export default class NavigationDrawer extends Vue {
 
   private async closeImportMenu() {
     this.importMenu = false;
+  }
+
+  private async closeNarMenu() {
+    this.narMenu = false;
   }
 
   private activeScenarioName() {
