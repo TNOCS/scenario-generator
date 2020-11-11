@@ -24,25 +24,36 @@
                       <template v-slot:default>
                         <thead>
                           <tr>
-                            <th class="text-left bold--text incorporated">
-                              <v-icon small @click="toggleNeglected()">
-                                mdi-eye-check
-                              </v-icon>
+                            <th class="text-left bold--text small-col">
+                              <v-tooltip right open-delay="1000">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon v-on="on" v-bind="attrs" small @click="toggleNeglected()"> mdi-eye-check </v-icon>
+                                </template>
+                                <span>{{ $t("APP.INCLUDE_ALL") | capitalize }}</span>
+                              </v-tooltip>
                             </th>
                             <th class="text-left bold--text">Dimension</th>
                             <th class="text-left bold--text more-padding">Selected</th>
+                            <th class="text-left bold--text small-col pr-8">
+                              <v-tooltip right open-delay="1000">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon v-on="on" v-bind="attrs" small @click="togglePinned()"> mdi-lock-open-outline </v-icon>
+                                </template>
+                                <span>{{ $t("APP.UNLOCK_ALL") | capitalize }}</span>
+                              </v-tooltip>
+                            </th>
                           </tr>
                         </thead>
                         <tbody class="category-table">
                           <template>
                             <tr v-for="cat in categories[catName]" :key="cat">
-                              <td class="incorporated">
+                              <td class="small-col">
                                 <v-tooltip right open-delay="1000">
                                   <template v-slot:activator="{ on, attrs }">
                                     <span v-on="on" v-bind="attrs">
-                                      <v-icon v-if="neglected.includes(cat)" small @click="toggleNeglected(cat)"
-                                        >mdi-eye-off-outline</v-icon
-                                      >
+                                      <v-icon v-if="neglected.includes(cat)" small @click="toggleNeglected(cat)">
+                                        mdi-eye-off-outline
+                                      </v-icon>
                                       <v-icon v-else small @click="toggleNeglected(cat)">mdi-eye-outline</v-icon>
                                     </span>
                                   </template>
@@ -54,6 +65,19 @@
                                 <!-- prettier-ignore -->
                                 <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
                                   clearable solo dense hide-details></v-select>
+                              </td>
+                              <td class="small-col pr-8">
+                                <v-tooltip right open-delay="1000">
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <span v-on="on" v-bind="attrs">
+                                      <v-icon v-if="pinned.includes(cat)" small @click="togglePinned(cat)">
+                                        mdi-lock-outline
+                                      </v-icon>
+                                      <v-icon v-else small @click="togglePinned(cat)">mdi-lock-open-variant-outline</v-icon>
+                                    </span>
+                                  </template>
+                                  <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
+                                </v-tooltip>
                               </td>
                             </tr>
                           </template>
@@ -82,10 +106,10 @@
             class="name-field"
             v-model="narrativeName"
             :label="$t('APP.NAME') | capitalize"
-            v-on:keyup.enter="pinNarrative"
+            v-on:keyup.enter="saveNarrative"
           >
           </v-text-field>
-          <v-btn @click="pinNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
+          <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
             <v-icon class="pr-2">mdi-content-save</v-icon>
             {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>
@@ -121,7 +145,7 @@ export default class ScenarioGenerator extends Vue {
   };
   private answers: { [key in CollectionNames]: string } = {} as { [key in CollectionNames]: string };
   private neglected: CollectionNames[] = [];
-  private fixed: CollectionNames[] = [];
+  private pinned: CollectionNames[] = [];
   private generated: boolean = false;
   private narrativeName: string = "";
   private narrativeText: string = "";
@@ -175,18 +199,34 @@ export default class ScenarioGenerator extends Vue {
     this.narrativeName = "";
     this.narrativeText = "";
     this.answers = {} as { [key in CollectionNames]: string };
+    this.neglected.length = 0;
+    this.pinned.length = 0;
+  }
+
+  private togglePinned(cat?: CollectionNames) {
+    if (!cat) {
+      this.pinned.splice(0, this.pinned.length);
+    } else {
+      const idx = this.pinned.indexOf(cat);
+      if (idx >= 0) {
+        this.pinned.splice(idx, 1);
+      } else {
+        this.pinned.push(cat);
+      }
+    }
   }
 
   private toggleNeglected(cat?: CollectionNames) {
     if (!cat) {
       this.neglected.length = 0;
-    }
-    const idx = this.neglected.indexOf(cat);
-    if (idx >= 0) {
-      this.neglected.splice(idx, 1);
     } else {
-      this.neglected.push(cat);
-      Vue.delete(this.answers, cat);
+      const idx = this.neglected.indexOf(cat);
+      if (idx >= 0) {
+        this.neglected.splice(idx, 1);
+      } else {
+        this.neglected.push(cat);
+        Vue.delete(this.answers, cat);
+      }
     }
   }
 
@@ -200,7 +240,7 @@ export default class ScenarioGenerator extends Vue {
         const names: CollectionNames[] = this.categories[c as ContentCategory];
         for (const n in names) {
           const name = names[n];
-          if (!this.neglected.includes(name)) {
+          if (!this.neglected.includes(name) && !this.pinned.includes(name)) {
             Vue.set(this.answers, name, this.getRandom(name));
           }
         }
@@ -228,7 +268,7 @@ export default class ScenarioGenerator extends Vue {
     return !finalInconsistencyFound;
   }
 
-  private async pinNarrative() {
+  private async saveNarrative() {
     console.log("Pin narrative");
     if (!this.scenario) return;
     if (!this.scenario.narratives) {
@@ -298,7 +338,7 @@ export default class ScenarioGenerator extends Vue {
 .v-data-table > .v-data-table__wrapper > table > tbody.category-table > tr > td {
   padding: 4px 0px 4px 16px;
 }
-.incorporated {
+.small-col {
   width: 14px !important;
 }
 </style>

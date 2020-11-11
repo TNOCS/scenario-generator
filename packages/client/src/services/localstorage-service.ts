@@ -34,8 +34,9 @@ const createLocalStorageFactory = () => {
 
     const create = async (item: Partial<T>) => {
       try {
-        const list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
+        let list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
         list.push(item as T);
+        list = list.sort((a, b) => a.name.localeCompare(b.name));
         localStorage.setItem(listKey, JSON.stringify(list));
         return list;
       } catch (err) {
@@ -45,13 +46,14 @@ const createLocalStorageFactory = () => {
 
     const update = async (item: Partial<T>) => {
       try {
-        const list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
-        const listItemIdx = list.findIndex((i) => i.id === item.id);
+        let list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
+        const listItemIdx = list.findIndex(i => i.id === item.id);
         if (listItemIdx >= 0) {
           // Update existing item
           const listItem = list.splice(listItemIdx, 1).pop()!;
           const newItem = Object.assign(listItem, item);
           list.push(newItem);
+          list = list.sort((a, b) => a.name.localeCompare(b.name));
           localStorage.setItem(listKey, JSON.stringify(list));
           return list;
         } else {
@@ -67,7 +69,7 @@ const createLocalStorageFactory = () => {
     const del = async (id: string) => {
       try {
         const list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
-        const listItemIdx = list.findIndex((i) => i.id === id);
+        const listItemIdx = list.findIndex(i => i.id === id);
         if (listItemIdx >= 0) {
           // Delete existing item
           const listItem = list.splice(listItemIdx, 1).pop()!;
@@ -84,7 +86,7 @@ const createLocalStorageFactory = () => {
 
     const load = (id: string) => {
       const list = JSON.parse(localStorage.getItem(listKey) || "[]") as T[];
-      const listItem = list.find((i) => i.id === id);
+      const listItem = list.find(i => i.id === id);
       return listItem;
     };
 

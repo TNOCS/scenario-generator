@@ -95,7 +95,7 @@ import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import { INarrative, IScenario } from "../models";
 import EditComponentCard from "./edit-component-card.vue";
 import ImportExportCard from "./import-export-card.vue";
-import DeleteCard from "./delete-card";
+import DeleteCard from "./delete-card.vue";
 
 @Component({
   components: { CountryFlag, EditComponentCard, ImportExportCard, DeleteCard },

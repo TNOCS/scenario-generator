@@ -62,8 +62,7 @@
 <script lang="ts">
 import _, { cloneDeep, random, range, throttle } from "lodash";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { createStyle } from "vuelayers/lib/ol-ext/style";
-import { findPointOnSurface, pointToLonLat } from "vuelayers/lib/ol-ext";
+import { createStyle, findPointOnSurface, pointToLonLat } from "vuelayers/lib/ol-ext";
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { bbox, bboxPolygon, center } from "@turf/turf";

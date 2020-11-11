@@ -34,15 +34,20 @@ export default class DeleteCard extends Vue {
 
   private async deleteItem() {
     console.log(`deleteItem`);
-    if (!this.scenario) return;
+    if (!this.scenario || !this.activeNarrative || !this.activeNarrative.id) return;
     if (!this.scenario.narratives) {
       this.scenario.narratives = [];
     } else {
-      this.scenario.narratives = this.scenario.narratives.filter(n => n.id != this.activeNarrative.id);
+      this.scenario.narratives = this.scenario.narratives.filter(n => n.id != (this.activeNarrative ? this.activeNarrative.id : ''));
     }
     await this.$store.actions["scenarios"].save(this.scenario);
     await this.$store.actions["scenarios"].load(this.scenario!.id!);
-    await this.$store.actions.changeNarrative({ id: undefined, narrative: undefined, name: undefined, components: undefined });
+    await this.$store.actions.changeNarrative(({
+      id: undefined,
+      narrative: undefined,
+      name: undefined,
+      components: undefined,
+    } as unknown) as INarrative);
     this.$emit("close");
   }
 
