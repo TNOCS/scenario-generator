@@ -9,7 +9,7 @@
       "BUILD_SENTENCE": "Build a sentence structure",
       "CANCEL": "cancel",
       "COMBINATIONS": "combinations",
-      "CONSISTENCIES": "Consistencies",
+      "CONSISTENCY": "consistency | consistencies",
       "CONSISTENT": "Combinations with these two items are possible",
       "CREATE_SCENARIO": "Create scenario",
       "DELETE": "delete {item}",
@@ -73,11 +73,11 @@
       "SCENARIOS": "scenario | scenarios",
       "SECURITYAWARENESS": "security awareness",
       "TARGETTYPE": "target type | target types",
-      "THREATDIRECTION": "actor | actors",
+      "THREATDIRECTION": "threat direction | threat directions",
       "TYPEOFENVIRONMENT": "environment type | environment types",
       "TYPEOFOBJECT": "type of object | type of objects",
       "WEAPON": "weapon | weapons",
-      "WEATHERBEHAVIOUR": "weather behaviour | weather behaviours",
+      "WEATHERBEHAVIOUR": "weather behaviour",
       "WEATHERTYPE": "weather condition | weather conditions"
     },
     "UTIL": {

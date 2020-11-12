@@ -8,16 +8,16 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-left bold--text">Dimension</th>
-                    <th class="text-left bold--text more-padding">Name</th>
+                    <th class="text-left bold--text">{{ $tc("APP.DIMENSION") | capitalize }}</th>
+                    <th class="text-left bold--text more-padding">{{ $tc("APP.NAME") | capitalize }}</th>
                     <th class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name | capitalize }}</th>
                   </tr>
                 </thead>
                 <tbody class="consistency-table">
                   <template v-for="cat in otherCategoriesWithoutSelected()">
                     <tr v-for="content in collections[cat].list" :key="content.id">
-                      <td>{{ cat }}</td>
-                      <td class="more-padding">{{ content.name }}</td>
+                      <td>{{ $tc(`COMP.${cat.toLocaleUpperCase()}`) | capitalize }}</td>
+                      <td class="more-padding">{{ content.name | capitalize }}</td>
                       <td v-for="hi in items" :key="hi.id">
                         <!-- Partly inconsistent; combination improbable -->
                         <v-tooltip right v-if="incons(content.id, hi.id, 'partly')" open-delay="1000">

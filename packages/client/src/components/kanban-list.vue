@@ -45,6 +45,7 @@ export default class KanbanList extends Vue {
   @Prop({ default: "" }) public itemkey!: CollectionNames;
   private items: Partial<IContent>[] = [];
   private title: string = "";
+  private language: string = "";
   private menu: boolean = false;
 
   @Watch("itemkey")
@@ -52,16 +53,27 @@ export default class KanbanList extends Vue {
     this.init();
   }
 
+  @Watch("language")
+  private languageChanged() {
+    this.setTitle();
+  }
+
   constructor() {
     super();
   }
 
-  private async init() {
+  private async setTitle() {
     if (!this.itemkey || !this.itemkey.length) return;
     this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2);
+  }
+
+  private async init() {
+    if (!this.itemkey || !this.itemkey.length) return;
+    this.setTitle();
     await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map(s => {
       this.items = s[this.itemkey].list!;
+      this.language = s.app.language;
     });
   }
 
