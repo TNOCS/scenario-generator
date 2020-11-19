@@ -1,13 +1,13 @@
 <template>
   <v-card dense flat tile class="flex-card" style="background: transparent">
     <div class="overline px-2 py-0">
-      {{ `${$t("APP.SHOW_SCENARIO")}` }}
+      {{ $tc("COMP.NARRATIVE") }}
       <span style="float: right">
         <v-btn icon><v-icon>mdi-info</v-icon></v-btn>
       </span>
     </div>
     <v-divider />
-    <v-card-text class="text-description ma-0 pa-1">
+    <v-card-text class="text-description ma-0 pa-4">
       <div v-if="narrative && narrative.id">
         <span class="scenario-narrative" v-html="getMarkdown(narrative.narrative)"></span>
       </div>
@@ -57,5 +57,11 @@ export default class ScenarioText extends Vue {
   display: inline;
   font-size: 150%;
   padding-right: 6px;
+}
+.scenario-narrative h1,
+.scenario-narrative h2,
+.scenario-narrative h3 {
+  padding-top: 4px;
+  padding-bottom: 8px;
 }
 </style>

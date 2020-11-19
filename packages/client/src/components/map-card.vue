@@ -1,5 +1,5 @@
 <template>
-  <v-card flat tile class="flex-card" style="background: transparent">
+  <v-card flat tile class="flex-card full-height full-width" style="background: transparent; min-height: 500px">
     <div class="overline px-2 py-0">
       {{ $tc("APP.LOCATION") }}
       <span style="float: right">
@@ -8,53 +8,50 @@
     </div>
     <v-divider />
     <v-card-text class="text-description full-height">
-      <div class="pr-cir">
-        <v-progress-circular indeterminate :size="150" color="primary" v-if="loading"></v-progress-circular>
+      <div class="pr-cir" v-if="loading">
+        <v-progress-circular indeterminate :size="150" color="primary"></v-progress-circular>
       </div>
-      <v-row class="no-gutters full-height">
-        <v-col md="12" class="full-height">
-          <div class="map-overlay-coords">{{ pointer }}</div>
-          <vl-map
-            :load-tiles-while-animating="true"
-            :load-tiles-while-interacting="true"
-            @pointermove="pointerMove"
-            @click="mapClick"
-            data-projection="EPSG:4326"
-            style="height: 85%"
-          >
-            <vl-view :zoom.sync="zoom" :center.sync="center"></vl-view>
+      <div class="map-overlay-coords">{{ pointer }}</div>
+      <vl-map
+        :load-tiles-while-animating="true"
+        :load-tiles-while-interacting="true"
+        @pointermove="pointerMove"
+        @click="mapClick"
+        @postrender="mapRendered"
+        data-projection="EPSG:4326"
+        style="height: 100%"
+      >
+        <vl-view :zoom.sync="zoom" :center.sync="center"></vl-view>
 
-            <!-- selected feature popup -->
-            <vl-interaction-select v-if="active">
-              <!-- prettier-ignore -->
-              <vl-overlay v-if="active.id_" :key="active.id_" :id="active.id_" :position="pointOnSurface(active.getGeometry())" :offset="[2, 2]">
+        <!-- selected feature popup -->
+        <vl-interaction-select v-if="active">
+          <!-- prettier-ignore -->
+          <vl-overlay v-if="active.id_" :key="active.id_" :id="active.id_" :position="pointOnSurface(active.getGeometry())" :offset="[2, 2]">
                   <p class="cardcontent" @click="closePopup" :auto-pan="true">
                     <strong>{{ active.get('name') }}</strong>
                   </p>
                 </vl-overlay>
-            </vl-interaction-select>
+        </vl-interaction-select>
 
-            <vl-layer-tile id="xyz">
-              <vl-source-xyz :url="url"></vl-source-xyz>
-            </vl-layer-tile>
+        <vl-layer-tile id="xyz">
+          <vl-source-xyz :url="url"></vl-source-xyz>
+        </vl-layer-tile>
 
-            <vl-layer-vector :z-index="99">
-              <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
-              <vl-source-vector :features="features">
-                <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
-                <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
-                <vl-style-box>
-                  <!-- <vl-style-circle :radius="10">
+        <vl-layer-vector :z-index="99">
+          <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
+          <vl-source-vector :features="features">
+            <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
+            <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
+            <vl-style-box>
+              <!-- <vl-style-circle :radius="10">
                       <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
                       <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
                     </vl-style-circle> -->
-                  <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
-                </vl-style-box>
-              </vl-source-vector>
-            </vl-layer-vector>
-          </vl-map>
-        </v-col>
-      </v-row>
+              <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
+            </vl-style-box>
+          </vl-source-vector>
+        </vl-layer-vector>
+      </vl-map>
     </v-card-text>
   </v-card>
 </template>
@@ -93,6 +90,7 @@ export default class MapCard extends Vue {
   private features: any[] = [];
   private pointer: string = "";
   private active: any = null;
+  private initialized: boolean = false;
 
   @Watch("narrative")
   private narrChanged() {
@@ -112,6 +110,14 @@ export default class MapCard extends Vue {
       }
       console.log(`Open ${f.get("name")}`);
     });
+  }
+
+  private mapRendered($evt: any) {
+    if (!this.initialized) {
+      const map = $evt.map;
+      map.updateSize();
+      this.initialized = true;
+    }
   }
 
   private closePopup($evt: any) {

@@ -61,7 +61,7 @@
                                 </v-tooltip>
                               </td>
                               <td class="catname">{{ cat }}</td>
-                              <td class="py-1">
+                              <td class="py-1 combobox">
                                 <!-- prettier-ignore -->
                                 <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
                                   clearable solo dense hide-details></v-select>
@@ -340,5 +340,8 @@ export default class ScenarioGenerator extends Vue {
 }
 .small-col {
   width: 14px !important;
+}
+.combobox .mdi-close:hover {
+  /* font-size: 2rem; */
 }
 </style>

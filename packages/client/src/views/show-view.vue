@@ -1,19 +1,13 @@
 <template>
   <v-container class="full-height pa-0" fluid>
-    <v-row no-gutters class="full-height" justify="center">
-      <v-col md="12" cols="12" class="full-height">
-        <splitpanes horizontal class="full-height">
-          <pane min-size="10" size="20" class="pa-2">
-            <ScenarioText></ScenarioText>
-          </pane>
-          <pane min-size="10" size="55" class="pa-2">
-            <MapCard></MapCard>
-          </pane>
-          <pane min-size="10" size="25" class="pa-2">
-            <NarrativeComponents></NarrativeComponents>
-          </pane>
-        </splitpanes>
-      </v-col>
+    <v-row no-gutters class="nc-height full-width">
+      <NarrativeComponents></NarrativeComponents>
+    </v-row>
+    <v-row no-gutters class="st-height full-width">
+      <ScenarioText></ScenarioText>
+    </v-row>
+    <v-row no-gutters class="map-height full-width">
+      <MapCard></MapCard>
     </v-row>
   </v-container>
 </template>
@@ -37,4 +31,17 @@ export default class ShowView extends Vue {
 }
 </script>
 
-<style scoped lang="css"></style>
+<style scoped lang="css">
+.full-width {
+  width: 100%;
+}
+.nc-height {
+  height: 300px;
+}
+.nc-height {
+  height: 300px;
+}
+.map-height {
+  height: calc(100% - 600px);
+}
+</style>

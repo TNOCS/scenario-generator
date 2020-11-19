@@ -1,6 +1,7 @@
 {
   "gb": {
     "APP": {
+      "ABOUT": "about",
       "ACTIVE": "active {item}",
       "ADD": "Add {item}",
       "ADD_CONTEXT": "add context",

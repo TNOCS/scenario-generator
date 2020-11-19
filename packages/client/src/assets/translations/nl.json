@@ -1,6 +1,7 @@
 {
   "nl": {
     "APP": {
+      "ABOUT": "over",
       "ACTIVE": "actief {item}",
       "ADD": "{item} toevoegen",
       "ADD_CONTEXT": "voeg context toe",
