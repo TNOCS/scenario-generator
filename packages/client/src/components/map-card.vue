@@ -91,6 +91,7 @@ export default class MapCard extends Vue {
   private pointer: string = "";
   private active: any = null;
   private initialized: boolean = false;
+  private map?: any;
 
   @Watch("narrative")
   private narrChanged() {
@@ -114,8 +115,8 @@ export default class MapCard extends Vue {
 
   private mapRendered($evt: any) {
     if (!this.initialized) {
-      const map = $evt.map;
-      map.updateSize();
+      this.map = $evt.map;
+      this.map.updateSize();
       this.initialized = true;
     }
   }
@@ -134,6 +135,7 @@ export default class MapCard extends Vue {
     } else {
       this.url = this.urls[0];
     }
+    this.map.updateSize();
   }
 
   private getIcon(n: INarrative): string {
