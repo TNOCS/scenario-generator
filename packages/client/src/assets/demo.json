@@ -6,7 +6,7 @@
       "category": "SCENARIO",
       "name": "Demo",
       "categories": {
-        "Threat": ["ThreatDirection", "Impact", "Motivation", "ModusOperandi", "Equipment", "Responsibility"],
+        "Threat": ["ThreatDirection", "Impact", "Motivation", "ModusOperandiDuringExecution", "Equipment", "Responsibility"],
         "Context": [
           "WeatherType",
           "WeatherBehaviour",
@@ -21,7 +21,7 @@
   "ThreatDirection": ["Hannibal", "The Romans", "Verweggistan"],
   "Impact": ["Low", "Medium", "High"],
   "Motivation": ["Money", "Justice", "Revenge"],
-  "ModusOperandi": ["Sniper attack", "Kidnapping", "Singing"],
+  "ModusOperandiDuringExecution": ["Sniper attack", "Kidnapping", "Singing"],
   "Equipment": ["None", "Drone", "Bomb", "Helicopter", "Hammer"],
   "Responsibility": ["Private", "Public"],
   "WeatherType": ["Rainy", "Sunny", "Windy", "Cloudy"],

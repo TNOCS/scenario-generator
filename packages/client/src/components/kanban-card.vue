@@ -10,15 +10,20 @@
       </v-btn>
     </v-card-title>
     <v-card-text class="text-description">
-      <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
-        <template v-slot:activator="{ on, attrs }">
-          <div v-on="on" v-bind="attrs">
-            <v-icon color="secondary" small>mdi-note-plus-outline</v-icon>
-            <span class="secondary--text"> {{ getContext(item) }}</span>
-          </div>
-        </template>
-        <AddContextCard :item="item" @close="closeMenu"></AddContextCard>
-      </v-menu>
+      <div class="not-on-hover" v-if="hasContext(item)">
+        <span class="secondary--text"> {{ getContext(item) }}</span>
+      </div>
+      <div class="only-on-hover">
+        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <div v-on="on" v-bind="attrs">
+              <v-icon color="secondary" small>mdi-note-plus-outline</v-icon>
+              <span class="secondary--text"> {{ getContext(item) }}</span>
+            </div>
+          </template>
+          <AddContextCard :item="item" @close="closeMenu"></AddContextCard>
+        </v-menu>
+      </div>
     </v-card-text>
   </v-card>
 </template>
@@ -38,6 +43,10 @@ export default class KanbanCard extends Vue {
 
   constructor() {
     super();
+  }
+
+  private hasContext(item: Partial<IContent>): boolean {
+    return !!item && !!item.context && !!item.context.type;
   }
 
   private getContext(item: Partial<IContent>): string {
@@ -79,5 +88,16 @@ export default class KanbanCard extends Vue {
 .k-c-btn {
   margin: 0px;
   padding: 0px;
+}
+.kanban-card:hover .only-on-hover {
+  display: block;
+}
+.kanban-card .only-on-hover,
+.kanban-card:hover .not-on-hover {
+  display: none;
+}
+
+.kanban-card .text-description {
+  min-height: 2.5rem;
 }
 </style>

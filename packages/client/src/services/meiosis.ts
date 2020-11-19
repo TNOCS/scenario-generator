@@ -1,6 +1,12 @@
 import { merge } from "../utils/mergerino";
 import { scan, stream } from "flyd";
-import { collectionFactory, CollectionsActions, CollectionsModel, CollectionType, ICollectionState } from "./states/collection-state";
+import {
+  collectionFactory,
+  CollectionsActions,
+  CollectionsModel,
+  CollectionType,
+  ICollectionState,
+} from "./states/collection-state";
 import { appStateMgmt, IAppStateActions, IAppStateModel } from "./states/app-state";
 import { IContent, IScenario } from "../models";
 
@@ -17,13 +23,15 @@ export type CollectionNames =
   | "Persons"
   | "Motivation"
   | "Capabilities"
-  | "PhysicalAngleOfAttack"
-  | "ModusOperandi"
+  | "PhysicalAngleOfAttackDuringExecution"
+  | "ModusOperandiDuringExecution"
+  | "BehaviourDuringPreparation"
+  | "CriminalPhase"
   | "Equipment"
   | "TargetType"
+  | "Responsibility"
   | "Location"
   | "TypeOfObject"
-  | "Responsibility"
   | "WeatherType"
   | "WeatherBehaviour"
   | "TypeOfEnvironment"
@@ -46,8 +54,10 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   "Persons",
   "Motivation",
   "Capabilities",
-  "PhysicalAngleOfAttack",
-  "ModusOperandi",
+  "PhysicalAngleOfAttackDuringExecution",
+  "ModusOperandiDuringExecution",
+  "BehaviourDuringPreparation",
+  "CriminalPhase",
   "Equipment",
   "TargetType",
   "Location",
@@ -71,7 +81,7 @@ export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...Collection
 export type ICollectionRecord = { [key in CollectionNames]: ICollectionState<IContent> };
 
 export const AllCollections: ICollectionRecord = {} as ICollectionRecord;
-CollectionNamesArr.forEach((name) => (AllCollections[name] = collectionFactory<IContent>(name)));
+CollectionNamesArr.forEach(name => (AllCollections[name] = collectionFactory<IContent>(name)));
 const scenariosCollection = collectionFactory<IScenario>("scenarios");
 
 export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
@@ -83,14 +93,14 @@ const app = {
     {},
     appStateMgmt.initial,
     scenariosCollection.initial,
-    ...Object.values(AllCollections).map((coll) => coll.initial)
+    ...Object.values(AllCollections).map(coll => coll.initial)
   ) as IAppModel,
   actions: (update: UpdateStream, states: flyd.Stream<IAppModel>) =>
     Object.assign(
       {},
       appStateMgmt.actions(update, states),
       scenariosCollection.actions(update, states),
-      ...Object.values(AllCollections).map((coll) => coll.actions(update, states))
+      ...Object.values(AllCollections).map(coll => coll.actions(update, states))
     ) as IActions,
 };
 
