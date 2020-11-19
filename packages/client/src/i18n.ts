@@ -4,6 +4,7 @@ import CountryFlag from "@dzangolab/vue-country-flag-icon";
 import nl from "./assets/translations/nl.json";
 import gb from "./assets/translations/gb.json";
 import { isVowelSound } from "./utils/constants";
+import { CollectionNames } from "./services/meiosis";
 
 // register i18n module
 Vue.use(VueI18n);
@@ -18,10 +19,14 @@ const i18n = new VueI18n({
   fallbackLocale: "gb",
   messages, // set locale messages
   modifiers: {
-    addArticle: (str) => (isVowelSound(str) ? `${translate("AN")} ${str}` : `${translate("A")}`),
-    getArticle: (str) => (isVowelSound(str) ? translate("AN") : translate("A")),
+    addArticle: str => (isVowelSound(str) ? `${translate("AN")} ${str}` : `${translate("A")}`),
+    getArticle: str => (isVowelSound(str) ? translate("AN") : translate("A")),
   },
 });
+
+export const translateCollName = (key: CollectionNames): string => {
+  return i18n.tc(`COMP.${key.toUpperCase()}`).toString();
+};
 
 const translate = (key: string): string => {
   if (!key) {

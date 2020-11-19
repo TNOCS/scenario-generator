@@ -21,7 +21,7 @@
                   <span class="ml-8 mb-2">
                     <v-select
                       :label="$t('APP.SELECT_DIMENSION') | capitalize"
-                      :items="getCategoryRows(cat)"
+                      :items="getCategoryRowsMap(cat)"
                       v-model="selectedCategory"
                       class="sel-dim"
                     >
@@ -60,6 +60,7 @@ import { Container, Draggable } from "vue-smooth-dnd";
 import { ContentCategory, IContent, IScenario, ISentence } from "../models";
 import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
 import { getUuid } from "../utils/constants";
+import { translateCollName } from "../i18n";
 import TableCard from "../components/table-card.vue";
 
 @Component({
@@ -89,8 +90,16 @@ export default class ConsistencyMatrices extends Vue {
     this.selectedCategory = Object.values(this.categories)[newTab][0];
   }
 
-  private getCategoryRows(cat: ContentCategory): CollectionNames[] {
+  private getCategoryRows(cat: ContentCategory): string[] {
     return this.rows.filter(r => this.categories[cat].includes(r));
+  }
+
+  private getCategoryRowsMap(cat: ContentCategory): any[] {
+    return this.rows
+      .filter(r => this.categories[cat].includes(r))
+      .map(c => {
+        return { text: translateCollName(c), value: c };
+      });
   }
 
   private async init() {
