@@ -33,7 +33,17 @@
                               </v-tooltip>
                             </th>
                             <th class="text-left bold--text">Dimension</th>
-                            <th class="text-left bold--text more-padding">Selected</th>
+                            <th class="text-left bold--text more-padding">
+                              <span> Selected</span>
+                              <span class="close-icon-span">
+                                <v-tooltip top>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-icon v-on="on" v-bind="attrs" small> mdi-close </v-icon>
+                                  </template>
+                                  <span> {{ $t("APP.EXPLAIN_CLEAR_ICON") }}</span>
+                                </v-tooltip>
+                              </span>
+                            </th>
                             <th class="text-left bold--text small-col pr-8">
                               <v-tooltip right open-delay="1000">
                                 <template v-slot:activator="{ on, attrs }">
@@ -64,7 +74,8 @@
                               <td class="py-1 combobox">
                                 <!-- prettier-ignore -->
                                 <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
-                                  clearable solo dense hide-details></v-select>
+                                  clearable solo dense hide-details>
+                                </v-select>
                               </td>
                               <td class="small-col pr-8">
                                 <v-tooltip right open-delay="1000">
@@ -343,5 +354,9 @@ export default class ScenarioGenerator extends Vue {
 }
 .combobox .mdi-close:hover {
   /* font-size: 2rem; */
+}
+.close-icon-span {
+  float: right;
+  margin-right: 28px;
 }
 </style>

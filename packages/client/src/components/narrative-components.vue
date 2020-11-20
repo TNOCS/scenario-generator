@@ -1,36 +1,43 @@
 <template>
-  <v-card flat tile class="flex-card" style="background: transparent">
-    <div class="overline px-2 py-0">
-      {{ `${$tc("APP.DIMENSION", 2)}` }}
-      <span style="float: right">
-        <v-btn icon><v-icon>mdi-info</v-icon></v-btn>
-      </span>
-    </div>
-    <v-divider />
-    <v-card-text class="text-description">
-      <div v-if="scenario && narrative.components" class="narr-table">
-        <v-simple-table dense v-for="cat in categoryNames" :key="cat" class="mb-2">
-          <template v-slot:default>
-            <thead>
-              <tr>
-                <th class="text-left bold--text normal-font">{{ cat }}</th>
-              </tr>
-              <tr>
-                <th class="text-left" v-for="col in getCollectionNames(cat)" :key="col">{{ col }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td v-for="(id, col) in getNarrativeComponents(cat)" :key="id">
-                  <div>{{ getCollectionVal(id, col) }}</div>
-                </td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
+  <v-expansion-panel class="no-background">
+    <v-expansion-panel-header dense class="no-background">
+      <v-tooltip left slot="actions">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon v-on="on" v-bind="attrs"> mdi-chevron-down </v-icon>
+        </template>
+        <span> {{ $t("APP.OPEN_CLOSE") }}</span>
+      </v-tooltip>
+      <div class="overline px-2 py-0 full-width">
+        {{ $tc("APP.DIMENSION", 2) }}
+        <!-- <v-divider /> -->
       </div>
-    </v-card-text>
-  </v-card>
+    </v-expansion-panel-header>
+    <v-expansion-panel-content>
+      <v-card-text class="text-description">
+        <div v-if="scenario && narrative.components" class="narr-table">
+          <v-simple-table dense v-for="cat in categoryNames" :key="cat" class="mb-2">
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-left bold--text normal-font">{{ cat }}</th>
+                </tr>
+                <tr>
+                  <th class="text-left" v-for="col in getCollectionNames(cat)" :key="col">{{ col }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td v-for="(id, col) in getNarrativeComponents(cat)" :key="id">
+                    <div>{{ getCollectionVal(id, col) }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </div>
+      </v-card-text>
+    </v-expansion-panel-content>
+  </v-expansion-panel>
 </template>
 
 <script lang="ts">
@@ -103,5 +110,8 @@ export default class NarrativeComponents extends Vue {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.nc-height {
+  height: 320px;
 }
 </style>

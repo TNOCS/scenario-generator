@@ -30,6 +30,23 @@
   font-size: 1.4em;
 }
 
+.no-background {
+  background: transparent !important;
+}
+
+.v-expansion-panel-header {
+  padding: 4px 16px;
+  min-height: 40px;
+}
+
+.v-expansion-panel-header hr {
+  margin: 0px -24px 0px;
+}
+
+.v-expansion-panel--active > .v-expansion-panel-header {
+  min-height: 40px;
+}
+
 .cardcontent {
   border: black solid 1px;
   padding: 8px 12px;

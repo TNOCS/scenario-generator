@@ -1,13 +1,11 @@
 <template>
-  <v-container class="full-height pa-0" fluid>
-    <v-row no-gutters class="nc-height full-width">
-      <NarrativeComponents></NarrativeComponents>
-    </v-row>
-    <v-row no-gutters class="st-height full-width">
-      <ScenarioText></ScenarioText>
-    </v-row>
-    <v-row no-gutters class="map-height full-width">
-      <MapCard></MapCard>
+  <v-container class="no-scroll full-height pa-0" fluid>
+    <v-row no-gutters class="full-width full-height">
+      <v-expansion-panels multiple accordion v-model="panels" class="no-background">
+        <NarrativeComponents></NarrativeComponents>
+        <ScenarioText></ScenarioText>
+        <MapCard></MapCard>
+      </v-expansion-panels>
     </v-row>
   </v-container>
 </template>
@@ -25,6 +23,8 @@ import NarrativeComponents from "../components/narrative-components.vue";
   components: { Splitpanes, Pane, DescriptionCard, NarrativeComponents, MapCard, ScenarioText },
 })
 export default class ShowView extends Vue {
+  private panels: number[] = [0, 1, 2];
+
   mounted() {
     console.log(`Show mounted`);
   }
@@ -35,13 +35,11 @@ export default class ShowView extends Vue {
 .full-width {
   width: 100%;
 }
-.nc-height {
-  height: 300px;
-}
-.nc-height {
-  height: 300px;
-}
 .map-height {
-  height: calc(100% - 600px);
+  height: calc(100% - 640px);
+}
+.no-scroll.full-height {
+  height: 100% !important;
+  overflow-x: hidden;
 }
 </style>

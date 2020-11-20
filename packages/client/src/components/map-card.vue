@@ -1,13 +1,17 @@
 <template>
-  <v-card flat tile class="flex-card full-height full-width" style="background: transparent; min-height: 500px">
-    <div class="overline px-2 py-0">
+  <v-card flat tile class="flex-card map-full-height map-full-width" style="background: transparent; min-height: 500px">
+    <div class="overline pl-6 pr-2 pb-0 pt-1">
       {{ $tc("APP.LOCATION") }}
-      <span style="float: right">
-        <v-btn icon @click="toggleMapLayer"><v-icon>mdi-map</v-icon></v-btn>
-      </span>
+      <v-tooltip left open-delay="1000">
+        <template v-slot:activator="{ on, attrs }">
+          <span v-on="on" v-bind="attrs" style="float: right">
+            <v-btn icon @click="toggleMapLayer"><v-icon>mdi-map</v-icon></v-btn>
+          </span>
+        </template>
+        <span>{{ $t("APP.TOGGLE_MAP_BASE") | capitalize }}</span>
+      </v-tooltip>
     </div>
-    <v-divider />
-    <v-card-text class="text-description full-height">
+    <div class="map-card-height map-card-full-width">
       <div class="pr-cir" v-if="loading">
         <v-progress-circular indeterminate :size="150" color="primary"></v-progress-circular>
       </div>
@@ -27,10 +31,10 @@
         <vl-interaction-select v-if="active">
           <!-- prettier-ignore -->
           <vl-overlay v-if="active.id_" :key="active.id_" :id="active.id_" :position="pointOnSurface(active.getGeometry())" :offset="[2, 2]">
-                  <p class="cardcontent" @click="closePopup" :auto-pan="true">
-                    <strong>{{ active.get('name') }}</strong>
-                  </p>
-                </vl-overlay>
+            <p class="cardcontent" @click="closePopup" :auto-pan="true">
+              <strong>{{ active.get('name') }}</strong>
+            </p>
+          </vl-overlay>
         </vl-interaction-select>
 
         <vl-layer-tile id="xyz">
@@ -52,7 +56,7 @@
           </vl-source-vector>
         </vl-layer-vector>
       </vl-map>
-    </v-card-text>
+    </div>
   </v-card>
 </template>
 
@@ -252,7 +256,7 @@ export default class MapCard extends Vue {
 .map-overlay-coords {
   position: absolute;
   text-align: center;
-  top: 6px;
+  top: 14px;
   width: 100%;
   z-index: 100;
   pointer-events: none;
@@ -265,5 +269,21 @@ export default class MapCard extends Vue {
   justify-content: center;
   top: 100px;
   z-index: 1000;
+}
+.loc-height {
+  min-height: 40px;
+}
+.map-card-height {
+  height: calc(100vh - (42px + 40px + 40px + 40px + 8px));
+  padding: 8px;
+}
+.map-full-width {
+  width: 100%;
+}
+.map-card-full-width {
+  width: calc(100% - 20px);
+}
+.map-full-height {
+  height: calc(100vh - (42px + 40px + 40px + 8px));
 }
 </style>

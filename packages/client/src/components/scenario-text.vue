@@ -1,18 +1,26 @@
 <template>
-  <v-card dense flat tile class="flex-card" style="background: transparent">
-    <div class="overline px-2 py-0">
-      {{ $tc("COMP.NARRATIVE") }}
-      <span style="float: right">
-        <v-btn icon><v-icon>mdi-info</v-icon></v-btn>
-      </span>
-    </div>
-    <v-divider />
-    <v-card-text class="text-description ma-0 pa-4">
-      <div v-if="narrative && narrative.id">
-        <span class="scenario-narrative" v-html="getMarkdown(narrative.narrative)"></span>
+  <v-expansion-panel class="no-background">
+    <v-expansion-panel-header dense class="no-background">
+      <v-tooltip left slot="actions">
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon v-on="on" v-bind="attrs"> mdi-chevron-down </v-icon>
+        </template>
+        <span> {{ $t("APP.OPEN_CLOSE") }}</span>
+      </v-tooltip>
+      <div class="overline px-2 py-0 full-width">
+        {{ $tc("COMP.NARRATIVE") }}
+        <!-- <v-divider /> -->
       </div>
-    </v-card-text>
-  </v-card>
+    </v-expansion-panel-header>
+    <v-expansion-panel-content>
+      <v-card-text class="text-description ma-0 pa-4">
+        <div v-if="narrative && narrative.id">
+          <span class="scenario-narrative" v-html="getMarkdown(narrative.narrative)"></span>
+        </div>
+      </v-card-text>
+    </v-expansion-panel-content>
+    <v-divider />
+  </v-expansion-panel>
 </template>
 
 <script lang="ts">
@@ -30,7 +38,6 @@ import dompurify from "dompurify";
 })
 export default class ScenarioText extends Vue {
   private narrative: INarrative = {} as INarrative;
-
   constructor() {
     super();
   }
