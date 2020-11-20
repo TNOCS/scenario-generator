@@ -18,10 +18,7 @@ const i18n = new VueI18n({
   locale: localStorage.getItem(languageStorageKey) || "gb", // set locale
   fallbackLocale: "gb",
   messages, // set locale messages
-  modifiers: {
-    addArticle: str => (isVowelSound(str) ? `${translate("AN")} ${str}` : `${translate("A")}`),
-    getArticle: str => (isVowelSound(str) ? translate("AN") : translate("A")),
-  },
+  modifiers: {},
 });
 
 export const translateCollName = (key: CollectionNames): string => {

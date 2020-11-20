@@ -3,7 +3,7 @@
     <v-card dense flat tile class="flex-card generate-card" style="background: transparent; overflow: auto">
       <div class="overline px-2 py-0">{{ `1. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
-        <v-container fluid class="">
+        <v-container fluid class="pa-0 ma-0">
           <v-row no-gutters class="d-flex">
             <v-btn @click="generateNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
               {{ $t("APP.GENERATE", { item: $tc("APP.SCENARIO") }) }}
@@ -70,7 +70,7 @@
                                   <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
                                 </v-tooltip>
                               </td>
-                              <td class="catname">{{ cat }}</td>
+                              <td class="catname">{{ cat | translateCollectionName | capitalize }}</td>
                               <td class="py-1 combobox">
                                 <!-- prettier-ignore -->
                                 <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"

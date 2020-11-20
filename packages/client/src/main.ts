@@ -7,8 +7,8 @@ import Vue from "vue";
 import Vuetify from "vuetify";
 import colors from "vuetify/lib/util/colors";
 import router from "./router";
-import { store } from "./services/meiosis";
-import { i18n } from "./i18n";
+import { CollectionNames, store } from "./services/meiosis";
+import { i18n, translateCollName } from "./i18n";
 import "./assets/v2018.css";
 import { isVowelSound } from "./utils/constants";
 import VueLayers from "vuelayers";
@@ -35,13 +35,13 @@ Vue.filter("capitalize", (value: string) => {
   value = value.toString();
   return value.charAt(0).toUpperCase() + value.slice(1);
 });
-Vue.filter("getArticle", (value: string) => {
-  if (!value) return "";
-  return isVowelSound(value) ? i18n.t("UTIL.AN") : i18n.t("UTIL.A");
-});
 Vue.filter("trim", (value: string) => {
   if (!value) return "";
   return value.trim();
+});
+Vue.filter("translateCollectionName", (value: string) => {
+  if (!value) return "";
+  return translateCollName(value as CollectionNames);
 });
 
 const vuetify = new Vuetify({
@@ -61,5 +61,5 @@ export default new Vue({
   vuetify: vuetify,
   router,
   i18n,
-  render: (h) => h(App),
+  render: h => h(App),
 }).$mount("#app");
