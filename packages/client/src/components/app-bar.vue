@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app dense flat clipped-left height="42" class="ind-app-bar noselect font-weight-light no-print">
-    <v-icon class="home-icon pr-3" :to="'create'">mdi-shield</v-icon>
+    <v-icon class="home-icon pr-3" @click="openDrawer">mdi-menu</v-icon>
     <v-toolbar-title>V2018 Scenario Generator</v-toolbar-title>
     <div class="text-center">
       <v-btn class="ml-8 mx-2 my-2 app-btn" outlined :to="'add'" small color="blue">
@@ -37,6 +37,10 @@ import { IScenario } from "../models";
 })
 export default class AppBar extends Vue {
   private scenario: Partial<IScenario> = {};
+
+  private openDrawer() {
+    this.$store.actions.toggleDrawer(true);
+  }
 
   async mounted() {
     this.$store.states.map(s => {

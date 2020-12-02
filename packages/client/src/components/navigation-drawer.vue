@@ -1,6 +1,9 @@
 <template>
-  <v-navigation-drawer width="240px" app clipped floating permanent class="noselect no-print">
+  <v-navigation-drawer v-model="drawer" width="240px" @input="drawerChanged" app absolute temporary class="noselect no-print">
     <!-- <v-subheader class="font-weight-thin"></v-subheader> -->
+    <v-row no-gutters class="my-3 ml-0">
+      <v-btn text @click="closeDrawer"><v-icon>mdi-arrow-left</v-icon> {{ $t("APP.CLOSE") }}</v-btn>
+    </v-row>
     <v-row no-gutters class="my-4" align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="180" contain />
     </v-row>
@@ -111,6 +114,11 @@ export default class NavigationDrawer extends Vue {
   private menu: boolean = false;
   private importMenu: boolean = false;
   private narMenu: boolean = false;
+  private drawer: boolean = false;
+
+  private drawerChanged(d: boolean) {
+    if (d === false) this.closeDrawer();
+  }
 
   private async languageChanged() {
     this.$store.actions.changeLanguage(this.activeLanguage);
@@ -140,6 +148,10 @@ export default class NavigationDrawer extends Vue {
     this.activeScenario.name ? this.activeScenario.name : "-";
   }
 
+  private closeDrawer() {
+    this.$store.actions.toggleDrawer(false);
+  }
+
   async mounted() {
     console.log(`navigation mounted`);
     this.$store.states.map(a => {
@@ -148,6 +160,9 @@ export default class NavigationDrawer extends Vue {
       this.scenarios = a.scenarios.list || [];
       this.activeScenario = a.scenarios.current || {};
       this.activeNarrative = a.app.narrative || ({} as INarrative);
+    });
+    this.$store.states.map(a => {
+      this.drawer = a.app.drawer;
     });
   }
 }

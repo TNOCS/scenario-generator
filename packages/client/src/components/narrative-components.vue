@@ -18,15 +18,15 @@
           <v-simple-table dense v-for="cat in categoryNames" :key="cat" class="mb-2">
             <template v-slot:default>
               <thead>
+                <!-- <span class="text-left bold--text normal-font pa-2">{{ cat }}</span> -->
                 <tr>
-                  <th class="text-left bold--text normal-font">{{ cat }}</th>
-                </tr>
-                <tr>
-                  <th class="text-left" v-for="col in getCollectionNames(cat)" :key="col">{{ col | translateCollectionName | capitalize }}</th>
+                  <th class="text-left bold--text normal-font pa-2">{{ cat }}</th>
+                  <th class="text-left" v-for="(id, col) in getNarrativeComponents(cat)" :key="id">{{ col | translateCollectionName | capitalize }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
+                  <td></td>
                   <td v-for="(id, col) in getNarrativeComponents(cat)" :key="id">
                     <div>{{ getCollectionVal(id, col) }}</div>
                   </td>

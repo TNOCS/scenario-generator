@@ -47,11 +47,25 @@
             <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
             <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
             <vl-style-box>
-              <!-- <vl-style-circle :radius="10">
-                      <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
-                      <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
-                    </vl-style-circle> -->
-              <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 1]"></vl-style-icon>
+              <vl-style-circle :radius="10">
+                <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
+                <vl-style-stroke :color="[20, 250, 22, 0.8]"></vl-style-stroke>
+              </vl-style-circle>
+              <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 0.5]"></vl-style-icon>
+            </vl-style-box>
+          </vl-source-vector>
+        </vl-layer-vector>
+
+        <vl-layer-vector :z-index="98">
+          <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
+          <vl-source-vector :features="features">
+            <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
+            <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
+            <vl-style-box>
+              <vl-style-circle :radius="24">
+                <vl-style-fill :color="[20, 20, 252, 0.1]"></vl-style-fill>
+                <vl-style-stroke :color="[255, 255, 255, 0.8]" :width="3"></vl-style-stroke>
+              </vl-style-circle>
             </vl-style-box>
           </vl-source-vector>
         </vl-layer-vector>
@@ -107,14 +121,21 @@ export default class MapCard extends Vue {
   }
 
   private toggleFeature(pixel: any, map: any) {
+    let _doneOne = false;
     map.forEachFeatureAtPixel(pixel, (f: any) => {
+      if (_doneOne) return;
       if (this.active && this.active.id_ == f.id_) {
         this.active = null;
+        _doneOne = true;
       } else {
         this.active = f;
+        _doneOne = true;
       }
-      console.log(`Open ${f.get("name")}`);
+      console.log(`Open/close ${f.get("name")}`);
     });
+    if (!_doneOne) {
+      this.active = null;
+    }
   }
 
   private mapRendered($evt: any) {
@@ -149,7 +170,9 @@ export default class MapCard extends Vue {
       const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
       const typeContext: IContext | undefined = type && type.context;
       if (typeContext) {
-        result = `${Object.values(typeContext.data).pop()!}`;
+        if (!Object.keys(typeContext.data).pop()!.includes('levels')) {
+          result = `${Object.values(typeContext.data).pop()!}`;
+        }
       }
     }
     return ICON_URL.replace("{{ITEM}}", result);
@@ -215,7 +238,7 @@ export default class MapCard extends Vue {
         this.$store.actions.notify(this.$t(`APP.NO_LOCATION_TYPE_CONTEXT`).toString());
         return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
       }
-      const amenity = `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
+      const amenity = this.getAmenityQuery(typeContext);
       if (locContext.type === "LOCATION") {
         const data = locContext.data as LocationContext;
         if (data.hasOwnProperty("NAME")) {
@@ -229,6 +252,14 @@ export default class MapCard extends Vue {
         console.log("No location context found");
         this.loading = false;
       }
+    }
+  }
+
+  private getAmenityQuery(typeContext: IContext) {
+    if (typeContext.data && Object.keys(typeContext.data).pop()!.includes("levels")) {
+      return `${Object.keys(typeContext.data).pop()!}~${Object.values(typeContext.data).pop()!}`;
+    } else {
+      return `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
     }
   }
 

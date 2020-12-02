@@ -14,6 +14,7 @@ export interface IAppStateModel {
     theme: string;
     note: string;
     narrative: INarrative;
+    drawer: boolean;
     //   page?: Dashboards;
   };
 }
@@ -28,6 +29,7 @@ export interface IAppStateActions {
   changeNarrative: (narrative: INarrative) => void;
   updateInconsistencies: (inconsistencies: Inconsistency[]) => void;
   notify: (note: string) => void;
+  toggleDrawer: (drawer: boolean) => void;
 }
 
 export interface IAppState {
@@ -45,6 +47,7 @@ export const appStateMgmt = {
       theme: localStorage.getItem(themeStorageKey) || "light",
       note: "",
       narrative: {} as INarrative,
+      drawer: false,
     },
   },
   actions: (update, _states) => {
@@ -95,6 +98,10 @@ export const appStateMgmt = {
       notify: (note: string) => {
         log("Set notification");
         update({ app: { note } });
+      },
+      toggleDrawer: (drawer: boolean) => {
+        log(`ToggleDrawer: ${drawer}`);
+        update({ app: { drawer } });
       },
     };
   },

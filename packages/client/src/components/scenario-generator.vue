@@ -120,14 +120,14 @@
             v-on:keyup.enter="saveNarrative"
           >
           </v-text-field>
-          <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
+          <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8">
             <v-icon class="pr-2">mdi-content-save</v-icon>
             {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>
         </div>
       </v-card-text>
     </v-card>
-    <v-row class="mt-1"> </v-row>
+    <v-row class="mt-8"> </v-row>
   </div>
 </template>
 

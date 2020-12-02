@@ -17,7 +17,7 @@ export default class OverpassService {
 
   public async getGeojsonFromCoordinates(coordinates: number[], type: string, callbackFcn: (...args: any) => any) {
     const f: Feature<Point> = this.createFeature(coordinates, {});
-    const buffered = buffer(f, 5, { units: "kilometers" });
+    const buffered = buffer(f, 2, { units: "kilometers" });
     const bufferBox = bbox(buffered);
     const queryBox = {
       minlat: +bufferBox[0],
@@ -43,7 +43,7 @@ export default class OverpassService {
     //   minlon: +found.boundingbox[2],
     //   maxlon: +found.boundingbox[3],
     // };
-    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), 5, { units: "kilometers" });
+    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), 2, { units: "kilometers" });
     const bufferBox = bbox(buffered);
     const queryBox = {
       minlat: +bufferBox[0],
