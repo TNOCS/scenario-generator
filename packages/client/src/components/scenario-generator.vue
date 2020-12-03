@@ -87,7 +87,7 @@
                                       <v-icon v-else small @click="togglePinned(cat)">mdi-lock-open-variant-outline</v-icon>
                                     </span>
                                   </template>
-                                  <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
+                                  <span>{{ $t("APP.UNLOCK_ONE") | capitalize }}</span>
                                 </v-tooltip>
                               </td>
                             </tr>
@@ -216,8 +216,15 @@ export default class ScenarioGenerator extends Vue {
 
   private togglePinned(cat?: CollectionNames) {
     if (!cat) {
-      this.pinned.splice(0, this.pinned.length);
+      // All
+      if (this.pinned.length > 0) {
+        this.pinned.splice(0, this.pinned.length);
+      } else {
+        this.pinned.splice(0, this.pinned.length);
+        this.rows.forEach(r => this.pinned.push(r));
+      }
     } else {
+      // Single
       const idx = this.pinned.indexOf(cat);
       if (idx >= 0) {
         this.pinned.splice(idx, 1);

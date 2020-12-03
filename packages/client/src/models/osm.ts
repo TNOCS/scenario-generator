@@ -1,14 +1,17 @@
 export type OsmType = { name: string; key: string; value: string };
 
 export const OsmTypes: OsmType[] = [
-  { name: "Restaurant", key: "amenity", value: "restaurant" },
-  { name: "Cafe", key: "amenity", value: "bar" },
-  { name: "Gas station", key: "amenity", value: "fuel" },
-  { name: "Parking", key: "amenity", value: "parking" },
-  { name: "Church", key: "building", value: "church" },
   { name: "Airport", key: "aeroway", value: "aerodrome" },
-  { name: "Flats", key: "\"building:levels\"", value: "\"([6-9]|\d{2,})\"" },
+  { name: "Cafe", key: "amenity", value: "bar" },
+  { name: "Church", key: "building", value: "church" },
+  { name: "City square", key: "place", value: "square" },
+  { name: "Flats", key: '"building:levels"', value: '"([6-9]|d{2,})"' },
+  { name: "Gas station", key: "amenity", value: "fuel" },
+  { name: "Hospital", key: "amenity", value: "hospital" },
   { name: "Hotel", key: "tourism", value: "hotel" },
+  { name: "Parking", key: "amenity", value: "parking" },
+  { name: "Restaurant", key: "amenity", value: "restaurant" },
+  { name: "Shopping street", key: "highway", value: "pedestrian" },
   { name: "Stadspoort", key: "historic", value: "city_gate" },
-  { name: "Standbeeld", key: "memorial", value: "statue" },
+  { name: "Statue", key: "memorial", value: "statue" },
 ];

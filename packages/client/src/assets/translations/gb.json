@@ -34,8 +34,8 @@
       "LOCATION": "location",
       "NAME": "name",
       "NO": "no",
-      "NO_LOCATION_CONTEXT": "Geen locatie gevonden in scenario",
-      "NO_LOCATION_TYPE_CONTEXT": "Geen locatie type gevonden in scenario",
+      "NO_LOCATION_CONTEXT": "No location found in scenario",
+      "NO_LOCATION_TYPE_CONTEXT": "No location type found in scenario",
       "NO_VALID_SCENARIO": "No valid scenario generated after {count} iterations.",
       "OPEN_CLOSE": "show/hide content",
       "PARTLY_CONSISTENT": "Combinations with these two items are improbable",
@@ -49,6 +49,7 @@
       "THEME": "theme",
       "TOGGLE_MAP_BASE": "toggle map background",
       "UNLOCK_ALL": "unlock all locked dimensions",
+      "UNLOCK_ONE": "unlock this locked dimension",
       "VALUE": "value",
       "WRITE_NARRATIVE": "write a narrative",
       "YES": "yes"
