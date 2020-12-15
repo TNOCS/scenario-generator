@@ -103,8 +103,8 @@ export default class MapCard extends Vue {
     "https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
     "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   ];
-  private zoom: number = 2;
-  private center: number[] = [0, 12];
+  private zoom: number = 8;
+  private center: number[] = [5.2, 52.3];
   private features: any[] = [];
   private pointer: string = "";
   private active: any = null;

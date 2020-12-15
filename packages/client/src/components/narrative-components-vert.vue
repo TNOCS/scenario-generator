@@ -1,5 +1,5 @@
 <template>
-  <v-row class="mt-0" no-gutters>
+  <v-row class="mt-0 overflow-y" no-gutters>
     <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6" cols="6">
       <div class="overline pl-2 pr-2 pb-0 pt-1">
         {{ catName }}

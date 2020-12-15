@@ -1,7 +1,26 @@
 <template>
   <div>
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <div class="overline px-2 py-0">{{ `1. ${$t("APP.WRITE_NARRATIVE")}` }}</div>
+      <v-card-text class="text-description ma-0 pa-1">
+        <v-text-field
+          hide-details
+          class="name-field pb-2"
+          :label="$t('APP.TITLE') | capitalize"
+          v-model="narrativeName"
+          v-on:keyup.enter="saveNarrative"
+          v-on:blur="saveNarrative"
+        >
+        </v-text-field>
+      </v-card-text>
+    </v-card>
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <v-card-text class="text-description ma-0 pa-1">
+        <v-textarea filled v-model="narrativeText" :hint="$tc('COMP.NARRATIVE') | capitalize"> </v-textarea>
+      </v-card-text>
+    </v-card>
     <v-card dense flat tile class="flex-card generate-card" style="background: transparent; overflow: auto">
-      <div class="overline px-2 py-0">{{ `1. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
+      <div class="overline px-2 py-0">{{ `2. ${$t("APP.GENERATE", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid class="pa-0 ma-0">
           <v-row no-gutters class="d-flex">
@@ -11,116 +30,105 @@
             <v-btn @click="newNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4">
               {{ $t("APP.EMPTY", { item: $tc("APP.SCENARIO") }) }}
             </v-btn>
+            <v-spacer></v-spacer>
+            <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8 btn-right">
+              <v-icon class="pr-2">mdi-content-save</v-icon>
+              {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
+            </v-btn>
           </v-row>
-          <div>
-            <v-row class="mt-1">
-              <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6" cols="6">
-                <v-card>
-                  <v-card-title dense>
-                    {{ catName }}
-                  </v-card-title>
-                  <v-card-text class="pa-0">
-                    <v-simple-table dense v-if="collections">
-                      <template v-slot:default>
-                        <thead>
-                          <tr>
-                            <th class="text-left bold--text small-col">
+          <v-row class="mt-1 full-width" no-gutters>
+            <v-col v-for="catName in categoryNames" :key="catName" class="pl-2" xs="6" cols="6">
+              <v-card>
+                <v-card-title dense>
+                  {{ catName }}
+                </v-card-title>
+                <v-card-text class="pa-0">
+                  <v-simple-table dense v-if="collections">
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left bold--text small-col">
+                            <v-tooltip right open-delay="1000">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon v-on="on" v-bind="attrs" small @click="toggleNeglected()"> mdi-eye-check </v-icon>
+                              </template>
+                              <span>{{ $t("APP.INCLUDE_ALL") | capitalize }}</span>
+                            </v-tooltip>
+                          </th>
+                          <th class="text-left bold--text">Dimension</th>
+                          <th class="text-left bold--text more-padding">
+                            <span> Selected</span>
+                            <span class="close-icon-span">
+                              <v-tooltip top>
+                                <template v-slot:activator="{ on, attrs }">
+                                  <v-icon v-on="on" v-bind="attrs" small> mdi-close </v-icon>
+                                </template>
+                                <span> {{ $t("APP.EXPLAIN_CLEAR_ICON") }}</span>
+                              </v-tooltip>
+                            </span>
+                          </th>
+                          <th class="text-left bold--text small-col pr-8">
+                            <v-tooltip right open-delay="1000">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-icon v-on="on" v-bind="attrs" small @click="togglePinned()"> mdi-lock-open-outline </v-icon>
+                              </template>
+                              <span>{{ $t("APP.UNLOCK_ALL") | capitalize }}</span>
+                            </v-tooltip>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="category-table">
+                        <template>
+                          <tr v-for="cat in categories[catName]" :key="cat">
+                            <td class="small-col">
                               <v-tooltip right open-delay="1000">
                                 <template v-slot:activator="{ on, attrs }">
-                                  <v-icon v-on="on" v-bind="attrs" small @click="toggleNeglected()"> mdi-eye-check </v-icon>
+                                  <span v-on="on" v-bind="attrs">
+                                    <v-icon v-if="neglected.includes(cat)" small @click="toggleNeglected(cat)">
+                                      mdi-eye-off-outline
+                                    </v-icon>
+                                    <v-icon v-else small @click="toggleNeglected(cat)">mdi-eye-outline</v-icon>
+                                  </span>
                                 </template>
-                                <span>{{ $t("APP.INCLUDE_ALL") | capitalize }}</span>
+                                <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
                               </v-tooltip>
-                            </th>
-                            <th class="text-left bold--text">Dimension</th>
-                            <th class="text-left bold--text more-padding">
-                              <span> Selected</span>
-                              <span class="close-icon-span">
-                                <v-tooltip top>
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <v-icon v-on="on" v-bind="attrs" small> mdi-close </v-icon>
-                                  </template>
-                                  <span> {{ $t("APP.EXPLAIN_CLEAR_ICON") }}</span>
-                                </v-tooltip>
-                              </span>
-                            </th>
-                            <th class="text-left bold--text small-col pr-8">
-                              <v-tooltip right open-delay="1000">
-                                <template v-slot:activator="{ on, attrs }">
-                                  <v-icon v-on="on" v-bind="attrs" small @click="togglePinned()"> mdi-lock-open-outline </v-icon>
-                                </template>
-                                <span>{{ $t("APP.UNLOCK_ALL") | capitalize }}</span>
-                              </v-tooltip>
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody class="category-table">
-                          <template>
-                            <tr v-for="cat in categories[catName]" :key="cat">
-                              <td class="small-col">
-                                <v-tooltip right open-delay="1000">
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <span v-on="on" v-bind="attrs">
-                                      <v-icon v-if="neglected.includes(cat)" small @click="toggleNeglected(cat)">
-                                        mdi-eye-off-outline
-                                      </v-icon>
-                                      <v-icon v-else small @click="toggleNeglected(cat)">mdi-eye-outline</v-icon>
-                                    </span>
-                                  </template>
-                                  <span>{{ $t("APP.DIMENSION_INCLUDED") | capitalize }}</span>
-                                </v-tooltip>
-                              </td>
-                              <td class="catname">{{ cat | translateCollectionName | capitalize }}</td>
-                              <td class="py-1 combobox">
-                                <!-- prettier-ignore -->
-                                <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
+                            </td>
+                            <td class="catname">{{ cat | translateCollectionName | capitalize }}</td>
+                            <td class="py-1 combobox">
+                              <!-- prettier-ignore -->
+                              <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
                                   clearable solo dense hide-details>
                                 </v-select>
-                              </td>
-                              <td class="small-col pr-8">
-                                <v-tooltip right open-delay="1000">
-                                  <template v-slot:activator="{ on, attrs }">
-                                    <span v-on="on" v-bind="attrs">
-                                      <v-icon v-if="pinned.includes(cat)" small @click="togglePinned(cat)">
-                                        mdi-lock-outline
-                                      </v-icon>
-                                      <v-icon v-else small @click="togglePinned(cat)">mdi-lock-open-variant-outline</v-icon>
-                                    </span>
-                                  </template>
-                                  <span>{{ $t("APP.UNLOCK_ONE") | capitalize }}</span>
-                                </v-tooltip>
-                              </td>
-                            </tr>
-                          </template>
-                        </tbody>
-                      </template>
-                    </v-simple-table>
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </div>
+                            </td>
+                            <td class="small-col pr-8">
+                              <v-tooltip right open-delay="1000">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <span v-on="on" v-bind="attrs">
+                                    <v-icon v-if="pinned.includes(cat)" small @click="togglePinned(cat)">
+                                      mdi-lock-outline
+                                    </v-icon>
+                                    <v-icon v-else small @click="togglePinned(cat)">mdi-lock-open-variant-outline</v-icon>
+                                  </span>
+                                </template>
+                                <span>{{ $t("APP.UNLOCK_ONE") | capitalize }}</span>
+                              </v-tooltip>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-container>
       </v-card-text>
     </v-card>
     <v-card dense flat tile class="flex-card" style="background: transparent">
-      <div class="overline px-2 py-0">{{ `2. ${$t("APP.WRITE_NARRATIVE")}` }}</div>
-      <v-card-text class="text-description ma-0 pa-1">
-        <v-textarea filled v-model="narrativeText" hint="Write a narrative "> </v-textarea>
-      </v-card-text>
-    </v-card>
-    <v-card dense flat tile class="flex-card" style="background: transparent">
-      <div class="overline px-2 py-0">{{ `3. ${$t("APP.PIN", { item: $tc("APP.SCENARIO") })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <div class="d-flex">
-          <v-text-field
-            class="name-field"
-            v-model="narrativeName"
-            :label="$t('APP.NAME') | capitalize"
-            v-on:keyup.enter="saveNarrative"
-          >
-          </v-text-field>
-          <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8">
+          <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-2 ml-0">
             <v-icon class="pr-2">mdi-content-save</v-icon>
             {{ $t("APP.PIN", { item: $tc("APP.SCENARIO") }) }}
           </v-btn>

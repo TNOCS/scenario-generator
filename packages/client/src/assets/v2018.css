@@ -10,6 +10,27 @@
   .no-print * {
     display: none !important;
   }
+  .v-application,
+  .v-application * {
+    font-size: 12px !important;
+    line-height: 12px !important;
+  }
+  .v-application h1 {
+    font-size: 14px !important;
+    line-height: 14px !important;
+  }
+  .v-data-table--dense > .v-data-table__wrapper > table > tbody > tr > td,
+  .v-data-table--dense > .v-data-table__wrapper > table > tbody > tr > th,
+  .v-data-table--dense > .v-data-table__wrapper > table > tfoot > tr > td,
+  .v-data-table--dense > .v-data-table__wrapper > table > tfoot > tr > th,
+  .v-data-table--dense > .v-data-table__wrapper > table > thead > tr > td,
+  .v-data-table--dense > .v-data-table__wrapper > table > thead > tr > th {
+    height: 20px !important;
+  }
+
+  .narr-table {
+    margin-top: 16px;
+  }
 }
 
 ::-webkit-scrollbar {

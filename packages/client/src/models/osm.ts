@@ -9,6 +9,7 @@ export const OsmTypes: OsmType[] = [
   { name: "Gas station", key: "amenity", value: "fuel" },
   { name: "Hospital", key: "amenity", value: "hospital" },
   { name: "Hotel", key: "tourism", value: "hotel" },
+  { name: "Palace", key: "castle_type", value: "palace" },
   { name: "Parking", key: "amenity", value: "parking" },
   { name: "Restaurant", key: "amenity", value: "restaurant" },
   { name: "Shopping street", key: "highway", value: "pedestrian" },

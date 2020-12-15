@@ -19,6 +19,12 @@
         <v-icon left>mdi-help-circle-outline</v-icon>{{ $t("APP.ABOUT") }}
       </v-btn>
     </div>
+    <div class="blue--text pr-2 pl-6">{{ $tc("COMP.NARRATIVE") | capitalize }}:</div>
+    <div class="text-center narr-selector">
+      <!-- prettier-ignore -->
+      <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
+          dense hide-details @change="narrativeSelected"></v-select>
+    </div>
     <v-spacer />
     <v-sheet class="blue px-2 d-flex" height="100%" tile>
       <a href="https://www.tno.nl" target="_blank" class="tno-link">
@@ -30,13 +36,23 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue } from "vue-property-decorator";
-import { IScenario } from "../models";
+import { INarrative, IScenario } from "../models";
+import _ from "lodash";
 
 @Component({
   components: {},
 })
 export default class AppBar extends Vue {
   private scenario: Partial<IScenario> = {};
+  private activeNarrative: INarrative = {} as INarrative;
+
+  private get sortedNarratives() {
+    return this.scenario && this.scenario.narratives ? _.sortBy(this.scenario.narratives, "name") : [];
+  }
+
+  private async narrativeSelected() {
+    this.$store.actions.changeNarrative(this.activeNarrative);
+  }
 
   private openDrawer() {
     this.$store.actions.toggleDrawer(true);
@@ -45,6 +61,7 @@ export default class AppBar extends Vue {
   async mounted() {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current!;
+      this.activeNarrative = s.app.narrative || ({} as INarrative);
     });
   }
 }
@@ -73,5 +90,8 @@ export default class AppBar extends Vue {
 .tno-link {
   display: flex;
   vertical-align: middle;
+}
+.narr-selector {
+  max-width: 280px !important;
 }
 </style>

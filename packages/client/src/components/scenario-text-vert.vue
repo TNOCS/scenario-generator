@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <v-row class="mt-0" no-gutters>
-      <v-col cols="12">
-        <v-card-text class="text-description ma-0 pa-4">
-          <div v-if="narrative && narrative.id">
-            <span class="scenario-narrative" v-html="getMarkdown(narrative.narrative)"></span>
-          </div>
-        </v-card-text>
-      </v-col>
-    </v-row>
-  </div>
+  <v-row class="mt-0 overflow-y-auto full-height" no-gutters>
+    <v-col cols="12" class="full-height">
+      <v-card-text class="text-description ma-0 pa-4 full-height">
+        <div v-if="narrative && narrative.id" class="full-height">
+          <div class="scenario-narrative full-height" v-html="getMarkdown(narrative.narrative)"></div>
+        </div>
+      </v-card-text>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -59,5 +57,8 @@ export default class ScenarioTextVert extends Vue {
 .scenario-narrative h3 {
   padding-top: 4px;
   padding-bottom: 8px;
+}
+.scenario-narrative > *:last-child {
+  padding-bottom: 16px;
 }
 </style>
