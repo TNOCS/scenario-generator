@@ -42,6 +42,7 @@
       "PIN": "save {item}",
       "SAVE": "save",
       "SCENARIO": "Scenario",
+      "SELECTED": "selected",
       "SELECT_DIMENSION": "select a dimension",
       "SENTENCE": "sentence | sentences",
       "SHOW_SCENARIO": "Show scenario",

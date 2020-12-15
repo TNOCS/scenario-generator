@@ -1,5 +1,5 @@
 <template>
-  <v-card flat tile class="flex-card map-full-height map-full-width" style="background: transparent; min-height: 500px">
+  <v-card flat tile class="flex-card map-full-height map-full-width no-background" style="min-height: 500px">
     <div class="overline pl-6 pr-2 pb-0 pt-1">
       {{ $tc("APP.LOCATION") }}
       <v-tooltip left open-delay="1000">
@@ -305,7 +305,7 @@ export default class MapCard extends Vue {
   min-height: 40px;
 }
 .map-card-height {
-  height: calc(100vh - (42px + 40px + 40px + 40px + 8px));
+  height: calc(100vh - (40px + 40px + 8px));
   padding: 8px;
 }
 .map-full-width {
@@ -315,6 +315,6 @@ export default class MapCard extends Vue {
   width: calc(100% - 20px);
 }
 .map-full-height {
-  height: calc(100vh - (42px + 40px + 40px + 8px));
+  height: calc(100vh - (40px + 8px));
 }
 </style>
