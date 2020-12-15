@@ -63,7 +63,7 @@
     </v-card>
     <v-row no-gutters class="my-0 ml-4">
       <!-- prettier-ignore -->
-      <v-select v-model="activeNarrative" :items="activeScenario.narratives" item-text="name" return-object 
+      <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
           dense hide-details @change="narrativeSelected"></v-select>
     </v-row>
     <v-card flat tile class="mt-6" style="background: transparent">
@@ -99,6 +99,7 @@ import { INarrative, IScenario } from "../models";
 import EditComponentCard from "./edit-component-card.vue";
 import ImportExportCard from "./import-export-card.vue";
 import DeleteCard from "./delete-card.vue";
+import _ from 'lodash';
 
 @Component({
   components: { CountryFlag, EditComponentCard, ImportExportCard, DeleteCard },
@@ -115,6 +116,10 @@ export default class NavigationDrawer extends Vue {
   private importMenu: boolean = false;
   private narMenu: boolean = false;
   private drawer: boolean = false;
+
+  private get sortedNarratives() {
+    return this.activeScenario && this.activeScenario.narratives ? _.sortBy(this.activeScenario.narratives, 'name') : [];
+  }
 
   private drawerChanged(d: boolean) {
     if (d === false) this.closeDrawer();
