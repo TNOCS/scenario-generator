@@ -132,3 +132,7 @@ rect.event.hover {
   stroke: rgb(255, 115, 0);
   cursor: pointer;
 }
+
+.markdown-tekst {
+  padding: 20px;
+}
