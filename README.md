@@ -1,5 +1,7 @@
 ## V2018 Scenario Generator
 
+Live demo at [https://tnocs.github.io/scenario-generator](https://tnocs.github.io/scenario-generator).
+
 ### Prerequisites
 [Yarn classic](https://classic.yarnpkg.com/lang/en/)
 
