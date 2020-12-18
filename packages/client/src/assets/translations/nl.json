@@ -51,6 +51,7 @@
       "TITLE": "titel",
       "TOGGLE_MAP_BASE": "wissel kaart achtergrond",
       "UNLOCK_ALL": "alle vastgezette dimensies losmaken",
+      "UNLOCK_ONE": "deze vastgezette dimensie losmaken",
       "VALUE": "value",
       "WRITE_NARRATIVE": "schrijf een narratief",
       "YES": "ja"
