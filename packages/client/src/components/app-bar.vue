@@ -15,8 +15,9 @@
       <v-btn class="mx-2 my-2 app-btn" outlined :to="'show'" small color="blue">
         <v-icon left>mdi-graph-outline</v-icon>{{ $t("APP.SHOW_SCENARIO") }}
       </v-btn>
-      <v-btn class="mx-2 my-2 app-btn" outlined :to="'about'" small color="blue">
-        <v-icon left>mdi-help-circle-outline</v-icon>{{ $t("APP.ABOUT") }}
+      <v-btn class="px-1 mx-2 my-2 app-btn" outlined :to="'about'" small color="blue">
+        <v-icon>mdi-help-circle-outline</v-icon>
+        <!-- {{ $t("APP.ABOUT") }} -->
       </v-btn>
     </div>
     <div class="blue--text pr-2 pl-6">{{ $tc("COMP.NARRATIVE") | capitalize }}:</div>

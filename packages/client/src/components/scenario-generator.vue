@@ -79,7 +79,11 @@
                       </thead>
                       <tbody class="category-table">
                         <template>
-                          <tr v-for="cat in categories[catName]" :key="cat">
+                          <tr
+                            v-for="cat in categories[catName]"
+                            :key="cat"
+                            :class="{ 'neglected-cat': neglected.includes(cat), 'pinned-cat': pinned.includes(cat) }"
+                          >
                             <td class="small-col">
                               <v-tooltip right open-delay="1000">
                                 <template v-slot:activator="{ on, attrs }">
@@ -97,8 +101,9 @@
                             <td class="py-1 combobox">
                               <!-- prettier-ignore -->
                               <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
-                                  clearable solo dense hide-details>
+                                  clearable solo dense hide-details v-show="!neglected.includes(cat)">
                                 </v-select>
+                              <div class="pl-4" v-show="neglected.includes(cat)">-</div>
                             </td>
                             <td class="small-col pr-8">
                               <v-tooltip right open-delay="1000">
@@ -178,9 +183,7 @@ export default class ScenarioGenerator extends Vue {
     this.narrativeText = nar.narrative || "";
     if (!nar.components) nar.components = {} as { [key in CollectionNames]: string };
     this.answers = Object.assign({}, nar.components);
-    this.neglected = _.difference(CollectionNamesArr, Object.keys(this.answers)) as CollectionNames[];
-    const presentNames = Object.keys(nar.components) as CollectionNames[];
-    this.neglected = this.neglected.concat(presentNames.filter(key => !nar.components[key]));
+    this.pinned = Object.keys(this.answers) as CollectionNames[];
   }
 
   constructor() {
@@ -215,7 +218,6 @@ export default class ScenarioGenerator extends Vue {
   }
 
   private newNarrative() {
-    this.narrativeName = "";
     this.narrativeText = "";
     this.answers = {} as { [key in CollectionNames]: string };
     this.neglected.length = 0;
@@ -373,5 +375,15 @@ export default class ScenarioGenerator extends Vue {
 .close-icon-span {
   float: right;
   margin-right: 28px;
+}
+.v-data-table--dense > .v-data-table__wrapper > table > tbody.category-table > tr.neglected-cat > td,
+.v-data-table--dense > .v-data-table__wrapper > table > tbody.category-table > tr.neglected-cat > th {
+  max-height: 24px;
+  height: 24px;
+  opacity: 0.5;
+}
+.v-data-table--dense > .v-data-table__wrapper > table > tbody.category-table > tr.pinned-cat,
+table > tbody.category-table > tr.pinned-cat > .combobox > .v-input > .v-input__control > .v-input__slot {
+  background: rgba(128, 128, 128, 0.1);
 }
 </style>
