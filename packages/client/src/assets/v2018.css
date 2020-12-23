@@ -40,6 +40,8 @@
 
 .splitpanes__splitter {
   margin: 6px 6px !important;
+  background-color: rgb(128, 128, 128);
+  opacity: 0.2;
 }
 
 .splitpanes--horizontal > .splitpanes__splitter:before {
