@@ -6,3 +6,4 @@ declare module 'vuelayers/lib/ol-ext';
 declare module 'vuelayers/lib/map';
 declare module 'overpass-frontend';
 declare module 'query-overpass';
+declare module '*.md';

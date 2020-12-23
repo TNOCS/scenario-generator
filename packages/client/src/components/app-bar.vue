@@ -2,25 +2,49 @@
   <v-app-bar app dense flat clipped-left height="42" class="ind-app-bar noselect font-weight-light no-print">
     <v-icon class="home-icon pr-3" @click="openDrawer">mdi-menu</v-icon>
     <v-toolbar-title>V2018 Scenario Generator</v-toolbar-title>
-    <div class="text-center">
-      <v-btn class="ml-8 mx-2 my-2 app-btn" outlined :to="'add'" small color="blue">
-        <v-icon left>mdi-plus</v-icon>{{ $tc("APP.DIMENSION", 2) }}
-      </v-btn>
-      <v-btn class="mx-2 my-2 app-btn" outlined :to="'consistency'" small color="blue">
-        <v-icon left>mdi-domain</v-icon>{{ $tc("APP.CONSISTENCY", 2) }}
-      </v-btn>
-      <v-btn class="mx-2 my-2 app-btn" outlined :to="'create'" small color="blue">
-        <v-icon left>mdi-pencil</v-icon>{{ $t("APP.CREATE_SCENARIO") }}
-      </v-btn>
-      <v-btn class="mx-2 my-2 app-btn" outlined :to="'show'" small color="blue">
-        <v-icon left>mdi-graph-outline</v-icon>{{ $t("APP.SHOW_SCENARIO") }}
-      </v-btn>
-      <v-btn class="px-1 mx-2 my-2 app-btn" outlined :to="'about'" small color="blue">
-        <v-icon>mdi-help-circle-outline</v-icon>
-        <!-- {{ $t("APP.ABOUT") }} -->
-      </v-btn>
+    <div class="text-center app-bar-buttons">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" class="ml-8 mx-2 my-2 app-btn" outlined :to="'add'" small color="blue">
+            <v-icon left>mdi-plus</v-icon><span class="app-bar-titles">{{ $tc("APP.DIMENSION", 2) }}</span>
+          </v-btn>
+        </template>
+        <span>{{ $tc("APP.DIMENSION", 2) | capitalize }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'consistency'" small color="blue">
+            <v-icon left>mdi-domain</v-icon><span class="app-bar-titles">{{ $tc("APP.CONSISTENCY", 2) }}</span>
+          </v-btn>
+        </template>
+        <span>{{ $tc("APP.CONSISTENCY", 2) | capitalize }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'create'" small color="blue">
+            <v-icon left>mdi-pencil</v-icon><span class="app-bar-titles">{{ $t("APP.CREATE_SCENARIO") }}</span>
+          </v-btn>
+        </template>
+        <span>{{ $t("APP.CREATE_SCENARIO") | capitalize }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'show'" small color="blue">
+            <v-icon left>mdi-graph-outline</v-icon><span class="app-bar-titles">{{ $t("APP.SHOW_SCENARIO") }}</span>
+          </v-btn>
+        </template>
+        <span>{{ $t("APP.SHOW_SCENARIO") | capitalize }}</span>
+      </v-tooltip>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn v-on="on" class="px-1 mx-2 my-2 app-btn" outlined :to="'about'" small color="blue">
+            <v-icon>mdi-help-circle-outline</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $t("APP.ABOUT") | capitalize }}</span>
+      </v-tooltip>
     </div>
-    <div class="blue--text pr-2 pl-6">{{ $tc("COMP.NARRATIVE") | capitalize }}:</div>
+    <div class="blue--text pr-2 pl-6 narr-selector-title">{{ $tc("COMP.NARRATIVE") | capitalize }}:</div>
     <div class="text-center narr-selector">
       <!-- prettier-ignore -->
       <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
@@ -94,5 +118,48 @@ export default class AppBar extends Vue {
 }
 .narr-selector {
   max-width: 280px !important;
+}
+@media only screen and (min-width: 1500px) and (max-width: 1600px) {
+  .app-bar-buttons {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .app-bar-titles {
+    max-width: 92px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+@media only screen and (min-width: 1350px) and (max-width: 1500px) {
+  .app-bar-buttons {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .app-bar-titles {
+    max-width: 64px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+@media only screen and (max-width: 1350px) {
+  .app-bar-buttons {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .app-bar-titles {
+    display: none;
+  }
+  .narr-selector {
+    max-width: 220px !important;
+  }
+}
+
+@media only screen and (max-width: 1050px) {
+  .narr-selector-title,
+  .narr-selector {
+    display: none;
+  }
 }
 </style>
