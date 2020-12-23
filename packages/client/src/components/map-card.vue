@@ -315,7 +315,7 @@ export default class MapCard extends Vue {
   text-align: center;
   top: 14px;
   width: 100%;
-  z-index: 100;
+  z-index: 2;
   pointer-events: none;
 }
 .pr-cir {
