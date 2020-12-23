@@ -81,7 +81,7 @@ import { createStyle, findPointOnSurface, pointToLonLat } from "vuelayers/lib/ol
 import { Map } from "vuelayers";
 import { Feature, FeatureCollection, Point } from "geojson";
 import { bbox, bboxPolygon, center } from "@turf/turf";
-import { IContent, IContext, INarrative, IScenario, LocationContext } from "../models";
+import { IContent, IContext, INarrative, IScenario, LocationContext, NominatimResult } from "../models";
 import { ICollectionRecord } from "../services/meiosis";
 import { CollectionType } from "../services/states/collection-state";
 
@@ -170,7 +170,7 @@ export default class MapCard extends Vue {
       const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
       const typeContext: IContext | undefined = type && type.context;
       if (typeContext) {
-        if (!Object.keys(typeContext.data).pop()!.includes('levels')) {
+        if (!Object.keys(typeContext.data).pop()!.includes("levels")) {
           result = `${Object.values(typeContext.data).pop()!}`;
         }
       }
@@ -223,7 +223,7 @@ export default class MapCard extends Vue {
     }
     if (this.narrative && this.narrative.id) {
       const locId = _.pick(this.narrative.components, "Location");
-      const loc = locId && _.find(this.locations.list!, val => val.id === locId.Location);
+      const loc: Partial<IContent> | undefined = locId && _.find(this.locations.list!, val => val.id === locId.Location);
       const locContext: IContext | undefined = loc && loc.context;
       if (!locContext) {
         this.loading = false;
@@ -236,22 +236,48 @@ export default class MapCard extends Vue {
       if (!typeContext) {
         this.loading = false;
         this.$store.actions.notify(this.$t(`APP.NO_LOCATION_TYPE_CONTEXT`).toString());
-        return console.log(`Could not find typeOfObject in narrative ${this.narrative.name}`);
+        this.getLocationOnly(locContext, loc!);
       }
-      const amenity = this.getAmenityQuery(typeContext);
-      if (locContext.type === "LOCATION") {
-        const data = locContext.data as LocationContext;
-        if (data.hasOwnProperty("NAME")) {
-          this.$overpass.getGeojsonFromQuery(data.NAME || loc!.name!, amenity, this.addFeatures);
-        } else if (data.hasOwnProperty("COORDINATES")) {
-          const coords = data.COORDINATES.split(",").map(c => +c);
-          this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
-        }
-      } else {
-        this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
-        console.log("No location context found");
-        this.loading = false;
+      this.getLocationAndLocationTypeResults(typeContext!, locContext!, loc!);
+    }
+  }
+
+  private getLocationAndLocationTypeResults(typeContext: IContext, locContext: IContext, loc: Partial<IContent>) {
+    const amenity = this.getAmenityQuery(typeContext);
+    if (locContext.type === "LOCATION") {
+      const data = locContext.data as LocationContext;
+      if (data.hasOwnProperty("NAME")) {
+        this.$overpass.getGeojsonFromQuery(data.NAME || loc!.name!, amenity, this.addFeatures);
+      } else if (data.hasOwnProperty("COORDINATES")) {
+        const coords = data.COORDINATES.split(",").map(c => +c);
+        this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
       }
+    } else {
+      this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
+      console.log("No location context found");
+      this.loading = false;
+    }
+  }
+
+  private getLocationOnly(locContext: IContext, loc: Partial<IContent>) {
+    if (locContext.type === "LOCATION") {
+      const data = locContext.data as LocationContext;
+      if (data.hasOwnProperty("NAME")) {
+        this.$overpass.getNominatimLocation(data.NAME || loc!.name!).then((result: NominatimResult | undefined) => {
+          if (result) {
+            this.center = [+result.lon, +result.lat];
+            this.zoom = 15;
+          }
+        });
+      } else if (data.hasOwnProperty("COORDINATES")) {
+        const coords = data.COORDINATES.split(",").map(c => +c);
+        this.center = [coords[1], coords[0]];
+        this.zoom = 14;
+      }
+    } else {
+      this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
+      console.log("No location context found");
+      this.loading = false;
     }
   }
 

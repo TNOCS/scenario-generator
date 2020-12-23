@@ -18,9 +18,20 @@ export default class OverpassService {
     this.overpass = query_overpass;
   }
 
-  private getQueryboxFromCoordinates(coordinates: number[], searchKm: number) {
+  public getQueryboxFromCoordinates(coordinates: number[], searchKm: number) {
     const f: Feature<Point> = this.createFeature(coordinates, {});
     const buffered = buffer(f, searchKm, { units: "kilometers" });
+    const bufferBox = bbox(buffered);
+    return {
+      minlat: +bufferBox[0],
+      minlon: +bufferBox[1],
+      maxlat: +bufferBox[2],
+      maxlon: +bufferBox[3],
+    };
+  }
+
+  public getQueryboxFromQuery(found: NominatimResult, searchKm: number) {
+    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), searchKm, { units: "kilometers" });
     const bufferBox = bbox(buffered);
     return {
       minlat: +bufferBox[0],
@@ -34,8 +45,8 @@ export default class OverpassService {
     let queryBox = this.getQueryboxFromCoordinates(coordinates, FIRST_SEARCH_CIRCLE_KM);
     this.getGeojson(queryBox, type, (fc: FeatureCollection<Point>) => {
       if (!fc || !fc.features || fc.features.length === 0) {
-      console.log(`Extending search radius to ${SECOND_SEARCH_CIRCLE_KM}`);
-      queryBox = this.getQueryboxFromCoordinates(coordinates, SECOND_SEARCH_CIRCLE_KM);
+        console.log(`Extending search radius to ${SECOND_SEARCH_CIRCLE_KM}`);
+        queryBox = this.getQueryboxFromCoordinates(coordinates, SECOND_SEARCH_CIRCLE_KM);
         this.getGeojson(queryBox, type, callbackFcn);
       } else {
         callbackFcn(fc);
@@ -43,19 +54,7 @@ export default class OverpassService {
     });
   }
 
-  private getQueryboxFromQuery(found: NominatimResult, searchKm: number) {
-    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), searchKm, { units: "kilometers" });
-    const bufferBox = bbox(buffered);
-    return {
-      minlat: +bufferBox[0],
-      minlon: +bufferBox[1],
-      maxlat: +bufferBox[2],
-      maxlon: +bufferBox[3],
-    };
-  }
-
-
-  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (fc: FeatureCollection<Point>) => void) {
+  public async getNominatimLocation(name: string): Promise<NominatimResult | undefined> {
     const query = queryString.stringify({ q: name, format: "json" });
     const aresult = await Axios.get(`${this.nominatim}${query}`);
     const result: NominatimResult[] = aresult.data;
@@ -63,12 +62,17 @@ export default class OverpassService {
       console.warn(`Nothing found for ${name}`);
       return;
     }
-    const found: NominatimResult = result.shift()!;
+    return result.shift()!;
+  }
+
+  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (fc: FeatureCollection<Point>) => void) {
+    const found = await this.getNominatimLocation(name);
+    if (!found) return callbackFcn({ type: "FeatureCollection", features: [] } as FeatureCollection<Point>);
     let queryBox = this.getQueryboxFromQuery(found, FIRST_SEARCH_CIRCLE_KM);
     this.getGeojson(queryBox, type, (fc: FeatureCollection<Point>) => {
       if (!fc || !fc.features || fc.features.length === 0) {
-      console.log(`Extending search radius to ${SECOND_SEARCH_CIRCLE_KM}`);
-      queryBox = this.getQueryboxFromQuery(found, SECOND_SEARCH_CIRCLE_KM);
+        console.log(`Extending search radius to ${SECOND_SEARCH_CIRCLE_KM}`);
+        queryBox = this.getQueryboxFromQuery(found, SECOND_SEARCH_CIRCLE_KM);
         this.getGeojson(queryBox, type, callbackFcn);
       } else {
         callbackFcn(fc);
