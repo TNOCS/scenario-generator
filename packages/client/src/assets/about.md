@@ -7,16 +7,16 @@ One of the challenges in the domain of safety and security is to stand guard aga
 The idea behind the scenario generator is simple. A threat scenario consists of two aspects:
 
 - Threat: defining the dimensions of the threat itself, such as the perpetrators, the impact that they have, their motivations and modus operandi.
-- Context: defining the dimensions of the  circumstances that surround the threat or attack, such as the location, the weather conditions, or the budget that is available to them.
+- Context: defining the dimensions of the circumstances that surround the threat or attack, such as the location, the weather conditions, or the budget that is available to them.
 
 In this tool, you can specify the dimensions for threat and context, as well as the values that each dimension takes. For example, the context dimension weather can have a value of rainy or sunny and the treat dimension actor can have a value of terrorist or criminal. Together, it is possible to create 4 scenarios, as shown in below table:
 
-| Threat \\ Context| rainy      | sunny      |
-|------------------|------------|------------|
-| terrorist        | scenario 1 | scenario 2 |
-| criminal         | scenario 3 | scenario 4 |
+| Threat \\ Context | rainy      | sunny      |
+| ----------------- | ---------- | ---------- |
+| terrorist         | scenario 1 | scenario 2 |
+| criminal          | scenario 3 | scenario 4 |
 
-In other words, scenario 1 is about a terrorist on a rainy day, scenario 2 about a terrorist on a sunny day, etc. 
+In other words, scenario 1 is about a terrorist on a rainy day, scenario 2 about a terrorist on a sunny day, etc.
 
 In case you have only two dimensions, the scenario generation is rather limited, but we normally use 10~15 dimensions for threat as well as context, in which case the number of scenarios one can generate is very large. Typical usage is to either generate a number of scenarios that span the dimension uniformly, and next to select the ones that make sense to you, or alternatively, to generate a single scenario at a time, and save the ones that appeal to you. Here, the latter approach is followed.
 
@@ -32,14 +32,13 @@ After generating scenarios one at a time, and saving the ones that appeal to you
 The scenario generator is setup as a wizard:
 
 1. Define the dimensions of the threat and context that you consider important.
+   <br><a target="_blank" href="https://user-images.githubusercontent.com/11523459/102987973-87349f00-4513-11eb-88ac-97549b2bc492.png">![Dimensions](https://user-images.githubusercontent.com/11523459/102987973-87349f00-4513-11eb-88ac-97549b2bc492.png)</a>
 2. Set all inconsistencies between dimensions: most combinations are typically allowed, so specify the few that you do not want to see, or only seldom.
+   <br><a target="_blank" href="https://user-images.githubusercontent.com/11523459/102987978-87cd3580-4513-11eb-9521-e00b764a6913.png">![Consistencies](https://user-images.githubusercontent.com/11523459/102987978-87cd3580-4513-11eb-9521-e00b764a6913.png)</a>
 3. Use the generator to generate a scenario, i.e. a combination of threat and context dimensions. You can optionally lock certain dimensions, e.g. the location or the actor, while varying the rest on each turn. When an interesting combination is found, save it under a new name, and optionally add a narrative.
+   <br><a target="_blank" href="https://user-images.githubusercontent.com/11523459/102987979-8865cc00-4513-11eb-8f4a-795cf8f59940.png">![Create scenario](https://user-images.githubusercontent.com/11523459/102987979-8865cc00-4513-11eb-8f4a-795cf8f59940.png)</a>
 4. Inspect and present all generated scenarios, which are also shown on the map. On this page, you can also print a scenario using the regular CTRL-P option.
-
-![Dimensions](https://user-images.githubusercontent.com/11523459/102987973-87349f00-4513-11eb-88ac-97549b2bc492.png)
-![Consistencies](https://user-images.githubusercontent.com/11523459/102987978-87cd3580-4513-11eb-9521-e00b764a6913.png)
-![Create scenario](https://user-images.githubusercontent.com/11523459/102987979-8865cc00-4513-11eb-8f4a-795cf8f59940.png)
-![Show scenario](https://user-images.githubusercontent.com/11523459/102987981-8865cc00-4513-11eb-8d4a-47d6ed58754c.png)
+   <br><a target="_blank" href="https://user-images.githubusercontent.com/11523459/102987981-8865cc00-4513-11eb-8d4a-47d6ed58754c.png">![Show scenario](https://user-images.githubusercontent.com/11523459/102987981-8865cc00-4513-11eb-8d4a-47d6ed58754c.png)</a>
 
 ## Further information
 

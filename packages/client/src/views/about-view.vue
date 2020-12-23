@@ -55,4 +55,7 @@ export default class AboutView extends Vue {
 .markdown-tekst table {
   border-collapse: collapse;
 }
+.markdown-tekst img {
+  width: 640px;
+}
 </style>
