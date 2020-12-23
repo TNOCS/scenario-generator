@@ -36,8 +36,17 @@ The scenario generator is setup as a wizard:
 3. Use the generator to generate a scenario, i.e. a combination of threat and context dimensions. You can optionally lock certain dimensions, e.g. the location or the actor, while varying the rest on each turn. When an interesting combination is found, save it under a new name, and optionally add a narrative.
 4. Inspect and present all generated scenarios, which are also shown on the map. On this page, you can also print a scenario using the regular CTRL-P option.
 
+![Dimensions](https://user-images.githubusercontent.com/11523459/102987973-87349f00-4513-11eb-88ac-97549b2bc492.png)
+![Consistencies](https://user-images.githubusercontent.com/11523459/102987978-87cd3580-4513-11eb-9521-e00b764a6913.png)
+![Create scenario](https://user-images.githubusercontent.com/11523459/102987979-8865cc00-4513-11eb-8f4a-795cf8f59940.png)
+![Show scenario](https://user-images.githubusercontent.com/11523459/102987981-8865cc00-4513-11eb-8d4a-47d6ed58754c.png)
+
 ## Further information
 
 This tool was developed by TNO for the Dutch gendarmerie (KMAR) and National Police. For more information, please contact [Erik Vullings, PhD MSc](mailto:erik.vullings@tno.nl)
+
+## Advanced
+
+Adding extra dimensions requires some manually editing of the code and a JSON file, there is not a simpler way yet.
 
 Issues with the tool can be reported at <a href="https://github.com/tnocs/scenario-generator" target="_blank">Github</a>
