@@ -1,8 +1,8 @@
-import { CollectionNames } from "../services/meiosis";
-import { IContent } from ".";
-import { ContentCategory } from "./content";
+import { CollectionNames } from '../services/meiosis';
+import { IContent } from '.';
+import { ContentCategory } from './content';
 
-export type InconsistencyType = "partly" | "totally";
+export type InconsistencyType = 'partly' | 'totally';
 
 export interface Inconsistency {
   ids: string[];

@@ -29,17 +29,16 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { IContent, IScenario } from "../models";
-import AddContextCard from "./add-context-card.vue";
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { IContent } from '../models';
+import AddContextCard from './add-context-card.vue';
 
 @Component({
   components: { AddContextCard },
 })
 export default class KanbanCard extends Vue {
-  @Prop({ default: () => {} }) public item!: Partial<IContent>;
-  private menu: boolean = false;
+  @Prop({ default: () => ({}) }) public item!: Partial<IContent>;
+  private menu = false;
 
   constructor() {
     super();
@@ -50,23 +49,26 @@ export default class KanbanCard extends Vue {
   }
 
   private getContext(item: Partial<IContent>): string {
-    if (!item || !item.context || !item.context.type) return this.$options.filters!.capitalize(this.$t("APP.ADD_CONTEXT"));
+    if (!item || !item.context || !item.context.type)
+      return this.$options.filters && this.$options.filters.capitalize(this.$t('APP.ADD_CONTEXT'));
     return item.context.type;
   }
 
   private async selectItem() {
-    this.$store.actions[this.item.type!].load(this.item.id!);
+    this.item.type && this.item.id && this.$store.actions[this.item.type].load(this.item.id);
   }
 
   private async deleteItem() {
-    this.$store.actions[this.item.type!].del(this.item.id!);
+    this.item.type && this.item.id && this.$store.actions[this.item.type].del(this.item.id);
   }
 
   private closeMenu() {
     this.menu = false;
   }
 
-  async mounted() {}
+  mounted(): void {
+    return;
+  }
 }
 </script>
 

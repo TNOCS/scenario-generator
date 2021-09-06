@@ -11,8 +11,8 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-left bold--text">{{ $tc("APP.DIMENSION") | capitalize }}</th>
-                    <th class="text-left bold--text more-padding">{{ $t("APP.SELECTED") | capitalize }}</th>
+                    <th class="text-left bold--text">{{ $tc('APP.DIMENSION') | capitalize }}</th>
+                    <th class="text-left bold--text more-padding">{{ $t('APP.SELECTED') | capitalize }}</th>
                   </tr>
                 </thead>
                 <tbody class="category-table">
@@ -40,13 +40,11 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ContentCategory, IContent, INarrative, IScenario } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
-import { CollectionsModel } from "../services/states/collection-state";
-import { getUuid } from "../utils/constants";
-import _ from "lodash";
+import { Component, Vue } from 'vue-property-decorator';
+import { ContentCategory, IContent, INarrative, IScenario } from '../models';
+import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
+import { CollectionsModel } from '../services/states/collection-state';
+import { pickBy } from 'lodash';
 
 @Component({
   components: {},
@@ -68,28 +66,33 @@ export default class NarrativeComponentsVert extends Vue {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
       this.narrative = s.app.narrative;
-      this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.categories =
+        this.scenario && this.scenario.categories
+          ? this.scenario.categories
+          : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
       this.collections = s;
     });
   }
 
-  private getNarrativeComponents(cat: ContentCategory): any {
+  private getNarrativeComponents(cat: ContentCategory) {
     const names = CollectionNamesArr.filter(r => this.categories[cat].includes(r));
-    return _.pickBy(this.narrative.components, (val, key) => names.includes(key as any));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return pickBy(this.narrative.components, (val, key) => names.includes(key as any));
   }
 
   private getCollectionVal(id: string, col: CollectionNames): string {
-    const item: Partial<IContent> | undefined = this.collections![col]!.list!.find(l => l.id! === id);
-    return item ? item.name! : "?";
+    const list = this.collections && this.collections[col] && this.collections[col].list;
+    const item: Partial<IContent> | undefined = list ? list.find(l => l.id === id) : undefined;
+    return item && item.name ? item.name : '?';
   }
 
   private getCollectionNames(cat: ContentCategory): CollectionNames[] {
     return CollectionNamesArr.filter(r => this.categories[cat].includes(r));
   }
 
-  mounted() {
-    this.init();
+  async mounted(): Promise<void> {
+    await this.init();
   }
 }
 </script>

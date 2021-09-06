@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title dense class="add-component-card">
-      {{ $t("APP.ADD", { item: this.getTranslateKey() }) }}
+      {{ $t('APP.ADD', { item: this.getTranslateKey() }) }}
     </v-card-title>
     <v-card-text class="pb-0">
       <v-text-field
@@ -14,24 +14,23 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn text @click="cancel"> {{ $t("APP.CANCEL") }} </v-btn>
-      <v-btn color="primary" text @click="addItem"> {{ $t("APP.SAVE") }} </v-btn>
+      <v-btn text @click="cancel"> {{ $t('APP.CANCEL') }} </v-btn>
+      <v-btn color="primary" text @click="addItem"> {{ $t('APP.SAVE') }} </v-btn>
     </v-card-actions>
   </v-card>
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { IContent, IScenario } from "../models";
-import { CollectionNames } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { IContent } from '../models';
+import { CollectionNames } from '../services/meiosis';
+import { getUuid } from '../utils/constants';
 
 @Component({
   components: {},
 })
 export default class AddComponentCard extends Vue {
-  @Prop({ default: "" }) public itemkey!: CollectionNames;
+  @Prop({ default: '' }) public itemkey!: CollectionNames;
   private newItem: Partial<IContent> = {};
 
   constructor() {
@@ -43,21 +42,21 @@ export default class AddComponentCard extends Vue {
   }
 
   private resetNewItem() {
-    this.newItem = { name: "", type: this.itemkey, id: getUuid() };
+    this.newItem = { name: '', type: this.itemkey, id: getUuid() };
   }
 
   private async addItem() {
     this.$store.actions[this.itemkey].save(this.newItem);
     this.resetNewItem();
-    this.$emit("close");
+    this.$emit('close');
   }
 
   private async cancel() {
     this.resetNewItem();
-    this.$emit("close");
+    this.$emit('close');
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     this.resetNewItem();
   }
 }

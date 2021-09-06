@@ -8,8 +8,8 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th class="text-left bold--text">{{ $tc("APP.DIMENSION") | capitalize }}</th>
-                    <th class="text-left bold--text more-padding">{{ $tc("APP.NAME") | capitalize }}</th>
+                    <th class="text-left bold--text">{{ $tc('APP.DIMENSION') | capitalize }}</th>
+                    <th class="text-left bold--text more-padding">{{ $tc('APP.NAME') | capitalize }}</th>
                     <th class="text-left" v-for="headerItem in items" :key="headerItem.id">{{ headerItem.name | capitalize }}</th>
                   </tr>
                 </thead>
@@ -26,7 +26,7 @@
                               <v-icon>mdi-checkerboard</v-icon>
                             </v-btn></template
                           >
-                          <span>{{ $t("APP.PARTLY_CONSISTENT") }}</span>
+                          <span>{{ $t('APP.PARTLY_CONSISTENT') }}</span>
                         </v-tooltip>
                         <!-- Totally inconsistent; combination impossible -->
                         <v-tooltip right v-if="incons(content.id, hi.id, 'totally')" open-delay="1000">
@@ -35,7 +35,7 @@
                               <v-icon>mdi-checkbox-blank-outline</v-icon>
                             </v-btn>
                           </template>
-                          <span>{{ $t("APP.INCONSISTENT") }}</span>
+                          <span>{{ $t('APP.INCONSISTENT') }}</span>
                         </v-tooltip>
                         <!-- No inconsistency; combination possible -->
                         <v-tooltip right v-if="incons(content.id, hi.id, undefined)" open-delay="1000">
@@ -44,7 +44,7 @@
                               <v-icon>mdi-checkbox-blank</v-icon>
                             </v-btn>
                           </template>
-                          <span>{{ $t("APP.CONSISTENT") }}</span>
+                          <span>{{ $t('APP.CONSISTENT') }}</span>
                         </v-tooltip>
                       </td>
                     </tr>
@@ -60,12 +60,10 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { ContextType, ContextTypes, IContent, IContext, Inconsistency, InconsistencyType, IScenario } from "../models";
-import { CollectionNames, IAppModel, ICollectionRecord } from "../services/meiosis";
-import { CollectionsModel } from "../services/states/collection-state";
-import { getUuid } from "../utils/constants";
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { IContent, Inconsistency, InconsistencyType } from '../models';
+import { CollectionNames, IAppModel } from '../services/meiosis';
+import { CollectionsModel } from '../services/states/collection-state';
 
 @Component({
   components: {},
@@ -76,9 +74,9 @@ export default class TableCard extends Vue {
   @Prop({ default: () => [] }) public inconsistencies!: Inconsistency[];
   public items: Partial<IContent>[] = [];
   private collections: CollectionsModel<IContent> | null = null;
-  private alwaysTrue: boolean = true;
+  private alwaysTrue = true;
 
-  @Watch("category")
+  @Watch('category')
   private categoryChanged(newCat: string) {
     console.log(`categoryChanged to ${newCat}`);
     this.init();
@@ -122,14 +120,14 @@ export default class TableCard extends Vue {
 
   private async init() {
     this.$store.states.map((s: IAppModel) => {
-      this.items = this.category ? s[this.category].list! : [];
+      this.items = this.category ? s[this.category].list || [] : [];
       this.collections = s;
     });
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     console.log(`Table card mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

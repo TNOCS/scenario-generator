@@ -1,8 +1,8 @@
-import { getUuid, themeStorageKey } from "../../utils/constants";
-import { i18n, languageStorageKey } from "../../i18n";
-import { CollectionNames, CollectionNamesArr, IAppModel, UpdateStream } from "../meiosis";
-import { INarrative, Inconsistency } from "../../models";
-import _ from "lodash";
+import { themeStorageKey } from '../../utils/constants';
+import { i18n, languageStorageKey } from '../../i18n';
+import { CollectionNames, CollectionNamesArr, IAppModel, UpdateStream } from '../meiosis';
+import { INarrative, Inconsistency } from '../../models';
+import { pickBy } from 'lodash';
 
 const log = console.log;
 
@@ -42,10 +42,10 @@ export const appStateMgmt = {
     app: {
       /** During development, use this URL to access the server. */
       apiService: process.env.SERVER || window.location.origin,
-      route: "/",
-      language: localStorage.getItem(languageStorageKey) || "gb",
-      theme: localStorage.getItem(themeStorageKey) || "light",
-      note: "",
+      route: '/',
+      language: localStorage.getItem(languageStorageKey) || 'gb',
+      theme: localStorage.getItem(themeStorageKey) || 'light',
+      note: '',
       narrative: {} as INarrative,
       drawer: false,
     },
@@ -54,49 +54,50 @@ export const appStateMgmt = {
     return {
       search: (isSearching: boolean, searchQuery?: string) => update({ app: { isSearching, searchQuery } }),
       changePage: (route: string) => {
-        log("Set route " + route);
+        log('Set route ' + route);
         update({ app: { route } });
       },
       changeLanguage: (language: string) => {
-        log("Set language " + language);
+        log('Set language ' + language);
         i18n.locale = language;
         localStorage.setItem(languageStorageKey, language);
         update({ app: { language } });
       },
       changeTheme: (theme: string) => {
-        log("Set theme " + theme);
+        log('Set theme ' + theme);
         localStorage.setItem(themeStorageKey, theme);
         update({ app: { theme } });
       },
       importState: (state: string) => {
-        log("Import state");
+        log('Import state');
         const newState = JSON.parse(state);
         update(newState);
       },
       exportState: () => {
-        log("Export state");
+        log('Export state');
         return JSON.stringify(
           _states.map(s =>
-            _.pickBy(s, (val, key) => {
-              return key != "app";
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            pickBy(s, (_, key: any) => {
+              return key != 'app';
             })
           )
         );
       },
       changeNarrative: (narrative: INarrative) => {
-        log("Set narrative " + narrative.id);
-        let temp = {} as { [key in CollectionNames]: any };
+        log('Set narrative ' + narrative.id);
+        const temp = {} as { [key in CollectionNames]: any };
         let fullComponents = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), temp);
         fullComponents = Object.assign(fullComponents, narrative.components);
         narrative.components = fullComponents;
         update({ app: { narrative } });
       },
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {
-        log("Set inconsistencies");
+        log('Set inconsistencies');
         update({ scenarios: { current: { inconsistencies: inconsistencies } } });
       },
       notify: (note: string) => {
-        log("Set notification");
+        log('Set notification');
         update({ app: { note } });
       },
       toggleDrawer: (drawer: boolean) => {

@@ -5,10 +5,10 @@
         <template v-slot:activator="{ on, attrs }">
           <v-icon v-on="on" v-bind="attrs"> mdi-chevron-down </v-icon>
         </template>
-        <span> {{ $t("APP.OPEN_CLOSE") }}</span>
+        <span> {{ $t('APP.OPEN_CLOSE') }}</span>
       </v-tooltip>
       <div class="overline px-2 py-0 full-width">
-        {{ $tc("COMP.NARRATIVE") }}
+        {{ $tc('COMP.NARRATIVE') }}
         <!-- <v-divider /> -->
       </div>
     </v-expansion-panel-header>
@@ -24,14 +24,10 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent, INarrative, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
-import marked from "marked";
-import dompurify from "dompurify";
+import { Component, Vue } from 'vue-property-decorator';
+import { INarrative } from '../models';
+import marked from 'marked';
+import dompurify from 'dompurify';
 
 @Component({
   components: {},
@@ -52,9 +48,9 @@ export default class ScenarioText extends Vue {
     return marked(text, { sanitizer: dompurify.sanitize });
   }
 
-  mounted() {
+  async mounted(): Promise<void> {
     console.log(`ScenarioText mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

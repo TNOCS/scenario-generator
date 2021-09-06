@@ -6,34 +6,34 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" class="ml-8 mx-2 my-2 app-btn" outlined :to="'add'" small color="blue">
-            <v-icon left>mdi-plus</v-icon><span class="app-bar-titles">{{ $tc("APP.DIMENSION", 2) }}</span>
+            <v-icon left>mdi-plus</v-icon><span class="app-bar-titles">{{ $tc('APP.DIMENSION', 2) }}</span>
           </v-btn>
         </template>
-        <span>{{ $tc("APP.DIMENSION", 2) | capitalize }}</span>
+        <span>{{ $tc('APP.DIMENSION', 2) | capitalize }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'consistency'" small color="blue">
-            <v-icon left>mdi-domain</v-icon><span class="app-bar-titles">{{ $tc("APP.CONSISTENCY", 2) }}</span>
+            <v-icon left>mdi-domain</v-icon><span class="app-bar-titles">{{ $tc('APP.CONSISTENCY', 2) }}</span>
           </v-btn>
         </template>
-        <span>{{ $tc("APP.CONSISTENCY", 2) | capitalize }}</span>
+        <span>{{ $tc('APP.CONSISTENCY', 2) | capitalize }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'create'" small color="blue">
-            <v-icon left>mdi-pencil</v-icon><span class="app-bar-titles">{{ $t("APP.CREATE_SCENARIO") }}</span>
+            <v-icon left>mdi-pencil</v-icon><span class="app-bar-titles">{{ $t('APP.CREATE_SCENARIO') }}</span>
           </v-btn>
         </template>
-        <span>{{ $t("APP.CREATE_SCENARIO") | capitalize }}</span>
+        <span>{{ $t('APP.CREATE_SCENARIO') | capitalize }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" class="mx-2 my-2 app-btn" outlined :to="'show'" small color="blue">
-            <v-icon left>mdi-graph-outline</v-icon><span class="app-bar-titles">{{ $t("APP.SHOW_SCENARIO") }}</span>
+            <v-icon left>mdi-graph-outline</v-icon><span class="app-bar-titles">{{ $t('APP.SHOW_SCENARIO') }}</span>
           </v-btn>
         </template>
-        <span>{{ $t("APP.SHOW_SCENARIO") | capitalize }}</span>
+        <span>{{ $t('APP.SHOW_SCENARIO') | capitalize }}</span>
       </v-tooltip>
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -41,10 +41,10 @@
             <v-icon>mdi-help-circle-outline</v-icon>
           </v-btn>
         </template>
-        <span>{{ $t("APP.ABOUT") | capitalize }}</span>
+        <span>{{ $t('APP.ABOUT') | capitalize }}</span>
       </v-tooltip>
     </div>
-    <div class="blue--text pr-2 pl-6 narr-selector-title">{{ $tc("COMP.NARRATIVE") | capitalize }}:</div>
+    <div class="blue--text pr-2 pl-6 narr-selector-title">{{ $tc('COMP.NARRATIVE') | capitalize }}:</div>
     <div class="text-center narr-selector">
       <!-- prettier-ignore -->
       <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
@@ -60,19 +60,19 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch, Vue } from "vue-property-decorator";
-import { INarrative, IScenario } from "../models";
-import _ from "lodash";
+import { Component, Vue } from 'vue-property-decorator';
+import { INarrative, IScenario } from '../models';
+import { sortBy } from 'lodash';
 
 @Component({
   components: {},
 })
 export default class AppBar extends Vue {
-  private scenario: Partial<IScenario> = {};
+  private scenario: Partial<IScenario> | undefined = {};
   private activeNarrative: INarrative = {} as INarrative;
 
   private get sortedNarratives() {
-    return this.scenario && this.scenario.narratives ? _.sortBy(this.scenario.narratives, "name") : [];
+    return this.scenario && this.scenario.narratives ? sortBy(this.scenario.narratives, 'name') : [];
   }
 
   private async narrativeSelected() {
@@ -83,9 +83,9 @@ export default class AppBar extends Vue {
     this.$store.actions.toggleDrawer(true);
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     this.$store.states.map(s => {
-      this.scenario = s.scenarios.current!;
+      this.scenario = s.scenarios.current;
       this.activeNarrative = s.app.narrative || ({} as INarrative);
     });
   }

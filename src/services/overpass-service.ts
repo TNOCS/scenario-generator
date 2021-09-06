@@ -1,26 +1,38 @@
-import { NominatimResult, OverpassResult } from "../models";
-import { Feature, FeatureCollection, GeoJsonProperties, Point } from "geojson";
-import query_overpass from "query-overpass";
+import { NominatimResult } from '../models';
+import { Feature, FeatureCollection, GeoJsonProperties, Point } from 'geojson';
+import query_overpass from 'query-overpass';
 // const overpass = require("overpass-frontend");
-import queryString from "query-string";
-import { bbox, buffer, center } from "@turf/turf";
-import Axios from "axios";
+import queryString from 'query-string';
+import { bbox, buffer, center } from '@turf/turf';
+import Axios from 'axios';
 
 const FIRST_SEARCH_CIRCLE_KM = 1.5;
 const SECOND_SEARCH_CIRCLE_KM = 5;
 
 export default class OverpassService {
   private nominatim;
-  private overpass: (query: string, cb: (...args: any) => void, options?: any) => void;
+  private overpass: (
+    query: string,
+    cb: (error: Error | undefined, fc: FeatureCollection<Point>) => void,
+    options?: unknown
+  ) => void;
 
   constructor() {
-    this.nominatim = "https://nominatim.openstreetmap.org/search?limit=10&";
+    this.nominatim = 'https://nominatim.openstreetmap.org/search?limit=10&';
     this.overpass = query_overpass;
   }
 
-  public getQueryboxFromCoordinates(coordinates: number[], searchKm: number) {
+  public getQueryboxFromCoordinates(
+    coordinates: number[],
+    searchKm: number
+  ): {
+    minlat: number;
+    minlon: number;
+    maxlat: number;
+    maxlon: number;
+  } {
     const f: Feature<Point> = this.createFeature(coordinates, {});
-    const buffered = buffer(f, searchKm, { units: "kilometers" });
+    const buffered = buffer(f, searchKm, { units: 'kilometers' });
     const bufferBox = bbox(buffered);
     return {
       minlat: +bufferBox[0],
@@ -30,8 +42,16 @@ export default class OverpassService {
     };
   }
 
-  public getQueryboxFromQuery(found: NominatimResult, searchKm: number) {
-    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), searchKm, { units: "kilometers" });
+  public getQueryboxFromQuery(
+    found: NominatimResult,
+    searchKm: number
+  ): {
+    minlat: number;
+    minlon: number;
+    maxlat: number;
+    maxlon: number;
+  } {
+    const buffered = buffer(center(this.createFeature([+found.lat, +found.lon], {})), searchKm, { units: 'kilometers' });
     const bufferBox = bbox(buffered);
     return {
       minlat: +bufferBox[0],
@@ -41,7 +61,11 @@ export default class OverpassService {
     };
   }
 
-  public async getGeojsonFromCoordinates(coordinates: number[], type: string, callbackFcn: (...args: any) => any) {
+  public async getGeojsonFromCoordinates(
+    coordinates: number[],
+    type: string,
+    callbackFcn: (fc: FeatureCollection<Point, GeoJsonProperties>) => void
+  ): Promise<void> {
     let queryBox = this.getQueryboxFromCoordinates(coordinates, FIRST_SEARCH_CIRCLE_KM);
     this.getGeojson(queryBox, type, (fc: FeatureCollection<Point>) => {
       if (!fc || !fc.features || fc.features.length === 0) {
@@ -55,19 +79,23 @@ export default class OverpassService {
   }
 
   public async getNominatimLocation(name: string): Promise<NominatimResult | undefined> {
-    const query = queryString.stringify({ q: name, format: "json" });
+    const query = queryString.stringify({ q: name, format: 'json' });
     const aresult = await Axios.get(`${this.nominatim}${query}`);
     const result: NominatimResult[] = aresult.data;
     if (!result || !result.length) {
       console.warn(`Nothing found for ${name}`);
       return;
     }
-    return result.shift()!;
+    return result.shift();
   }
 
-  public async getGeojsonFromQuery(name: string, type: string, callbackFcn: (fc: FeatureCollection<Point>) => void) {
+  public async getGeojsonFromQuery(
+    name: string,
+    type: string,
+    callbackFcn: (fc: FeatureCollection<Point>) => void
+  ): Promise<void> {
     const found = await this.getNominatimLocation(name);
-    if (!found) return callbackFcn({ type: "FeatureCollection", features: [] } as FeatureCollection<Point>);
+    if (!found) return callbackFcn({ type: 'FeatureCollection', features: [] } as FeatureCollection<Point>);
     let queryBox = this.getQueryboxFromQuery(found, FIRST_SEARCH_CIRCLE_KM);
     this.getGeojson(queryBox, type, (fc: FeatureCollection<Point>) => {
       if (!fc || !fc.features || fc.features.length === 0) {
@@ -80,7 +108,11 @@ export default class OverpassService {
     });
   }
 
-  private async getGeojson(bb: any, type: string, cb: (...args: any) => any) {
+  private async getGeojson(
+    bb: { minlat: number; minlon: number; maxlat: number; maxlon: number },
+    type: string,
+    cb: (args: FeatureCollection<Point>) => unknown
+  ) {
     const q =
       `[out:json];(` +
       `node(${bb.minlat},${bb.minlon},${bb.maxlat},${bb.maxlon})[${type}];` +
@@ -91,13 +123,13 @@ export default class OverpassService {
     this.overpass(q, (error: Error | undefined, fc: FeatureCollection<Point>) => {
       if (error) {
         console.log(error);
-        cb({ type: "FeatureCollection", features: [] } as FeatureCollection);
+        cb({ type: 'FeatureCollection', features: [] } as FeatureCollection<Point>);
       } else {
         console.log(fc);
         fc.features.forEach(f => {
           f.properties = f.properties || {};
           delete f.properties.geometry;
-          f.properties.name = f.properties["tags"] ? f.properties["tags"]["name"] || "?" : "?";
+          f.properties.name = f.properties['tags'] ? f.properties['tags']['name'] || '?' : '?';
         });
         cb(fc);
       }
@@ -106,26 +138,26 @@ export default class OverpassService {
 
   private createFeature(coords: number[], props: GeoJsonProperties): Feature<Point, GeoJsonProperties> {
     return {
-      type: "Feature",
+      type: 'Feature',
       geometry: {
-        type: "Point",
+        type: 'Point',
         coordinates: coords,
       },
       properties: {
-        name: props && props["tags"] ? props["tags"]["name"] || "?" : "?",
+        name: props && props['tags'] ? props['tags']['name'] || '?' : '?',
       },
     };
   }
 
-  private createFeatureOverpass(result: OverpassResult): Feature<Point> {
-    return this.createFeature(
-      [result.center.lon, result.center.lat],
-      Object.assign(
-        {
-          id: result.id,
-        },
-        result.tags
-      )
-    );
-  }
+  // private createFeatureOverpass(result: OverpassResult): Feature<Point> {
+  //   return this.createFeature(
+  //     [result.center.lon, result.center.lat],
+  //     Object.assign(
+  //       {
+  //         id: result.id,
+  //       },
+  //       result.tags
+  //     )
+  //   );
+  // }
 }

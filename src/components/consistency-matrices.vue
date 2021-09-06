@@ -16,7 +16,7 @@
                   <!-- <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span> -->
                   <span class="title pt-4">
                     <!-- {{ $t("APP.CONSISTENCIES") }} -->
-                    {{ $t("APP.COMBINATIONS") | capitalize }}
+                    {{ $t('APP.COMBINATIONS') | capitalize }}
                   </span>
                   <span class="ml-8 mb-2">
                     <v-select
@@ -30,11 +30,11 @@
                 </v-col>
                 <v-col xs="12" md="6" class="d-flex">
                   <div class="d-block pb-4">
-                    <span class="d-block"><v-icon class="pr-1">mdi-checkbox-blank</v-icon>{{ $t("APP.CONSISTENT") }}</span>
+                    <span class="d-block"><v-icon class="pr-1">mdi-checkbox-blank</v-icon>{{ $t('APP.CONSISTENT') }}</span>
                     <span class="d-block"
-                      ><v-icon class="pr-1">mdi-checkbox-blank-outline</v-icon>{{ $t("APP.INCONSISTENT") }}</span
+                      ><v-icon class="pr-1">mdi-checkbox-blank-outline</v-icon>{{ $t('APP.INCONSISTENT') }}</span
                     >
-                    <span class="d-block"><v-icon class="pr-1">mdi-checkerboard</v-icon>{{ $t("APP.PARTLY_CONSISTENT") }} </span>
+                    <span class="d-block"><v-icon class="pr-1">mdi-checkerboard</v-icon>{{ $t('APP.PARTLY_CONSISTENT') }} </span>
                   </div>
                 </v-col>
               </v-row>
@@ -54,20 +54,18 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { ContentCategory, IContent, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
-import { translateCollName } from "../i18n";
-import TableCard from "../components/table-card.vue";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { ContentCategory, IScenario } from '../models';
+import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
+import { translateCollName } from '../i18n';
+import TableCard from '../components/table-card.vue';
 
 @Component({
   components: { TableCard },
 })
 export default class ConsistencyMatrices extends Vue {
-  private tab: number = 0;
+  private tab = 0;
   private scenario: Partial<IScenario> = {};
   private rows: Array<CollectionNames> = [];
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
@@ -80,9 +78,9 @@ export default class ConsistencyMatrices extends Vue {
     super();
   }
 
-  @Watch("scenario.inconsistencies")
+  @Watch('scenario.inconsistencies')
   private inconsistenciesChanged() {
-    this.$store.actions["scenarios"].save(this.scenario);
+    this.$store.actions['scenarios'].save(this.scenario);
   }
 
   private tabChanged(newTab: number) {
@@ -110,15 +108,18 @@ export default class ConsistencyMatrices extends Vue {
       CollectionNamesArr.forEach(n => {
         this.rows.push(n);
       });
-      this.categories = this.scenario ? this.scenario!.categories! : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.categories =
+        this.scenario && this.scenario.categories
+          ? this.scenario.categories
+          : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.selectedCategory = this.selectedCategory ? this.selectedCategory : this.rows.length > 0 ? this.rows[0] : null;
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
   }
 
-  mounted() {
+  async mounted(): Promise<void> {
     console.log(`ConsistencyMatrices mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
-export const version = "1.0.0";
-export const themeStorageKey = "V2018_THEME";
+export const version = '1.0.0';
+export const themeStorageKey = 'V2018_THEME';
 
-export const getUuid = (full: boolean = false) => (full ? uuidv4() : uuidv4().substr(0, 8));
+export const getUuid = (full = false): string => (full ? uuidv4() : uuidv4().substr(0, 8));
 
-export const vowelSoundWords = () => ["hour"];
-export const isVowelSound = (s: string) => {
+export const vowelSoundWords = (): string[] => ['hour'];
+export const isVowelSound = (s: string): boolean => {
   if (!s || s.length <= 0) return false;
-  return /^[aeiou]$/i.test(s[0]) || vowelSoundWords().some((w) => w.startsWith(s.toLocaleLowerCase()));
+  return /^[aeiou]$/i.test(s[0]) || vowelSoundWords().some(w => w.startsWith(s.toLocaleLowerCase()));
 };

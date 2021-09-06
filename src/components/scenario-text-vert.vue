@@ -11,14 +11,10 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent, INarrative, IScenario, ISentence } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
-import marked from "marked";
-import dompurify from "dompurify";
+import { Component, Vue } from 'vue-property-decorator';
+import { INarrative } from '../models';
+import marked from 'marked';
+import dompurify from 'dompurify';
 
 @Component({
   components: {},
@@ -39,9 +35,9 @@ export default class ScenarioTextVert extends Vue {
     return marked(text, { sanitizer: dompurify.sanitize });
   }
 
-  mounted() {
+  async mounted(): Promise<void> {
     console.log(`ScenarioText mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

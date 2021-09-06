@@ -1,8 +1,8 @@
-import { CollectionNames, CollectionNamesPlus, IAppModel, UpdateStream } from "../meiosis";
-import { IContent } from "../../models";
-import { localStorageFactory } from "../localstorage-service";
+import { CollectionNames, CollectionNamesPlus, IAppModel, UpdateStream } from '../meiosis';
+import { IContent } from '../../models';
+import { localStorageFactory } from '../localstorage-service';
 
-export type CollectionItemMode = "view" | "edit" | "loading";
+export type CollectionItemMode = 'view' | 'edit' | 'loading';
 
 export type CollectionType<T extends IContent> = {
   section?: string;
@@ -58,16 +58,16 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
           },
           saveList: async () => {
             if (states()[collectionName] && states()[collectionName].list) {
-            await lsSvc.saveList(states()[collectionName].list! as any);
-            us({ [collectionName]: { list: states()[collectionName].list! } });
+              await lsSvc.saveList(states()[collectionName].list! as any);
+              us({ [collectionName]: { list: states()[collectionName].list! } });
             }
           },
-          load: async (id) => {
+          load: async id => {
             const current = await lsSvc.load(id);
             if (current) {
               const state = states();
               const { current: old = {} } = state[collectionName];
-              Object.keys(old).forEach((k) => (old[k as keyof IContent] = undefined));
+              Object.keys(old).forEach(k => (old[k as keyof IContent] = undefined));
               us({ [collectionName]: { current: { ...old, ...current } } });
             }
           },
@@ -79,7 +79,7 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
               callback && callback(list);
             }
           },
-          del: async (id) => {
+          del: async id => {
             const list = await lsSvc.del(id);
             if (list) {
               us({ [collectionName]: { list } });

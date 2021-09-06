@@ -2,20 +2,20 @@
   <v-navigation-drawer v-model="drawer" width="240px" @input="drawerChanged" app absolute temporary class="noselect no-print">
     <!-- <v-subheader class="font-weight-thin"></v-subheader> -->
     <v-row no-gutters class="my-3 ml-0">
-      <v-btn text @click="closeDrawer"><v-icon>mdi-arrow-left</v-icon> {{ $t("APP.CLOSE") }}</v-btn>
+      <v-btn text @click="closeDrawer"><v-icon>mdi-arrow-left</v-icon> {{ $t('APP.CLOSE') }}</v-btn>
     </v-row>
     <v-row no-gutters class="my-4" align-content="center" justify="center">
       <v-img :src="require('../assets/words.png')" max-width="180" contain />
     </v-row>
     <v-card flat tile class="" style="background: transparent">
       <div class="overline px-2 py-2">
-        {{ $t("APP.SCENARIO") }}
+        {{ $t('APP.SCENARIO') }}
       </div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
         <div class="blue--text">
-          {{ $t("APP.ACTIVE", { item: $tc("COMP.SCENARIOS") }) | capitalize }}:
-          <span class="bold--text">{{ this.activeScenario.name || "-" }} </span>
+          {{ $t('APP.ACTIVE', { item: $tc('COMP.SCENARIOS') }) | capitalize }}:
+          <span class="bold--text">{{ this.activeScenario.name || '-' }} </span>
           <span>
             <v-menu v-if="activeScenario" v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
               <template v-slot:activator="{ on, attrs }">
@@ -42,12 +42,12 @@
       </v-menu>
     </v-row>
     <v-card flat tile class="mb-0" style="background: transparent" v-if="activeScenario">
-      <div class="overline px-2 py-2">{{ $tc("COMP.NARRATIVE", 2) }}</div>
+      <div class="overline px-2 py-2">{{ $tc('COMP.NARRATIVE', 2) }}</div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
         <div class="blue--text">
-          {{ $t("APP.ACTIVE", { item: $tc("COMP.NARRATIVE") }) | capitalize }}:
-          <span class="bold--text">{{ this.activeNarrative.name || "-" }} </span>
+          {{ $t('APP.ACTIVE', { item: $tc('COMP.NARRATIVE') }) | capitalize }}:
+          <span class="bold--text">{{ this.activeNarrative.name || '-' }} </span>
           <span>
             <v-menu v-if="activeNarrative" v-model="narMenu" :close-on-content-click="false" :nudge-width="200" offset-x>
               <template v-slot:activator="{ on, attrs }">
@@ -67,7 +67,7 @@
           dense hide-details @change="narrativeSelected"></v-select>
     </v-row>
     <v-card flat tile class="mt-6" style="background: transparent">
-      <div class="overline px-2 py-2">{{ $t("APP.LANGUAGE") }}</div>
+      <div class="overline px-2 py-2">{{ $t('APP.LANGUAGE') }}</div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
         <v-radio-group v-model="activeLanguage" @change="languageChanged" class="ind-radio">
@@ -80,7 +80,7 @@
       </v-card-text>
     </v-card>
     <v-card flat tile class="" style="background: transparent">
-      <div class="overline px-2 py-2">{{ $t("APP.THEME") }}</div>
+      <div class="overline px-2 py-2">{{ $t('APP.THEME') }}</div>
       <v-divider />
       <v-card-text class="text-description px-4 py-1">
         <v-radio-group v-model="activeTheme" @change="themeChanged" class="ind-radio">
@@ -92,33 +92,32 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import { languageStorageKey } from "../i18n";
-import CountryFlag from "@dzangolab/vue-country-flag-icon";
-import { INarrative, IScenario } from "../models";
-import EditComponentCard from "./edit-component-card.vue";
-import ImportExportCard from "./import-export-card.vue";
-import DeleteCard from "./delete-card.vue";
-import _ from 'lodash';
+import { Component, Vue } from 'vue-property-decorator';
+import CountryFlag from '@dzangolab/vue-country-flag-icon';
+import { INarrative, IScenario } from '../models';
+import EditComponentCard from './edit-component-card.vue';
+import ImportExportCard from './import-export-card.vue';
+import DeleteCard from './delete-card.vue';
+import { sortBy } from 'lodash';
 
 @Component({
   components: { CountryFlag, EditComponentCard, ImportExportCard, DeleteCard },
 })
 export default class NavigationDrawer extends Vue {
-  private languages: string[] = ["gb", "nl"];
-  private activeLanguage: string = "";
-  private themes: string[] = ["light", "dark"];
+  private languages: string[] = ['gb', 'nl'];
+  private activeLanguage = '';
+  private themes: string[] = ['light', 'dark'];
   private scenarios: Partial<IScenario>[] = [];
-  private activeTheme: string = "";
+  private activeTheme = '';
   private activeScenario: Partial<IScenario> = {};
   private activeNarrative: INarrative = {} as INarrative;
-  private menu: boolean = false;
-  private importMenu: boolean = false;
-  private narMenu: boolean = false;
-  private drawer: boolean = false;
+  private menu = false;
+  private importMenu = false;
+  private narMenu = false;
+  private drawer = false;
 
   private get sortedNarratives() {
-    return this.activeScenario && this.activeScenario.narratives ? _.sortBy(this.activeScenario.narratives, 'name') : [];
+    return this.activeScenario && this.activeScenario.narratives ? sortBy(this.activeScenario.narratives, 'name') : [];
   }
 
   private drawerChanged(d: boolean) {
@@ -150,14 +149,14 @@ export default class NavigationDrawer extends Vue {
   }
 
   private activeScenarioName() {
-    this.activeScenario.name ? this.activeScenario.name : "-";
+    this.activeScenario.name ? this.activeScenario.name : '-';
   }
 
   private closeDrawer() {
     this.$store.actions.toggleDrawer(false);
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     console.log(`navigation mounted`);
     this.$store.states.map(a => {
       this.activeLanguage = a.app.language;

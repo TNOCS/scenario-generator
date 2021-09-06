@@ -1,6 +1,6 @@
 <template>
   <v-card flat tile class="flex-card" style="background: transparent">
-    <div class="overline px-2 py-0">{{ $tc("APP.DESCRIPTION") }}</div>
+    <div class="overline px-2 py-0">{{ $tc('APP.DESCRIPTION') }}</div>
     <div v-if="subtitle && subtitle.length > 0" class="px-4 pt-0 pb-2 v-card__text">
       {{ subtitle }}
     </div>
@@ -19,21 +19,21 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import { IContent } from "../models";
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { IContent } from '../models';
 @Component({
   components: {},
 })
 export default class DescriptionCard extends Vue {
-  @Prop({ default: "" }) public html!: string;
-  @Prop({ default: "" }) public subtitle!: string;
+  @Prop({ default: '' }) public html!: string;
+  @Prop({ default: '' }) public subtitle!: string;
   private actors: Partial<IContent>[] = [];
 
   constructor() {
     super();
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     await this.$store.actions.scenarios.updateList();
   }
 }

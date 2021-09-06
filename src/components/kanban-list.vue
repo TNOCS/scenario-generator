@@ -29,31 +29,29 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { IContent } from "../models";
-import { CollectionNames } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
-import KanbanCard from "./kanban-card.vue";
-import AddComponentCard from "./add-component-card.vue";
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Container, Draggable } from 'vue-smooth-dnd';
+import { IContent } from '../models';
+import { CollectionNames } from '../services/meiosis';
+import KanbanCard from './kanban-card.vue';
+import AddComponentCard from './add-component-card.vue';
 
 @Component({
   components: { Container, Draggable, KanbanCard, AddComponentCard },
 })
 export default class KanbanList extends Vue {
-  @Prop({ default: "" }) public itemkey!: CollectionNames;
+  @Prop({ default: '' }) public itemkey!: CollectionNames;
   private items: Partial<IContent>[] = [];
-  private title: string = "";
-  private language: string = "";
-  private menu: boolean = false;
+  private title = '';
+  private language = '';
+  private menu = false;
 
-  @Watch("itemkey")
+  @Watch('itemkey')
   private itemkeyChanged() {
     this.init();
   }
 
-  @Watch("language")
+  @Watch('language')
   private languageChanged() {
     this.setTitle();
   }
@@ -72,7 +70,7 @@ export default class KanbanList extends Vue {
     this.setTitle();
     await this.$store.actions[this.itemkey].updateList();
     this.$store.states.map(s => {
-      this.items = s[this.itemkey].list!;
+      this.items = s[this.itemkey].list || [];
       this.language = s.app.language;
     });
   }
@@ -81,9 +79,9 @@ export default class KanbanList extends Vue {
     this.menu = false;
   }
 
-  mounted() {
+  async mounted(): Promise<void> {
     console.log(`KanbanList mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

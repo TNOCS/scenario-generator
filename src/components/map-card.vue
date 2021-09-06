@@ -1,14 +1,14 @@
 <template>
   <v-card flat tile class="flex-card map-full-height map-full-width no-background" style="min-height: 500px">
     <div class="overline pl-6 pr-2 pb-0 pt-1">
-      {{ $tc("APP.LOCATION") }}
+      {{ $tc('APP.LOCATION') }}
       <v-tooltip left open-delay="1000">
         <template v-slot:activator="{ on, attrs }">
           <span v-on="on" v-bind="attrs" style="float: right">
             <v-btn icon @click="toggleMapLayer"><v-icon>mdi-map</v-icon></v-btn>
           </span>
         </template>
-        <span>{{ $t("APP.TOGGLE_MAP_BASE") | capitalize }}</span>
+        <span>{{ $t('APP.TOGGLE_MAP_BASE') | capitalize }}</span>
       </v-tooltip>
     </div>
     <div class="map-card-height map-card-full-width">
@@ -75,17 +75,17 @@
 </template>
 
 <script lang="ts">
-import _, { cloneDeep, random, range, throttle } from "lodash";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { createStyle, findPointOnSurface, pointToLonLat } from "vuelayers/lib/ol-ext";
-import { Map } from "vuelayers";
-import { Feature, FeatureCollection, Point } from "geojson";
-import { bbox, bboxPolygon, center } from "@turf/turf";
-import { IContent, IContext, INarrative, IScenario, LocationContext, NominatimResult } from "../models";
-import { ICollectionRecord } from "../services/meiosis";
-import { CollectionType } from "../services/states/collection-state";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-prototype-builtins */
+import { pick, find, throttle, debounce } from 'lodash';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { pointToLonLat } from 'vuelayers/lib/ol-ext';
+import { Feature, FeatureCollection, Point } from 'geojson';
+import { bbox, bboxPolygon, center } from '@turf/turf';
+import { IContent, IContext, INarrative, IScenario, LocationContext, NominatimResult } from '../models';
+import { CollectionType } from '../services/states/collection-state';
 
-const ICON_URL: string = "https://github.com/rinzeb/osm-icons/raw/master/png/osm{{ITEM}}.png";
+const ICON_URL = 'https://github.com/rinzeb/osm-icons/raw/master/png/osm{{ITEM}}.png';
 
 @Component({
   components: {},
@@ -95,23 +95,23 @@ export default class MapCard extends Vue {
   private scenario: Partial<IScenario> = {};
   private locations: CollectionType<IContent> = {};
   private typeOfObjects: CollectionType<IContent> = {};
-  private iconUrl: string = "https://github.com/rinzeb/osm-icons/raw/master/png/osmairport.png";
-  private loading: boolean = false;
+  private iconUrl = 'https://github.com/rinzeb/osm-icons/raw/master/png/osmairport.png';
+  private loading = false;
 
-  private url: string = "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  private url = 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   private urls: string[] = [
-    "https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png",
-    "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    'https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png',
+    'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   ];
-  private zoom: number = 8;
-  private center: number[] = [5.2, 52.3];
+  private zoom = 8;
+  private center: [number, number] = [5.2, 52.3];
   private features: any[] = [];
-  private pointer: string = "";
+  private pointer = '';
   private active: any = null;
-  private initialized: boolean = false;
+  private initialized = false;
   private map?: any;
 
-  @Watch("narrative")
+  @Watch('narrative')
   private narrChanged() {
     this.updateMap();
   }
@@ -131,7 +131,7 @@ export default class MapCard extends Vue {
         this.active = f;
         _doneOne = true;
       }
-      console.log(`Open/close ${f.get("name")}`);
+      console.log(`Open/close ${f.get('name')}`);
     });
     if (!_doneOne) {
       this.active = null;
@@ -151,7 +151,7 @@ export default class MapCard extends Vue {
   }
 
   private pointOnSurface(...args: any) {
-    return pointToLonLat(args[0].getCoordinates(), "EPSG:3857", "EPSG:4326");
+    return pointToLonLat(args[0].getCoordinates(), 'EPSG:3857', 'EPSG:4326');
   }
 
   private toggleMapLayer() {
@@ -164,21 +164,22 @@ export default class MapCard extends Vue {
   }
 
   private getIcon(n: INarrative): string {
-    let result = "building";
+    let result = 'building';
     if (n && n.components) {
-      const typeId = _.pick(n.components, "TypeOfObject");
-      const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
+      const typeId = pick(n.components, 'TypeOfObject');
+      const type = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
       const typeContext: IContext | undefined = type && type.context;
       if (typeContext) {
-        if (!Object.keys(typeContext.data).pop()!.includes("levels")) {
-          result = `${Object.values(typeContext.data).pop()!}`;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        if (!Object.keys(typeContext.data).pop()!.includes('levels')) {
+          result = `${Object.values(typeContext.data).pop()}`;
         }
       }
     }
-    return ICON_URL.replace("{{ITEM}}", result);
+    return ICON_URL.replace('{{ITEM}}', result);
   }
 
-  private zoomMap = _.throttle(this.zoomMapThrottled, 500, { trailing: true });
+  private zoomMap = throttle(this.zoomMapThrottled, 500, { trailing: true });
 
   private zoomMapThrottled() {
     if (!this.features || this.features.length < 1) return;
@@ -186,7 +187,7 @@ export default class MapCard extends Vue {
     if (this.features.length === 1) {
       c = this.features[0];
     } else {
-      c = center(bboxPolygon(bbox({ type: "FeatureCollection", features: this.features } as FeatureCollection<any, any>)));
+      c = center(bboxPolygon(bbox({ type: 'FeatureCollection', features: this.features } as FeatureCollection<any, any>)));
     }
     if (c && c.geometry && c.geometry.coordinates) {
       this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
@@ -194,7 +195,7 @@ export default class MapCard extends Vue {
     }
   }
 
-  private pointerMove = _.throttle(this.pointerMoveThrottled, 50, { trailing: true });
+  private pointerMove = throttle(this.pointerMoveThrottled, 50, { trailing: true });
 
   private pointerMoveThrottled(evt: any) {
     this.pointer = `Lat: ${evt.coordinate[1].toFixed(4)}, Lon: ${evt.coordinate[0].toFixed(4)}`;
@@ -208,12 +209,12 @@ export default class MapCard extends Vue {
       features.push(f);
     });
     setTimeout(() => {
-      Vue.set(this, "features", features);
+      Vue.set(this, 'features', features);
       this.zoomMap();
     }, 100);
   }
 
-  private updateMap = _.debounce(this.updateMapThrottled, 500);
+  private updateMap = debounce(this.updateMapThrottled, 500);
 
   private updateMapThrottled() {
     console.log(`Update map data`);
@@ -222,76 +223,77 @@ export default class MapCard extends Vue {
       this.features.splice(0, this.features.length);
     }
     if (this.narrative && this.narrative.id) {
-      const locId = _.pick(this.narrative.components, "Location");
-      const loc: Partial<IContent> | undefined = locId && _.find(this.locations.list!, val => val.id === locId.Location);
+      const locId = pick(this.narrative.components, 'Location');
+      const loc: Partial<IContent> | undefined = locId && find(this.locations.list, val => val.id === locId.Location);
       const locContext: IContext | undefined = loc && loc.context;
       if (!locContext) {
         this.loading = false;
         this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
         return console.log(`Could not find loc in narrative ${this.narrative.name}`);
       }
-      const typeId = _.pick(this.narrative.components, "TypeOfObject");
-      const type = typeId && _.find(this.typeOfObjects.list!, val => val.id === typeId.TypeOfObject);
+      const typeId = pick(this.narrative.components, 'TypeOfObject');
+      const type = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
       const typeContext: IContext | undefined = type && type.context;
       if (!typeContext) {
         this.loading = false;
         this.$store.actions.notify(this.$t(`APP.NO_LOCATION_TYPE_CONTEXT`).toString());
-        this.getLocationOnly(locContext, loc!);
+        loc && this.getLocationOnly(locContext, loc);
       }
-      this.getLocationAndLocationTypeResults(typeContext!, locContext!, loc!);
+      typeContext && loc && this.getLocationAndLocationTypeResults(typeContext, locContext, loc);
     }
   }
 
   private getLocationAndLocationTypeResults(typeContext: IContext, locContext: IContext, loc: Partial<IContent>) {
     const amenity = this.getAmenityQuery(typeContext);
-    if (locContext.type === "LOCATION") {
+    if (locContext.type === 'LOCATION') {
       const data = locContext.data as LocationContext;
-      if (data.hasOwnProperty("NAME")) {
-        this.$overpass.getGeojsonFromQuery(data.NAME || loc!.name!, amenity, this.addFeatures);
-      } else if (data.hasOwnProperty("COORDINATES")) {
-        const coords = data.COORDINATES.split(",").map(c => +c);
+      if (data.hasOwnProperty('NAME')) {
+        this.$overpass.getGeojsonFromQuery(data.NAME || loc.name || '', amenity, this.addFeatures);
+      } else if (data.hasOwnProperty('COORDINATES')) {
+        const coords = data.COORDINATES.split(',').map(c => +c);
         this.$overpass.getGeojsonFromCoordinates(coords, amenity, this.addFeatures);
       }
     } else {
       this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
-      console.log("No location context found");
+      console.log('No location context found');
       this.loading = false;
     }
   }
 
   private getLocationOnly(locContext: IContext, loc: Partial<IContent>) {
-    if (locContext.type === "LOCATION") {
+    if (locContext.type === 'LOCATION') {
       const data = locContext.data as LocationContext;
-      if (data.hasOwnProperty("NAME")) {
-        this.$overpass.getNominatimLocation(data.NAME || loc!.name!).then((result: NominatimResult | undefined) => {
+      if (data.hasOwnProperty('NAME')) {
+        this.$overpass.getNominatimLocation(data.NAME || loc.name || '').then((result: NominatimResult | undefined) => {
           if (result) {
             this.center = [+result.lon, +result.lat];
             this.zoom = 15;
           }
         });
-      } else if (data.hasOwnProperty("COORDINATES")) {
-        const coords = data.COORDINATES.split(",").map(c => +c);
+      } else if (data.hasOwnProperty('COORDINATES')) {
+        const coords = data.COORDINATES.split(',').map(c => +c);
         this.center = [coords[1], coords[0]];
         this.zoom = 14;
       }
     } else {
       this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
-      console.log("No location context found");
+      console.log('No location context found');
       this.loading = false;
     }
   }
 
   private getAmenityQuery(typeContext: IContext) {
-    if (typeContext.data && Object.keys(typeContext.data).pop()!.includes("levels")) {
-      return `${Object.keys(typeContext.data).pop()!}~${Object.values(typeContext.data).pop()!}`;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    if (typeContext.data && Object.keys(typeContext.data).pop()!.includes('levels')) {
+      return `${Object.keys(typeContext.data).pop()}~${Object.values(typeContext.data).pop()}`;
     } else {
-      return `${Object.keys(typeContext.data).pop()!}=${Object.values(typeContext.data).pop()!}`;
+      return `${Object.keys(typeContext.data).pop()}=${Object.values(typeContext.data).pop()}`;
     }
   }
 
   private init() {
     this.$store.states.map(s => {
-      this.scenario = s.scenarios.current!;
+      this.scenario = s.scenarios.current || {};
       this.locations = s.Location;
       this.typeOfObjects = s.TypeOfObject;
       this.narrative = s.app.narrative || ({} as INarrative);
@@ -299,7 +301,7 @@ export default class MapCard extends Vue {
     });
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     this.init();
     setTimeout(() => this.updateMap(), 250);
   }

@@ -9,7 +9,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item v-for="(val, cat) in categories" :key="cat">
         <v-card dense flat tile class="flex-card" style="background: transparent">
-          <div class="overline px-2 py-0">{{ $tc("APP.DIMENSION", 2) }}</div>
+          <div class="overline px-2 py-0">{{ $tc('APP.DIMENSION', 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2">
             <v-container fluid class="ma-0 pa-0">
               <v-row no-gutters v-for="(val, i) in getCategoryRows(cat)" :key="i" class="kanban-col">
@@ -26,20 +26,17 @@
 </template>
 
 <script lang="ts">
-import { lightFormat } from "date-fns";
-import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { Container, Draggable } from "vue-smooth-dnd";
-import { ContentCategory, IContent } from "../models";
-import { CollectionNames, CollectionNamesArr } from "../services/meiosis";
-import { getUuid } from "../utils/constants";
-import KanbanList from "./kanban-list.vue";
+import { Component, Vue } from 'vue-property-decorator';
+import { ContentCategory } from '../models';
+import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
+import KanbanList from './kanban-list.vue';
 
 @Component({
   components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
   private rows: Array<CollectionNames> = [];
-  private tab: number = 0;
+  private tab = 0;
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
     [key in ContentCategory]: Array<CollectionNames>;
   };
@@ -50,23 +47,24 @@ export default class KanbanLists extends Vue {
   }
 
   private getCategoryRows(cat: ContentCategory) {
-    return this.rows.filter((r) => this.categories[cat].includes(r));
+    return this.rows.filter(r => this.categories[cat].includes(r));
   }
 
   private async init() {
-    this.$store.states.map((s) => {
+    this.$store.states.map(s => {
       this.rows.length = 0;
-      CollectionNamesArr.forEach((n) => {
+      CollectionNamesArr.forEach(n => {
         this.rows.push(n);
       });
-      this.categories = s.scenarios.current
-        ? s.scenarios.current!.categories!
-        : ({} as { [key in ContentCategory]: Array<CollectionNames> });
+      this.categories =
+        s.scenarios.current && s.scenarios.current.categories
+          ? s.scenarios.current.categories
+          : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
   }
 
-  private onCardDrop(id: string, evt: any) {
+  private onCardDrop(id: string) {
     console.log(`Drop ${id}`);
   }
 
@@ -75,9 +73,9 @@ export default class KanbanLists extends Vue {
     return id;
   }
 
-  async mounted() {
+  async mounted(): Promise<void> {
     console.log(`KanbanLists mounted`);
-    this.init();
+    await this.init();
   }
 }
 </script>

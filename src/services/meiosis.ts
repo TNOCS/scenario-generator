@@ -1,14 +1,14 @@
-import { merge } from "../utils/mergerino";
-import { scan, stream } from "flyd";
+import { merge } from '../utils/mergerino';
+import { scan, stream } from 'flyd';
 import {
   collectionFactory,
   CollectionsActions,
   CollectionsModel,
   CollectionType,
   ICollectionState,
-} from "./states/collection-state";
-import { appStateMgmt, IAppStateActions, IAppStateModel } from "./states/app-state";
-import { IContent, IScenario } from "../models";
+} from './states/collection-state';
+import { appStateMgmt, IAppStateActions, IAppStateModel } from './states/app-state';
+import { IContent, IScenario } from '../models';
 
 export interface IActions extends IAppStateActions, CollectionsActions<IContent | IScenario> {}
 
@@ -17,72 +17,72 @@ export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppMode
 export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
 export type CollectionNames =
-  | "ThreatDirection"
-  | "Impact"
-  | "Duration"
-  | "Persons"
-  | "Motivation"
-  | "Capabilities"
-  | "PhysicalAngleOfAttackDuringExecution"
-  | "ModusOperandiDuringExecution"
-  | "BehaviourDuringPreparation"
-  | "CriminalPhase"
-  | "Equipment"
-  | "TargetType"
-  | "Responsibility"
-  | "Location"
-  | "TypeOfObject"
-  | "WeatherType"
-  | "WeatherBehaviour"
-  | "TypeOfEnvironment"
-  | "PeopleDensity"
-  | "Intent"
-  | "ExistingInfra"
-  | "PrivacyAwareness"
-  | "SecurityAwareness"
-  | "AvailableBudget"
-  | "CompartmentsPresent"
-  | "OpenCompartments"
-  | "RelationOwnerObjectAndOwnerSecuritySystem";
+  | 'ThreatDirection'
+  | 'Impact'
+  | 'Duration'
+  | 'Persons'
+  | 'Motivation'
+  | 'Capabilities'
+  | 'PhysicalAngleOfAttackDuringExecution'
+  | 'ModusOperandiDuringExecution'
+  | 'BehaviourDuringPreparation'
+  | 'CriminalPhase'
+  | 'Equipment'
+  | 'TargetType'
+  | 'Responsibility'
+  | 'Location'
+  | 'TypeOfObject'
+  | 'WeatherType'
+  | 'WeatherBehaviour'
+  | 'TypeOfEnvironment'
+  | 'PeopleDensity'
+  | 'Intent'
+  | 'ExistingInfra'
+  | 'PrivacyAwareness'
+  | 'SecurityAwareness'
+  | 'AvailableBudget'
+  | 'CompartmentsPresent'
+  | 'OpenCompartments'
+  | 'RelationOwnerObjectAndOwnerSecuritySystem';
 
-export type CollectionNamesPlus = CollectionNames | "scenarios";
+export type CollectionNamesPlus = CollectionNames | 'scenarios';
 
 export const CollectionNamesArr: Array<CollectionNames> = [
-  "ThreatDirection",
-  "Impact",
-  "Duration",
-  "Persons",
-  "Motivation",
-  "Capabilities",
-  "PhysicalAngleOfAttackDuringExecution",
-  "ModusOperandiDuringExecution",
-  "BehaviourDuringPreparation",
-  "CriminalPhase",
-  "Equipment",
-  "TargetType",
-  "Location",
-  "TypeOfObject",
-  "Responsibility",
-  "WeatherType",
-  "WeatherBehaviour",
-  "TypeOfEnvironment",
-  "PeopleDensity",
-  "Intent",
-  "ExistingInfra",
-  "PrivacyAwareness",
-  "SecurityAwareness",
-  "AvailableBudget",
-  "CompartmentsPresent",
-  "OpenCompartments",
-  "RelationOwnerObjectAndOwnerSecuritySystem",
+  'ThreatDirection',
+  'Impact',
+  'Duration',
+  'Persons',
+  'Motivation',
+  'Capabilities',
+  'PhysicalAngleOfAttackDuringExecution',
+  'ModusOperandiDuringExecution',
+  'BehaviourDuringPreparation',
+  'CriminalPhase',
+  'Equipment',
+  'TargetType',
+  'Location',
+  'TypeOfObject',
+  'Responsibility',
+  'WeatherType',
+  'WeatherBehaviour',
+  'TypeOfEnvironment',
+  'PeopleDensity',
+  'Intent',
+  'ExistingInfra',
+  'PrivacyAwareness',
+  'SecurityAwareness',
+  'AvailableBudget',
+  'CompartmentsPresent',
+  'OpenCompartments',
+  'RelationOwnerObjectAndOwnerSecuritySystem',
 ];
-export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, "scenarios"];
+export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, 'scenarios'];
 
 export type ICollectionRecord = { [key in CollectionNames]: ICollectionState<IContent> };
 
 export const AllCollections: ICollectionRecord = {} as ICollectionRecord;
 CollectionNamesArr.forEach(name => (AllCollections[name] = collectionFactory<IContent>(name)));
-const scenariosCollection = collectionFactory<IScenario>("scenarios");
+const scenariosCollection = collectionFactory<IScenario>('scenarios');
 
 export interface IAppModel extends IAppStateModel, CollectionsModel<IContent> {
   scenarios: CollectionType<IScenario>;
