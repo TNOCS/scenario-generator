@@ -18,6 +18,10 @@ export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
 export type CollectionNames =
   | 'ThreatDirection'
+  | 'Actor'
+  | 'Action'
+  | 'Access'
+  | 'Means'
   | 'Impact'
   | 'Duration'
   | 'Persons'
@@ -49,6 +53,10 @@ export type CollectionNamesPlus = CollectionNames | 'scenarios';
 
 export const CollectionNamesArr: Array<CollectionNames> = [
   'ThreatDirection',
+  'Actor',
+  'Action',
+  'Access',
+  'Means',
   'Impact',
   'Duration',
   'Persons',

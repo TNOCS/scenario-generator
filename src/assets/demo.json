@@ -7,14 +7,7 @@
       "name": "Demo",
       "categories": {
         "Threat": ["ThreatDirection", "Impact", "Motivation", "ModusOperandiDuringExecution", "Equipment", "Responsibility"],
-        "Context": [
-          "WeatherType",
-          "WeatherBehaviour",
-          "TypeOfObject",
-          "AvailableBudget",
-          "OpenCompartments",
-          "Location"
-        ]
+        "Context": ["WeatherType", "WeatherBehaviour", "TypeOfObject", "AvailableBudget", "OpenCompartments", "Location"]
       }
     }
   ],
