@@ -23,13 +23,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import "splitpanes/dist/splitpanes.css";
-import { Splitpanes, Pane } from "splitpanes";
-import MapCard from "../components/map-card.vue";
-import DescriptionCard from "../components/description-card.vue";
-import ScenarioTextVert from "../components/scenario-text-vert.vue";
-import NarrativeComponentsVert from "../components/narrative-components-vert.vue";
+import { Component, Vue } from 'vue-property-decorator';
+import 'splitpanes/dist/splitpanes.css';
+import { Splitpanes, Pane } from 'splitpanes';
+import MapCard from '../components/map-card.vue';
+import DescriptionCard from '../components/description-card.vue';
+import ScenarioTextVert from '../components/scenario-text-vert.vue';
+import NarrativeComponentsVert from '../components/narrative-components-vert.vue';
 // import ScenarioText from "../components/scenario-text.vue";
 // import NarrativeComponents from "../components/narrative-components.vue";
 
@@ -39,7 +39,7 @@ import NarrativeComponentsVert from "../components/narrative-components-vert.vue
 export default class ShowView extends Vue {
   private panels: number[] = [0, 1, 2];
 
-  mounted() {
+  mounted(): void {
     console.log(`Show mounted`);
   }
 }

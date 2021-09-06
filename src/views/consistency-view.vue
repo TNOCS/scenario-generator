@@ -9,16 +9,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import "splitpanes/dist/splitpanes.css";
-import { Splitpanes, Pane } from "splitpanes";
-import ConsistencyMatrices from "../components/consistency-matrices.vue";
+import { Component, Vue } from 'vue-property-decorator';
+import 'splitpanes/dist/splitpanes.css';
+import ConsistencyMatrices from '../components/consistency-matrices.vue';
 
 @Component({
   components: { ConsistencyMatrices },
 })
 export default class ConsistencyView extends Vue {
-  mounted() {
+  mounted(): void {
     console.log(`ConsistencyView mounted`);
   }
 }

@@ -10,10 +10,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import marked from "marked";
-import dompurify from "dompurify";
-import aboutText from "../assets/about.md";
+import { Component, Vue } from 'vue-property-decorator';
+import marked from 'marked';
+import dompurify from 'dompurify';
+import aboutText from '../assets/about.md';
 
 @Component({
   components: {},
@@ -24,7 +24,7 @@ export default class AboutView extends Vue {
     return marked(text, { sanitizer: dompurify.sanitize });
   }
 
-  async mounted() {
+  mounted(): void {
     console.log(`AboutView mounted`);
   }
 }

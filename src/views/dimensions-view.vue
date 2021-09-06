@@ -9,17 +9,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import "splitpanes/dist/splitpanes.css";
-import { Splitpanes, Pane } from "splitpanes";
-import DescriptionCard from "../components/description-card.vue";
-import KanbanLists from "../components/kanban-lists.vue";
+import { Component, Vue } from 'vue-property-decorator';
+import 'splitpanes/dist/splitpanes.css';
+import KanbanLists from '../components/kanban-lists.vue';
 
 @Component({
   components: { KanbanLists },
 })
 export default class DimensionsView extends Vue {
-  mounted() {
+  mounted(): void {
     console.log(`DimensionsView mounted`);
   }
 }

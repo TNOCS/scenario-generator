@@ -9,22 +9,23 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
-import ScenarioGenerator from "../components/scenario-generator.vue";
+import { Component, Vue } from 'vue-property-decorator';
+import ScenarioGenerator from '../components/scenario-generator.vue';
 
 @Component({
   components: { ScenarioGenerator },
 })
 export default class ScenarioView extends Vue {
   private init() {
-    this.$store.states.map((s) => {
-      if (!s.scenarios.current && s.scenarios.list!.length > 0) {
-        this.$store.actions.scenarios.load(s.scenarios.list![0].id!);
+    this.$store.states.map(s => {
+      if (!s.scenarios.current && s.scenarios.list && s.scenarios.list.length > 0) {
+        const id = s.scenarios.list[0].id;
+        id && this.$store.actions.scenarios.load(id);
       }
     });
   }
 
-  mounted() {
+  mounted(): void {
     console.log(`ScenarioView mounted`);
     this.init();
   }
