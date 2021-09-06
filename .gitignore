@@ -10,7 +10,6 @@ node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 
 # Editor directories and files
 .idea
@@ -21,15 +20,3 @@ lerna-debug.log*
 *.sln
 *.sw*
 *.tsbuildinfo
-**/*.db
-**/*.dbbkp
-**/*.xlsx
-**/*.exe
-**/*.pptx
-packages/server/dashboard/
-*.lnk
-exec/dashboard/
-exec/exec.7z
-*.7z
-packages/client/_morf.json
-packages/client/scenario-generator/

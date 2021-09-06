@@ -15,12 +15,12 @@
 </template>
 
 <script lang="ts">
-import { Component, Watch, Vue } from "vue-property-decorator";
-import AppBar from "./components/app-bar.vue";
-import NavigationDrawer from "./components/navigation-drawer.vue";
-import { Route } from "vue-router";
-import { CollectionNamesPlusArr } from "./services/meiosis";
-import { IScenario } from "./models";
+import { Component, Watch, Vue } from 'vue-property-decorator';
+import AppBar from './components/app-bar.vue';
+import NavigationDrawer from './components/navigation-drawer.vue';
+import { Route } from 'vue-router';
+import { CollectionNamesPlusArr } from './services/meiosis';
+import { IScenario } from './models';
 
 @Component({
   components: {
@@ -29,65 +29,66 @@ import { IScenario } from "./models";
   },
 })
 export default class App extends Vue {
-  private theme: string = "";
+  private theme = '';
   private scenarios?: Partial<IScenario>[] = [];
   private activeScenario?: Partial<IScenario> = {};
-  private note: string = "";
-  private snackbar: boolean = false;
+  private note = '';
+  private snackbar = false;
 
   constructor() {
     super();
     console.log(CollectionNamesPlusArr);
     CollectionNamesPlusArr.forEach(async n => {
-      if (this.$store.actions.hasOwnProperty(n)) await this.$store.actions[n].updateList();
+      // eslint-disable-next-line no-prototype-builtins
+      if (this.$store.actions.hasOwnProperty(n)) this.$store.actions[n].updateList();
     });
   }
 
-  @Watch("scenarios")
+  @Watch('scenarios')
   private scenariosUpdated() {
     if (!this.activeScenario && this.scenarios && this.scenarios.length > 0) {
-      this.$store.actions["scenarios"].load(this.scenarios![0]!.id!);
+      this.$store.actions['scenarios'].load(this.scenarios[0].id || '');
     }
   }
 
-  @Watch("activeScenario")
+  @Watch('activeScenario')
   private activeScenarioUpdated() {
     if (this.activeScenario && this.activeScenario.id) {
       if (!this.$store.states().app.narrative || !this.$store.states().app.narrative.id) {
         if (this.activeScenario.narratives && this.activeScenario.narratives.length > 0) {
-          this.$store.actions.changeNarrative(this.activeScenario.narratives[0]!);
+          this.$store.actions.changeNarrative(this.activeScenario.narratives[0]);
         }
       }
     }
   }
 
-  @Watch("snackbar")
-  snackbarUpdated(active: boolean) {
+  @Watch('snackbar')
+  snackbarUpdated(active: boolean): void {
     if (!active) {
-      this.$store.actions.notify("");
+      this.$store.actions.notify('');
     }
   }
 
-  @Watch("note")
-  noteUpdated(note: string) {
-    if (note && note != "") {
+  @Watch('note')
+  noteUpdated(note: string): void {
+    if (note && note != '') {
       this.snackbar = true;
     }
   }
 
-  @Watch("theme")
-  themeUpdated(theme: string) {
-    this.$vuetify.theme.dark = theme === "dark" ? true : false;
+  @Watch('theme')
+  themeUpdated(theme: string): void {
+    this.$vuetify.theme.dark = theme === 'dark' ? true : false;
   }
 
-  @Watch("$route")
-  routeUpdated(to: Route, from: Route) {
+  @Watch('$route')
+  routeUpdated(to: Route): void {
     if (`/${this.$store.states().app.route}` !== to.path) {
       this.$store.actions.changePage(to.path);
     }
   }
 
-  public mounted() {
+  public mounted(): void {
     this.$store.states.map(s => {
       this.theme = s.app.theme;
       this.note = s.app.note;
@@ -138,7 +139,7 @@ html {
 }
 
 .splitpanes__splitter:before {
-  content: "";
+  content: '';
   position: absolute;
   left: 0;
   top: 0;
