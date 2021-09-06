@@ -1,6 +1,11 @@
 <template>
   <v-row class="mt-0 overflow-y" no-gutters>
-    <v-col v-for="catName in categoryNames" :key="catName" class="" xs="6" cols="6">
+    <v-col
+      v-for="catName in categoryNames"
+      :key="catName"
+      v-bind:xs="12 / categoryNames.length"
+      v-bind:cols="12 / categoryNames.length"
+    >
       <div class="overline pl-2 pr-2 pb-0 pt-1">
         {{ catName }}
       </div>
@@ -104,10 +109,10 @@ export default class NarrativeComponentsVert extends Vue {
 .narr-table .v-data-table--dense > .v-data-table__wrapper > table > thead > tr > th,
 .narr-table .v-data-table--dense > .v-data-table__wrapper > table > tbody > tr > td {
   overflow: hidden;
-  width: 100px;
+  /* width: 100px; */
 }
 .narr-table .v-data-table--dense > .v-data-table__wrapper > table > tbody > tr > td > div {
-  width: 100px;
+  /* width: 100px; */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;

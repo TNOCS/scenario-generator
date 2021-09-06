@@ -226,20 +226,17 @@ export default class MapCard extends Vue {
       const locId = pick(this.narrative.components, 'Location');
       const loc: Partial<IContent> | undefined = locId && find(this.locations.list, val => val.id === locId.Location);
       const locContext: IContext | undefined = loc && loc.context;
-      if (!locContext) {
-        this.loading = false;
+      const typeId = pick(this.narrative.components, 'TypeOfObject');
+      const type: Partial<IContent> | undefined = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
+      const typeContext: IContext | undefined = type && type.context;
+      this.loading = false;
+      if (!locContext && !typeContext) {
         this.$store.actions.notify(this.$t(`APP.NO_LOCATION_CONTEXT`).toString());
         return console.log(`Could not find loc in narrative ${this.narrative.name}`);
       }
-      const typeId = pick(this.narrative.components, 'TypeOfObject');
-      const type = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
-      const typeContext: IContext | undefined = type && type.context;
-      if (!typeContext) {
-        this.loading = false;
-        this.$store.actions.notify(this.$t(`APP.NO_LOCATION_TYPE_CONTEXT`).toString());
-        loc && this.getLocationOnly(locContext, loc);
-      }
-      typeContext && loc && this.getLocationAndLocationTypeResults(typeContext, locContext, loc);
+      if (locContext && typeContext && loc) return this.getLocationAndLocationTypeResults(typeContext, locContext, loc);
+      if (locContext && loc) return this.getLocationOnly(locContext, loc);
+      if (typeContext && type) return this.getLocationOnly(typeContext, type);
     }
   }
 

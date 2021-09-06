@@ -37,7 +37,13 @@
             </v-btn>
           </v-row>
           <v-row class="mt-1 full-width" no-gutters>
-            <v-col v-for="catName in categoryNames" :key="catName" class="pl-2" xs="6" cols="6">
+            <v-col
+              v-for="catName in categoryNames"
+              :key="catName"
+              class="pl-2"
+              v-bind:xs="12 / categoryNames.length"
+              v-bind:cols="12 / categoryNames.length"
+            >
               <v-card>
                 <v-card-title dense>
                   {{ catName }}
