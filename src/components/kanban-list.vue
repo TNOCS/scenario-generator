@@ -1,6 +1,33 @@
 <template>
   <v-card dense flat tile class="flex-card" color="secondary">
-    <v-card-text>
+    <v-card-text v-if="verticalDirection">
+      <v-row no-gutters>
+        <v-col cols="9">
+          <span class="title text-truncate">{{ title | capitalize }}</span>
+        </v-col>
+        <v-col cols="3">
+          <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn v-on="on" v-bind="attrs" color="accent darken-1" fab small elevation="2" class="ml-4">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <AddComponentCard :itemkey="itemkey" @close="closeMenu"></AddComponentCard>
+          </v-menu>
+        </v-col>
+        <v-col cols="12" class="py-1 pl-1">
+          <div class="text-description px-2 hor-overflow">
+            <Container orientation="vertical">
+              <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
+                <KanbanCard :item="item" />
+              </Draggable>
+            </Container>
+          </div>
+        </v-col>
+      </v-row>
+    </v-card-text>
+
+    <v-card-text v-if="!verticalDirection">
       <v-row no-gutters>
         <v-col cols="2" class="py-2 pl-0 divider-r">
           <span class="title">{{ title | capitalize }}</span>
@@ -41,6 +68,7 @@ import AddComponentCard from './add-component-card.vue';
 })
 export default class KanbanList extends Vue {
   @Prop({ default: '' }) public itemkey!: CollectionNames;
+  @Prop({ default: false }) private readonly verticalDirection!: boolean;
   private items: Partial<IContent>[] = [];
   private title = '';
   private language = '';

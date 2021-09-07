@@ -46,6 +46,7 @@
       "SELECT_DIMENSION": "select a dimension",
       "SENTENCE": "sentence | sentences",
       "SHOW_SCENARIO": "Show scenario",
+      "TOGGLE_KANBAN_DIR": "Toggle morphological box",
       "STRUCTURE": "structure",
       "THEME": "theme",
       "TITLE": "title",

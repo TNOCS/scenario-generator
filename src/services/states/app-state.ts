@@ -1,4 +1,4 @@
-import { themeStorageKey } from '../../utils/constants';
+import { kanbanDirectionStorageKey, themeStorageKey } from '../../utils/constants';
 import { i18n, languageStorageKey } from '../../i18n';
 import { CollectionNames, CollectionNamesArr, IAppModel, UpdateStream } from '../meiosis';
 import { INarrative, Inconsistency } from '../../models';
@@ -15,6 +15,7 @@ export interface IAppStateModel {
     note: string;
     narrative: INarrative;
     drawer: boolean;
+    kanbanDirVert: boolean;
     //   page?: Dashboards;
   };
 }
@@ -30,6 +31,7 @@ export interface IAppStateActions {
   updateInconsistencies: (inconsistencies: Inconsistency[]) => void;
   notify: (note: string) => void;
   toggleDrawer: (drawer: boolean) => void;
+  setDirection: (directionVertical: boolean) => void;
 }
 
 export interface IAppState {
@@ -44,6 +46,7 @@ export const appStateMgmt = {
       apiService: process.env.SERVER || window.location.origin,
       route: '/',
       language: localStorage.getItem(languageStorageKey) || 'gb',
+      kanbanDirVert: localStorage.getItem(kanbanDirectionStorageKey) || false,
       theme: localStorage.getItem(themeStorageKey) || 'light',
       note: '',
       narrative: {} as INarrative,
@@ -103,6 +106,9 @@ export const appStateMgmt = {
       toggleDrawer: (drawer: boolean) => {
         log(`ToggleDrawer: ${drawer}`);
         update({ app: { drawer } });
+      },
+      setDirection: (directionVertical: boolean) => {
+        update({ app: { kanbanDirVert: directionVertical } });
       },
     };
   },

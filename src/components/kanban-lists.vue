@@ -11,7 +11,15 @@
         <v-card dense flat tile class="flex-card" style="background: transparent">
           <div class="overline px-2 py-0">{{ $tc('APP.DIMENSION', 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2">
-            <v-container fluid class="ma-0 pa-0">
+            <v-container v-if="verticalDirection" fluid class="ma-0 pa-0">
+              <v-row no-gutters class="kanban-col">
+                <v-col v-for="(val, i) in getCategoryRows(cat)" :key="i" style="max-width: 280px" class="my-1 elevation-1">
+                  <KanbanList :itemkey="val" v-bind:vertical-direction="verticalDirection" />
+                </v-col>
+              </v-row>
+            </v-container>
+
+            <v-container v-if="!verticalDirection" fluid class="ma-0 pa-0">
               <v-row no-gutters v-for="(val, i) in getCategoryRows(cat)" :key="i" class="kanban-col">
                 <v-col cols="12" class="my-1 elevation-1">
                   <KanbanList :itemkey="val" />
@@ -26,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { ContentCategory } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
 import KanbanList from './kanban-list.vue';
@@ -35,6 +43,7 @@ import KanbanList from './kanban-list.vue';
   components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
+  @Prop() public verticalDirection!: boolean;
   private rows: Array<CollectionNames> = [];
   private tab = 0;
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {

@@ -50,6 +50,18 @@
       <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
           dense hide-details @change="narrativeSelected"></v-select>
     </div>
+    <v-row no-gutters class="my-3 ml-0">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn text @click="toggleDirection" v-bind="attrs" v-on="on">
+            <v-icon v-if="verticalDirection">mdi-align-horizontal-left</v-icon>
+            <v-icon v-if="!verticalDirection">mdi-align-vertical-top</v-icon>
+          </v-btn>
+        </template>
+        <span>{{ $tc('APP.TOGGLE_KANBAN_DIR') | capitalize }}</span>
+      </v-tooltip>
+    </v-row>
+
     <v-spacer />
     <v-sheet class="blue px-2 d-flex" height="100%" tile>
       <a href="https://www.tno.nl" target="_blank" class="tno-link">
@@ -60,7 +72,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import { INarrative, IScenario } from '../models';
 import { sortBy } from 'lodash';
 
@@ -70,6 +82,12 @@ import { sortBy } from 'lodash';
 export default class AppBar extends Vue {
   private scenario: Partial<IScenario> | undefined = {};
   private activeNarrative: INarrative = {} as INarrative;
+  private verticalDirection = false;
+
+  @Watch('kanbanDirVert')
+  kanbanDirVertUpdated(dir: boolean): void {
+    this.verticalDirection = dir;
+  }
 
   private get sortedNarratives() {
     return this.scenario && this.scenario.narratives ? sortBy(this.scenario.narratives, 'name') : [];
@@ -83,10 +101,15 @@ export default class AppBar extends Vue {
     this.$store.actions.toggleDrawer(true);
   }
 
+  private toggleDirection() {
+    this.$store.actions.setDirection(!this.verticalDirection);
+  }
+
   async mounted(): Promise<void> {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current;
       this.activeNarrative = s.app.narrative || ({} as INarrative);
+      this.verticalDirection = s.app.kanbanDirVert;
     });
   }
 }
