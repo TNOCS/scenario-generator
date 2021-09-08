@@ -1,5 +1,9 @@
 # V2018 Scenario Generator
 
+Generate a scenario based on a morphological box.
+
+![screenshot](https://github.com/TNOCS/scenario-generator/blob/master/img/screenshot.png?raw=true)
+
 Live demo at [https://tnocs.github.io/scenario-generator](https://tnocs.github.io/scenario-generator).
 
 ## Prerequisites
