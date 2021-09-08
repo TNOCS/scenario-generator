@@ -17,7 +17,7 @@ export const htmlTemplate = ({
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>${title}</title>
-  <meta name="description" content="A simple HTML5 Template for new projects.">
+  <meta name="description" content="${desc}">
   <meta name="author" content="TNO">
 
   <meta property="og:title" content="${title}">
