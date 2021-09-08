@@ -20,8 +20,8 @@
       "DIMENSION_INCLUDED": "dimensie wel of niet gebruiken in scenario",
       "DONE": "klaar",
       "EDIT": "{item} bewerken",
-      "EMPTY": "leeg {item}",
-      "EXPLAIN_CLEAR_ICON": "Klik het kruisje achter een item om deze leeg te maken",
+      "EMPTY": "wis {item}",
+      "EXPLAIN_CLEAR_ICON": "Klik het kruisje achter een item om deze te wissen",
       "EXPORT": "Exporteer bestand",
       "FILL_SENTENCE": "Vul de zin in",
       "GENERATE": "Genereer {item}",
@@ -55,6 +55,8 @@
       "UNLOCK_ONE": "deze vastgezette dimensie losmaken",
       "VALUE": "value",
       "WRITE_NARRATIVE": "schrijf een narratief",
+      "NARRATIVE_INCLUDED": "geselecteerd",
+      "NARRATIVE_NOT_INCLUDED": "niet geselecteerd",
       "YES": "ja"
     },
     "COMP": {

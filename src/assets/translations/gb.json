@@ -55,6 +55,8 @@
       "UNLOCK_ONE": "unlock this locked dimension",
       "VALUE": "value",
       "WRITE_NARRATIVE": "write a narrative",
+      "NARRATIVE_INCLUDED": "included",
+      "NARRATIVE_NOT_INCLUDED": "not selected",
       "YES": "yes"
     },
     "COMP": {

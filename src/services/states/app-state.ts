@@ -93,7 +93,7 @@ export const appStateMgmt = {
         let fullComponents = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), temp);
         fullComponents = Object.assign(fullComponents, narrative.components);
         narrative.components = fullComponents;
-        update({ app: { narrative } });
+        update({ app: { narrative: () => narrative } });
       },
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {
         log('Set inconsistencies');

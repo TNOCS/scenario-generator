@@ -1,26 +1,7 @@
 <template>
   <div>
-    <v-card dense flat tile class="flex-card" style="background: transparent">
-      <div class="overline px-2 py-0">{{ `1. ${$t('APP.WRITE_NARRATIVE')}` }}</div>
-      <v-card-text class="text-description ma-0 pa-1">
-        <v-text-field
-          hide-details
-          class="name-field pb-2"
-          :label="$t('APP.TITLE') | capitalize"
-          v-model="narrativeName"
-          v-on:keyup.enter="saveNarrative"
-          v-on:blur="saveNarrative"
-        >
-        </v-text-field>
-      </v-card-text>
-    </v-card>
-    <v-card dense flat tile class="flex-card" style="background: transparent">
-      <v-card-text class="text-description ma-0 pa-1">
-        <v-textarea filled v-model="narrativeText" :hint="$tc('COMP.NARRATIVE') | capitalize"> </v-textarea>
-      </v-card-text>
-    </v-card>
     <v-card dense flat tile class="flex-card generate-card" style="background: transparent; overflow: auto">
-      <div class="overline px-2 py-0">{{ `2. ${$t('APP.GENERATE', { item: $tc('APP.SCENARIO') })}` }}</div>
+      <div class="overline px-2 py-0">{{ `1. ${$t('APP.GENERATE', { item: $tc('APP.SCENARIO') })}` }}</div>
       <v-card-text class="text-description ma-0 pa-1">
         <v-container fluid class="pa-0 ma-0">
           <v-row no-gutters class="d-flex">
@@ -136,6 +117,32 @@
         </v-container>
       </v-card-text>
     </v-card>
+
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <div class="overline px-2 py-0">{{ `2. ${$t('APP.WRITE_NARRATIVE')}` }}</div>
+      <v-card-text class="text-description ma-0 pa-1 d-flex">
+        <v-text-field
+          hide-details
+          class="name-field pb-2"
+          :label="$t('APP.TITLE') | capitalize"
+          v-model="narrativeName"
+          v-on:keyup.enter="saveNarrative"
+          v-on:blur="saveNarrative"
+        >
+        </v-text-field>
+        <v-checkbox
+          v-model="included"
+          :label="`${included ? $t('APP.NARRATIVE_INCLUDED') : $t('APP.NARRATIVE_NOT_INCLUDED')}`"
+        ></v-checkbox>
+      </v-card-text>
+    </v-card>
+
+    <v-card dense flat tile class="flex-card" style="background: transparent">
+      <v-card-text class="text-description ma-0 pa-1">
+        <v-textarea filled v-model="narrativeText" :hint="$tc('COMP.NARRATIVE') | capitalize"> </v-textarea>
+      </v-card-text>
+    </v-card>
+
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <v-card-text class="text-description ma-0 pa-1">
         <div class="d-flex">
@@ -174,6 +181,7 @@ export default class ScenarioGenerator extends Vue {
   private neglected: CollectionNames[] = [];
   private pinned: CollectionNames[] = [];
   private generated = false;
+  private included = false;
   private narrativeName = '';
   private narrativeText = '';
   private narrative = {} as INarrative;
@@ -184,6 +192,7 @@ export default class ScenarioGenerator extends Vue {
     console.log(`narrativeChanged to ${nar.id}`);
     this.narrativeName = nar.name || '';
     this.narrativeText = nar.narrative || '';
+    this.included = nar.included || false;
     if (!nar.components) nar.components = {} as { [key in CollectionNames]: string };
     this.answers = Object.assign({}, nar.components);
     this.pinned = Object.keys(this.answers) as CollectionNames[];
@@ -321,6 +330,7 @@ export default class ScenarioGenerator extends Vue {
       name: this.narrativeName,
       components: answerObject as { [key in CollectionNames]: string },
       narrative: this.narrativeText,
+      included: this.included,
     };
     this.scenario.narratives.push(n);
     this.$store.actions['scenarios'].save(this.scenario);

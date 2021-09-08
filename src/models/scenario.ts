@@ -14,6 +14,8 @@ export interface INarrative {
   name: string;
   components: { [key in CollectionNames]: string };
   narrative: string;
+  /** Is the narrative included in the final set of narratives or a temporary scenario, just in case */
+  included: boolean;
 }
 
 export interface IScenario extends IContent {
