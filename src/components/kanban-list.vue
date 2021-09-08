@@ -19,7 +19,7 @@
           <div class="text-description px-2 hor-overflow">
             <Container orientation="vertical">
               <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
-                <KanbanCard :item="item" />
+                <KanbanCard :item="item" :is-included="includedComponents.indexOf(item.id) >= 0" />
               </Draggable>
             </Container>
           </div>
@@ -45,7 +45,7 @@
           <div class="text-description px-2 hor-overflow">
             <Container orientation="horizontal">
               <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
-                <KanbanCard :item="item" />
+                <KanbanCard :item="item" :is-included="includedComponents.indexOf(item.id) >= 0" />
               </Draggable>
             </Container>
           </div>
@@ -58,7 +58,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Container, Draggable } from 'vue-smooth-dnd';
-import { IContent } from '../models';
+import { IContent, IScenario } from '../models';
 import { CollectionNames } from '../services/meiosis';
 import KanbanCard from './kanban-card.vue';
 import AddComponentCard from './add-component-card.vue';
@@ -73,6 +73,7 @@ export default class KanbanList extends Vue {
   private title = '';
   private language = '';
   private menu = false;
+  private includedComponents: string[] = [];
 
   @Watch('itemkey')
   private itemkeyChanged() {
@@ -90,26 +91,36 @@ export default class KanbanList extends Vue {
 
   private async setTitle() {
     if (!this.itemkey || !this.itemkey.length) return;
-    this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2);
+    this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2) || this.itemkey;
   }
 
-  private async init() {
+  private init() {
     if (!this.itemkey || !this.itemkey.length) return;
     this.setTitle();
-    await this.$store.actions[this.itemkey].updateList();
+    this.$store.actions[this.itemkey].updateList();
+    let scenario: Partial<IScenario> | undefined;
     this.$store.states.map(s => {
       this.items = s[this.itemkey].list || [];
       this.language = s.app.language;
+      scenario = s.scenarios.current;
     });
+    this.extractUsedComponents(scenario);
   }
 
   private async closeMenu() {
     this.menu = false;
   }
 
-  async mounted(): Promise<void> {
+  private extractUsedComponents(scenario?: Partial<IScenario>) {
+    this.includedComponents =
+      this.itemkey && scenario && scenario.narratives && scenario.narratives.length
+        ? scenario.narratives.filter(n => n.included).map(n => n.components[this.itemkey])
+        : [];
+  }
+
+  mounted(): void {
     console.log(`KanbanList mounted`);
-    await this.init();
+    this.init();
   }
 }
 </script>

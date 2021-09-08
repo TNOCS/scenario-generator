@@ -1,9 +1,7 @@
 <template>
-  <v-card tile class="flex-card ma-1 kanban-card" elevation="2" color="accent">
+  <v-card tile class="flex-card ma-1 kanban-card" elevation="2" :color="isIncluded ? '#FFD800' : '#5FB0C7'">
     <v-card-title class="px-4 pt-2 pb-0 k-c-title">
-      <div class="k-c-title-text">
-        {{ item.name }}
-      </div>
+      <div class="k-c-title-text">{{ item.name }}</div>
       <v-spacer />
       <v-btn @click="deleteItem" color="secondary" icon x-small class="k-c-btn">
         <v-icon>mdi-delete</v-icon>
@@ -38,6 +36,7 @@ import AddContextCard from './add-context-card.vue';
 })
 export default class KanbanCard extends Vue {
   @Prop({ default: () => ({}) }) public item!: Partial<IContent>;
+  @Prop({ default: undefined }) private readonly isIncluded!: boolean;
   private menu = false;
 
   constructor() {

@@ -11,14 +11,16 @@
         <v-card dense flat tile class="flex-card" style="background: transparent">
           <div class="overline px-2 py-0">{{ $tc('APP.DIMENSION', 2) }}</div>
           <v-card-text class="text-description ma-0 pa-2">
+            <!-- If kanban is vertical -->
             <v-container v-if="verticalDirection" fluid class="ma-0 pa-0">
               <v-row no-gutters class="kanban-col">
                 <v-col v-for="(val, i) in getCategoryRows(cat)" :key="i" style="max-width: 280px" class="my-1 elevation-1">
-                  <KanbanList :itemkey="val" v-bind:vertical-direction="verticalDirection" />
+                  <KanbanList :itemkey="val" :vertical-direction="verticalDirection" />
                 </v-col>
               </v-row>
             </v-container>
 
+            <!-- If kanban is horizontal -->
             <v-container v-if="!verticalDirection" fluid class="ma-0 pa-0">
               <v-row no-gutters v-for="(val, i) in getCategoryRows(cat)" :key="i" class="kanban-col">
                 <v-col cols="12" class="my-1 elevation-1">
