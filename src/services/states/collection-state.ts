@@ -36,7 +36,7 @@ export interface ICollectionState<T extends IContent> {
   actions: (us: UpdateStream, states: flyd.Stream<IAppModel>) => CollectionsActions<T>;
 }
 
-export const collectionFactory = <T extends IContent>(collectionName: CollectionNamesPlus) => {
+export const collectionFactory = <T extends IContent>(collectionName: CollectionNamesPlus): ICollectionState<T> => {
   const lsSvc = localStorageFactory<T>(collectionName);
 
   return {

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <v-btn class="float-right mr-2 mt-1" color="accent" @click="copyToClipboard" fab dark small>
+      <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
+    </v-btn>
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab v-for="catName in categoryNames" :key="catName">
@@ -36,10 +39,14 @@
 </template>
 
 <script lang="ts">
+import { CollectionType } from '@/services/states/collection-state';
+import { capitalize, range } from 'lodash';
+import { render } from 'slimdown-js';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { ContentCategory } from '../models';
+import { ContentCategory, IContent } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
 import KanbanList from './kanban-list.vue';
+import { htmlTemplate, cssTable } from '../assets/html-styles';
 
 @Component({
   components: { KanbanList },
@@ -59,6 +66,56 @@ export default class KanbanLists extends Vue {
 
   private getCategoryRows(cat: ContentCategory) {
     return this.rows.filter(r => this.categories[cat].includes(r));
+  }
+
+  private copyToClipboard() {
+    const category = this.categories[this.categoryNames[this.tab]];
+    const state = this.$store.states();
+    const scenario = state.scenarios.current;
+    const narratives = scenario && scenario.narratives && scenario.narratives.filter(n => n.included);
+    const includedComponents = category.reduce((acc, cur) => {
+      acc[cur] = narratives ? narratives.map(n => n.components[cur]) : [];
+      return acc;
+    }, {} as { [key: string]: string[] });
+    const included = (collectionName: string, item: Partial<IContent>) =>
+      includedComponents[collectionName].indexOf(item.id || '') >= 0 ? `**${item.name}**` : item.name;
+
+    const headers = `|${category.map(c => capitalize(this.$tc(`COMP.${c.toLocaleUpperCase()}`, 2) || c)).join('|')}|`;
+    const format = `|${category.map(_ => ':-----:').join('|')}|`;
+    const maxRows = category.reduce((acc, cur) => {
+      const ct = state[cur] as CollectionType<IContent>;
+      return ct && ct.list ? Math.max(acc, ct.list.length) : acc;
+    }, 0);
+    const content = range(maxRows)
+      .map(
+        index =>
+          `|${category
+            .map(c => {
+              const ct = state[c] as CollectionType<IContent>;
+              // return ct && ct.list && ct.list.length > index ? ct.list[index].name : ' ';
+              return ct && ct.list && ct.list.length > index ? included(c, ct.list[index]) : '';
+            })
+            .join('|')}|`
+      )
+      .join('\n');
+    console.log(content);
+
+    const md = `
+${headers}
+${format}
+${content}`;
+    const html = render(md);
+
+    function listener(e: ClipboardEvent) {
+      if (!e.clipboardData) return;
+      e.clipboardData.setData('text/html', htmlTemplate({ body: html, css: cssTable }));
+      e.clipboardData.setData('text/plain', md);
+      e.clipboardData.setData('text/markdown', md);
+      e.preventDefault();
+    }
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener);
   }
 
   private async init() {
