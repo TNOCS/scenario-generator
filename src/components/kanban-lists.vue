@@ -98,7 +98,6 @@ export default class KanbanLists extends Vue {
             .join('|')}|`
       )
       .join('\n');
-    console.log(content);
 
     const md = `
 ${headers}
