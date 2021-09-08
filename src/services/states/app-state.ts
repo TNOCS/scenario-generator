@@ -74,6 +74,9 @@ export const appStateMgmt = {
       importState: (state: string) => {
         log('Import state');
         const newState = JSON.parse(state);
+        if (newState && newState.scenarios && newState.scenarios.current && newState.scenarios.current.categories) {
+          update({ ...newState, scenarios: { current: { categories: () => newState.scenarios.current.categories } } });
+        }
         update(newState);
       },
       exportState: () => {
