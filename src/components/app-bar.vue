@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app dense flat clipped-left height="42" class="ind-app-bar noselect font-weight-light no-print">
     <v-icon class="home-icon pr-3" @click="openDrawer">mdi-menu</v-icon>
-    <v-toolbar-title>V2018 Scenario Generator</v-toolbar-title>
+    <v-toolbar-title>Scenario Generator</v-toolbar-title>
     <div class="text-center app-bar-buttons">
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -44,11 +44,11 @@
         <span>{{ $t('APP.ABOUT') | capitalize }}</span>
       </v-tooltip>
     </div>
-    <div class="blue--text pr-2 pl-6 narr-selector-title">{{ $tc('COMP.NARRATIVE') | capitalize }}:</div>
+    <div class="pr-2 pl-6 pt-1 narr-selector-title">{{ $tc('COMP.NARRATIVE') | capitalize }}:</div>
     <div class="text-center narr-selector">
       <!-- prettier-ignore -->
-      <v-select v-model="activeNarrative" :items="sortedNarratives" item-text="name" return-object 
-          dense hide-details @change="narrativeSelected"></v-select>
+      <v-select v-model="activeNarrative" :items="sortedNarratives" :item-text="narrativeName" return-object 
+        dense hide-details @change="narrativeSelected"></v-select>
     </div>
     <v-row no-gutters class="my-3 ml-0">
       <v-tooltip bottom>
@@ -87,6 +87,10 @@ export default class AppBar extends Vue {
   @Watch('kanbanDirVert')
   kanbanDirVertUpdated(dir: boolean): void {
     this.verticalDirection = dir;
+  }
+
+  private narrativeName(narrative: INarrative) {
+    return `${narrative.name} (${narrative.included ? '✓' : 'x'})`;
   }
 
   private get sortedNarratives() {
