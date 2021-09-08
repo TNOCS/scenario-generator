@@ -54,8 +54,8 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn text @click="toggleDirection" v-bind="attrs" v-on="on">
-            <v-icon v-if="verticalDirection">mdi-align-horizontal-left</v-icon>
-            <v-icon v-if="!verticalDirection">mdi-align-vertical-top</v-icon>
+            <v-icon v-if="verticalDirection">mdi-align-vertical-top</v-icon>
+            <v-icon v-if="!verticalDirection">mdi-align-horizontal-left</v-icon>
           </v-btn>
         </template>
         <span>{{ $tc('APP.TOGGLE_KANBAN_DIR') | capitalize }}</span>
