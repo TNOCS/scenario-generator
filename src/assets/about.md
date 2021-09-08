@@ -11,10 +11,10 @@ The idea behind the scenario generator is simple. A threat scenario consists of 
 
 In this tool, you can specify the dimensions for threat and context, as well as the values that each dimension takes. For example, the context dimension weather can have a value of rainy or sunny and the treat dimension actor can have a value of terrorist or criminal. Together, it is possible to create 4 scenarios, as shown in below table:
 
-| Threat \\ Context | rainy      | sunny      |
-| ----------------- | ---------- | ---------- |
-| terrorist         | scenario 1 | scenario 2 |
-| criminal          | scenario 3 | scenario 4 |
+| Threat \ Context | rainy      | sunny      |
+| ---------------- | ---------- | ---------- |
+| terrorist        | scenario 1 | scenario 2 |
+| criminal         | scenario 3 | scenario 4 |
 
 In other words, scenario 1 is about a terrorist on a rainy day, scenario 2 about a terrorist on a sunny day, etc.
 
@@ -46,6 +46,6 @@ This tool was developed by TNO for the Dutch gendarmerie (KMAR) and National Pol
 
 ## Advanced
 
-Adding extra dimensions requires some manually editing of the code and a JSON file, there is not a simpler way yet.
+Adding extra dimensions requires some manual editing of the code and a JSON file, there is not a simpler way yet.
 
-Issues with the tool can be reported at <a href="https://github.com/tnocs/scenario-generator" target="_blank">Github</a>
+Issues with the tool can be reported on <a href="https://github.com/tnocs/scenario-generator" target="_blank">Github</a>

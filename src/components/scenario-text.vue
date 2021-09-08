@@ -26,8 +26,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { INarrative } from '../models';
-import marked from 'marked';
-import dompurify from 'dompurify';
+import { render } from 'slimdown-js';
 
 @Component({
   components: {},
@@ -45,7 +44,7 @@ export default class ScenarioText extends Vue {
   }
 
   private getMarkdown(text: string): string {
-    return marked(text, { sanitizer: dompurify.sanitize });
+    return render(text);
   }
 
   async mounted(): Promise<void> {

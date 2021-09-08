@@ -11,9 +11,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import marked from 'marked';
-import dompurify from 'dompurify';
 import aboutText from '../assets/about.md';
+import { render } from 'slimdown-js';
 
 @Component({
   components: {},
@@ -21,7 +20,9 @@ import aboutText from '../assets/about.md';
 export default class AboutView extends Vue {
   private getMarkdown(): string {
     const text = aboutText;
-    return marked(text, { sanitizer: dompurify.sanitize });
+    const r = render(text, true);
+    console.log(r);
+    return r;
   }
 
   mounted(): void {

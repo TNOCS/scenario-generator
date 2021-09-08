@@ -21,11 +21,9 @@
     "@types/geojson": "^7946.0.7",
     "axios": "^0.21.1",
     "date-fns": "^2.16.1",
-    "dompurify": "^2.2.6",
     "file-saver": "^2.0.5",
     "flyd": "^0.2.8",
     "lodash": "^4.17.20",
-    "marked": "^1.2.7",
     "overpass-frontend": "^2.4.11",
     "query-overpass": "^1.5.5",
     "query-string": "^6.13.7",
@@ -39,7 +37,8 @@
     "vue-router": "^3.4.9",
     "vue-smooth-dnd": "^0.8.1",
     "vuelayers": "^0.11.30",
-    "vuetify": "^2.3.22"
+    "vuetify": "^2.3.22",
+    "slimdown-js": "^0.5.1"
   },
   "devDependencies": {
     "@mdi/font": "^5.8.55",
