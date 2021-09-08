@@ -10,9 +10,13 @@
               </pane>
               <pane min-size="10" size="40" class="pa-2">
                 <ScenarioTextVert></ScenarioTextVert>
+                <v-btn class="float-right mr-2 mt-1" color="accent" @click="copyToClipboard" fab dark small>
+                  <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
+                </v-btn>
               </pane>
             </splitpanes>
           </pane>
+
           <pane min-size="10" size="50" class="pa-2">
             <MapCard></MapCard>
           </pane>
@@ -30,6 +34,11 @@ import MapCard from '../components/map-card.vue';
 import DescriptionCard from '../components/description-card.vue';
 import ScenarioTextVert from '../components/scenario-text-vert.vue';
 import NarrativeComponentsVert from '../components/narrative-components-vert.vue';
+import { htmlTemplate, cssTable } from '@/assets/html-styles';
+import { ContentCategory, IContent } from '@/models';
+import { CollectionType } from '@/services/states/collection-state';
+import { capitalize } from 'lodash';
+import { render } from 'slimdown-js';
 // import ScenarioText from "../components/scenario-text.vue";
 // import NarrativeComponents from "../components/narrative-components.vue";
 
@@ -41,6 +50,68 @@ export default class ShowView extends Vue {
 
   mounted(): void {
     console.log(`Show mounted`);
+  }
+
+  private copyToClipboard() {
+    const state = this.$store.states();
+    const scenario = state.scenarios.current;
+    const categories = scenario && scenario.categories;
+    const categoryNames = categories && (Object.keys(categories) as ContentCategory[]);
+    const narrative = state.app.narrative;
+
+    if (!categoryNames || !categories || !narrative) return;
+
+    const singleDim = categoryNames.length === 1;
+    const intro = singleDim
+      ? `# ${capitalize(narrative.name)}`
+      : `# ${capitalize(narrative.name)}
+## ${capitalize(this.$tc('APP.DIMENSION', 2))}`;
+
+    const headers = `|${capitalize(this.$tc('APP.DIMENSION'))}|${capitalize(this.$tc('APP.SELECTED'))}|`;
+    const format = '|-----|-----|';
+    const dimensionTables = categoryNames
+      .map(categoryName => {
+        const category = categories[categoryName];
+        const components = narrative.components;
+        const tbody = category
+          .map(c => {
+            const ct = state[c] as CollectionType<IContent>;
+            const component = ct && ct.list && ct.list.filter(i => i.id === components[c]).shift();
+            return component && `| ${capitalize(this.$tc(`COMP.${c.toUpperCase()}`))} | ${component.name} |`;
+          })
+          .join('\n');
+        const table = `
+${headers}
+${format}
+${tbody}`;
+        return `${singleDim ? '##' : '###'} ${categoryName} ${this.$tc('APP.DIMENSION')}
+${table}`;
+      })
+      .join('\n\n');
+
+    const narrativeTxt = `## ${capitalize(this.$tc('COMP.NARRATIVE'))} (${this.$tc(
+      narrative.included ? 'APP.NARRATIVE_INCLUDED' : 'APP.NARRATIVE_NOT_INCLUDED'
+    )})
+    
+${narrative.narrative.replace(/(#+)/g, '$1##')}`;
+
+    const md = `${intro}
+
+${dimensionTables}
+
+${narrativeTxt}`;
+    console.log(md);
+    const html = render(md);
+
+    function listener(e: ClipboardEvent) {
+      if (!e.clipboardData) return;
+      e.clipboardData.setData('text/html', htmlTemplate({ body: html, css: cssTable }));
+      e.clipboardData.setData('text/plain', md);
+      e.preventDefault();
+    }
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener);
   }
 }
 </script>

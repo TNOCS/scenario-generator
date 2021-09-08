@@ -109,7 +109,6 @@ ${content}`;
       if (!e.clipboardData) return;
       e.clipboardData.setData('text/html', htmlTemplate({ body: html, css: cssTable }));
       e.clipboardData.setData('text/plain', md);
-      e.clipboardData.setData('text/markdown', md);
       e.preventDefault();
     }
     document.addEventListener('copy', listener);
