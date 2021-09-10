@@ -10,6 +10,11 @@
         autofocus
         v-on:keyup.enter="addItem"
       ></v-text-field>
+      <v-text-field
+        :label="`${$tc('APP.DESCRIPTION', 1)}` | capitalize"
+        v-model="newItem.desc"
+        v-on:keyup.enter="addItem"
+      ></v-text-field>
       <v-text-field label="Type" disabled v-model="newItem.type">itemkey</v-text-field>
     </v-card-text>
     <v-card-actions>

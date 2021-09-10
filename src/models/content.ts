@@ -2,6 +2,7 @@ import { CollectionNamesPlus } from '../services/meiosis';
 export interface IBasicContent {
   id: string;
   name: string;
+  desc?: string;
   type: CollectionNamesPlus;
 }
 
