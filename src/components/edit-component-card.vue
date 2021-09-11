@@ -10,10 +10,16 @@
         autofocus
         v-on:keyup.enter="editItem"
       ></v-text-field>
+      <v-text-field
+        :label="`${$tc('APP.DESCRIPTION', 1)}` | capitalize"
+        v-model="desc"
+        v-on:keyup.enter="editItem"
+      ></v-text-field>
       <v-text-field label="Type" disabled v-model="itemkey">itemkey</v-text-field>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
+      <v-btn text @click="deleteItem"> {{ $t('APP.DELETE_ITEM') }} </v-btn>
       <v-btn text @click="cancel"> {{ $t('APP.CANCEL') }} </v-btn>
       <v-btn color="primary" text @click="editItem"> {{ $t('APP.SAVE') }} </v-btn>
     </v-card-actions>
@@ -30,8 +36,10 @@ import { CollectionNames } from '../services/meiosis';
 export default class EditComponentCard extends Vue {
   @Prop({ default: '' }) public itemkey!: CollectionNames;
   @Prop({ default: '' }) public itemname!: string;
+  @Prop({ default: '' }) public itemdesc!: string;
   @Prop({ default: '' }) public itemid!: string;
   private newName = '';
+  private desc = '';
   constructor() {
     super();
   }
@@ -40,9 +48,14 @@ export default class EditComponentCard extends Vue {
     return this.$tc(`COMP.${this.itemkey.toUpperCase()}`);
   }
 
-  private async editItem() {
-    await this.$store.actions[this.itemkey].save({ id: this.itemid, name: this.newName });
-    await this.$store.actions[this.itemkey].load(this.itemid);
+  private editItem() {
+    this.$store.actions[this.itemkey].save({ id: this.itemid, name: this.newName, desc: this.desc });
+    this.$store.actions[this.itemkey].load(this.itemid);
+    this.$emit('close');
+  }
+
+  private deleteItem() {
+    this.$store.actions[this.itemkey].del(this.itemid);
     this.$emit('close');
   }
 
@@ -51,7 +64,7 @@ export default class EditComponentCard extends Vue {
   }
 
   mounted(): void {
-    return;
+    this.newName = this.itemname;
   }
 }
 </script>

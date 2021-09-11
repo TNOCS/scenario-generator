@@ -15,6 +15,7 @@
       "CONSISTENT": "Combinaties met deze twee items zijn mogelijk",
       "CREATE_SCENARIO": "creëer scenario",
       "DELETE": "delete {item}",
+      "DELETE_ITEM": "delete",
       "DESCRIPTION": "beschrijving | beschrijvingen",
       "DIMENSION": "dimensie | dimensies",
       "DIMENSION_INCLUDED": "dimensie wel of niet gebruiken in scenario",

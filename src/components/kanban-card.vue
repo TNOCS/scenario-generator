@@ -6,16 +6,33 @@
       <!-- <v-btn @click="editItem" color="secondary" icon x-small class="k-c-btn">
         <v-icon>mdi-edit</v-icon>
       </v-btn> -->
-      <v-btn @click="deleteItem" color="secondary" icon x-small class="k-c-btn">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
+      <div class="only-on-hover">
+        <v-menu v-model="editMenu" :close-on-content-click="false" :nudge-width="200" offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <div v-on="on" v-bind="attrs">
+              <v-icon color="secondary" small>mdi-pencil</v-icon>
+            </div>
+          </template>
+          <EditComponentCard
+            :itemkey="itemkey"
+            :itemid="item.id"
+            :itemname="item.name"
+            :itemdesc="item.desc"
+            @close="closeEditMenu"
+          ></EditComponentCard>
+          <!-- <EditComponentCard :item="item" :itemkey="itemkey" @close="closeEditMenu"></EditComponentCard> -->
+        </v-menu>
+        <!-- <v-btn @click="deleteItem" color="secondary" icon x-small class="k-c-btn">
+          <v-icon color="secondary" small>mdi-delete</v-icon>
+        </v-btn> -->
+      </div>
     </v-card-title>
     <v-card-text class="text-description">
       <div class="not-on-hover" v-if="hasContext(item)">
         <span class="secondary--text"> {{ getContext(item) }}</span>
       </div>
       <div class="only-on-hover">
-        <span class="secondary--text" v-if="item.desc"> {{ item.desc }}</span>
+        <span class="secondary--text"> {{ item.desc || item.name }}</span>
         <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-x>
           <template v-slot:activator="{ on, attrs }">
             <div v-on="on" v-bind="attrs">
@@ -31,17 +48,21 @@
 </template>
 
 <script lang="ts">
+import { CollectionNames } from '@/services/meiosis';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { IContent } from '../models';
 import AddContextCard from './add-context-card.vue';
+import EditComponentCard from './edit-component-card.vue';
 
 @Component({
-  components: { AddContextCard },
+  components: { AddContextCard, EditComponentCard },
 })
 export default class KanbanCard extends Vue {
   @Prop({ default: () => ({}) }) public item!: Partial<IContent>;
+  @Prop({ default: '' }) public itemkey!: CollectionNames;
   @Prop({ default: undefined }) private readonly isIncluded!: boolean;
   private menu = false;
+  private editMenu = false;
 
   constructor() {
     super();
@@ -67,6 +88,10 @@ export default class KanbanCard extends Vue {
 
   private closeMenu() {
     this.menu = false;
+  }
+
+  private closeEditMenu() {
+    this.editMenu = false;
   }
 
   mounted(): void {

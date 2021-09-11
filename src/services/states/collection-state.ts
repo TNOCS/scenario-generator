@@ -58,8 +58,9 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
           },
           saveList: async () => {
             if (states()[collectionName] && states()[collectionName].list) {
-              await lsSvc.saveList(states()[collectionName].list! as any);
-              us({ [collectionName]: { list: states()[collectionName].list! } });
+              const list = states()[collectionName].list;
+              await (list && lsSvc.saveList(list as Partial<T>[]));
+              us({ [collectionName]: { list } });
             }
           },
           load: async id => {
@@ -74,7 +75,7 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
           save: async (item, callback?: (list: Partial<T>[]) => void) => {
             const list = await lsSvc.save(item);
             if (list) {
-              console.table(list);
+              // console.table(list);
               us({ [collectionName]: { list } });
               callback && callback(list);
             }

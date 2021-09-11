@@ -55,7 +55,7 @@ const createLocalStorageFactory = () => {
         const listItemIdx = list.findIndex(i => i.id === item.id);
         if (listItemIdx >= 0) {
           // Update existing item
-          const listItem = list.splice(listItemIdx, 1).pop()!;
+          const listItem = list.splice(listItemIdx, 1).pop();
           const newItem = Object.assign(listItem, item);
           list.push(newItem);
           list = list.sort((a, b) => a.name.localeCompare(b.name));

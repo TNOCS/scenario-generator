@@ -23,9 +23,12 @@
                   <v-icon>mdi-pencil</v-icon>
                 </v-btn>
               </template>
-              <!-- prettier-ignore -->
-              <EditComponentCard itemkey="scenarios" :itemid="activeScenario.id" @close="closeMenu" 
-                :itemname="activeScenario.name"></EditComponentCard>
+              <EditComponentCard
+                itemkey="scenarios"
+                :itemid="activeScenario.id"
+                :itemname="activeScenario.name"
+                @close="closeMenu"
+              ></EditComponentCard>
             </v-menu>
           </span>
         </div>
