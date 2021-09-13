@@ -6,6 +6,7 @@
     <v-card-text class="pb-0">
       <v-text-field
         :label="`${$t('APP.NAME')}` | capitalize"
+        :disabled="lockName"
         v-model="newName"
         autofocus
         v-on:keyup.enter="editItem"
@@ -38,6 +39,7 @@ export default class EditComponentCard extends Vue {
   @Prop({ default: '' }) public itemname!: string;
   @Prop({ default: '' }) public itemdesc!: string;
   @Prop({ default: '' }) public itemid!: string;
+  @Prop({ default: false }) public lockName!: boolean;
   private newName = '';
   private desc = '';
   constructor() {
