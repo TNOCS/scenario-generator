@@ -1,7 +1,8 @@
 <template>
   <div>
-    <v-btn class="float-right mr-2 mt-1" color="accent" @click="copyToClipboard" fab dark small>
+    <v-btn @click="copyToClipboard" color="accent darken-1" elevation="2" class="float-right btn-right mr-2 mt-1">
       <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
+      {{ '&nbsp;&nbsp;' + $t('APP.COPY') }}
     </v-btn>
     <v-tabs v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>

@@ -63,7 +63,7 @@
     </v-row>
 
     <v-spacer />
-    <v-sheet class="blue px-2 d-flex" height="100%" tile>
+    <v-sheet class="accent darken-1 px-2 d-flex" height="100%" tile>
       <a href="https://www.tno.nl" target="_blank" class="tno-link">
         <v-img :src="require('../assets/tno.png')" max-width="50" contain />
       </a>

@@ -13,6 +13,7 @@
       "COMBINATIONS": "combinaties",
       "CONSISTENCY": "consistentie | consistenties",
       "CONSISTENT": "Combinaties met deze twee items zijn mogelijk",
+      "COPY": "Kopieer",
       "CREATE_SCENARIO": "creëer scenario",
       "DELETE": "delete {item}",
       "DELETE_ITEM": "delete",
@@ -55,7 +56,7 @@
       "UNLOCK_ALL": "alle vastgezette dimensies losmaken",
       "UNLOCK_ONE": "deze vastgezette dimensie losmaken",
       "VALUE": "value",
-      "WRITE_NARRATIVE": "schrijf een narratief",
+      "WRITE_NARRATIVE": "Aantekeningen",
       "NARRATIVE_INCLUDED": "geselecteerd",
       "NARRATIVE_NOT_INCLUDED": "niet geselecteerd",
       "YES": "ja"

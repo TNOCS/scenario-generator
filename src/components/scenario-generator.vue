@@ -12,6 +12,10 @@
               {{ $t('APP.EMPTY', { item: $tc('APP.SCENARIO') }) }}
             </v-btn>
             <v-spacer></v-spacer>
+            <v-btn @click="copyToClipboard" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8 btn-right">
+              <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
+              {{ '&nbsp;&nbsp;' + $t('APP.COPY') }}
+            </v-btn>
             <v-btn @click="saveNarrative" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8 btn-right">
               <v-icon class="pr-2">mdi-content-save</v-icon>
               {{ $t('APP.PIN', { item: $tc('APP.SCENARIO') }) }}
@@ -42,9 +46,9 @@
                               <span>{{ $t('APP.INCLUDE_ALL') | capitalize }}</span>
                             </v-tooltip>
                           </th>
-                          <th class="text-left bold--text">Dimension</th>
+                          <th class="text-left bold--text">{{ $tc('APP.DIMENSION', 1) | capitalize }}</th>
                           <th class="text-left bold--text more-padding">
-                            <span> Selected</span>
+                            <span>{{ $t('APP.SELECTED') | capitalize }}</span>
                             <span class="close-icon-span">
                               <v-tooltip top>
                                 <template v-slot:activator="{ on, attrs }">
@@ -86,10 +90,25 @@
                             </td>
                             <td class="catname">{{ cat | translateCollectionName | capitalize }}</td>
                             <td class="py-1 combobox">
-                              <!-- prettier-ignore -->
-                              <v-select :items="collections[cat].list" item-text="name" item-value="id" v-model="answers[cat]"
-                                  clearable solo dense hide-details v-show="!neglected.includes(cat)">
-                                </v-select>
+                              <v-tooltip right :open-delay="getTooltip(cat) ? 100 : 100000">
+                                <template v-slot:activator="{ on, attrs }">
+                                  <div v-on="on" v-bind="attrs">
+                                    <v-select
+                                      :items="collections[cat].list"
+                                      item-text="name"
+                                      item-value="id"
+                                      v-model="answers[cat]"
+                                      clearable
+                                      solo
+                                      dense
+                                      hide-details
+                                      v-show="!neglected.includes(cat)"
+                                    >
+                                    </v-select>
+                                  </div>
+                                </template>
+                                <span>{{ getTooltip(cat) }}</span>
+                              </v-tooltip>
                               <div class="pl-4" v-show="neglected.includes(cat)">-</div>
                             </td>
                             <td class="small-col pr-8">
@@ -161,8 +180,10 @@
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { ContentCategory, IContent, INarrative, IScenario } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
-import { CollectionsModel } from '../services/states/collection-state';
-import { random } from 'lodash';
+import { CollectionsModel, CollectionType } from '../services/states/collection-state';
+import { capitalize, random } from 'lodash';
+import { render } from 'slimdown-js';
+import { htmlTemplate, cssTable } from '@/assets/html-styles';
 
 const MAX_GENERATIONS = 500;
 
@@ -336,6 +357,74 @@ export default class ScenarioGenerator extends Vue {
     this.$store.actions['scenarios'].save(this.scenario);
     this.scenario.id && this.$store.actions['scenarios'].load(this.scenario.id);
     this.$store.actions.changeNarrative(n);
+  }
+
+  private getTooltip(cat: CollectionNames) {
+    const collection = this.collections && this.collections[cat];
+    const ans = this.answers[cat];
+    const selected = collection && ans && collection.list && collection.list.filter(i => i.id === ans).pop();
+    return (selected && selected.desc) || '';
+  }
+
+  private copyToClipboard() {
+    const state = this.$store.states();
+    const scenario = state.scenarios.current;
+    const categories = scenario && scenario.categories;
+    const categoryNames = categories && (Object.keys(categories) as ContentCategory[]);
+    const narrative = state.app.narrative;
+
+    if (!categoryNames || !categories || !narrative) return;
+
+    const singleDim = categoryNames.length === 1;
+    const intro = singleDim
+      ? `# ${capitalize(narrative.name)}`
+      : `# ${capitalize(narrative.name)}
+## ${capitalize(this.$tc('APP.DIMENSION', 2))}`;
+
+    const headers = `|${capitalize(this.$tc('APP.DIMENSION'))}|${capitalize(this.$tc('APP.SELECTED'))}|`;
+    const format = '|-----|-----|';
+    const dimensionTables = categoryNames
+      .map(categoryName => {
+        const category = categories[categoryName];
+        const components = narrative.components;
+        const tbody = category
+          .map(c => {
+            const ct = state[c] as CollectionType<IContent>;
+            const component = ct && ct.list && ct.list.filter(i => i.id === components[c]).shift();
+            return component && `| ${capitalize(this.$tc(`COMP.${c.toUpperCase()}`))} | ${component.name} |`;
+          })
+          .join('\n');
+        const table = `
+${headers}
+${format}
+${tbody}`;
+        return `${singleDim ? '##' : '###'} ${categoryName} ${this.$tc('APP.DIMENSION')}
+${table}`;
+      })
+      .join('\n\n');
+
+    const narrativeTxt = `## ${capitalize(this.$tc('COMP.NARRATIVE'))} (${this.$tc(
+      narrative.included ? 'APP.NARRATIVE_INCLUDED' : 'APP.NARRATIVE_NOT_INCLUDED'
+    )})
+
+${narrative.narrative.replace(/(#+)/g, '$1##')}`;
+
+    const md = `${intro}
+
+${dimensionTables}
+
+${narrativeTxt}`;
+    const html = render(md);
+
+    function listener(e: ClipboardEvent) {
+      if (!e.clipboardData) return;
+      e.clipboardData.setData('text/html', htmlTemplate({ body: html, css: cssTable }));
+      e.clipboardData.setData('text/plain', md);
+      e.preventDefault();
+    }
+    document.addEventListener('copy', listener);
+    document.execCommand('copy');
+    document.removeEventListener('copy', listener);
   }
 
   mounted(): void {

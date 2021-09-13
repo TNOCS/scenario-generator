@@ -13,6 +13,7 @@
       "COMBINATIONS": "combinations",
       "CONSISTENCY": "consistency | consistencies",
       "CONSISTENT": "Combinations with these two items are possible",
+      "COPY": "Copy to clipboard",
       "CREATE_SCENARIO": "Create scenario",
       "DELETE": "delete {item}",
       "DELETE_ITEM": "delete",
@@ -55,7 +56,7 @@
       "UNLOCK_ALL": "unlock all locked dimensions",
       "UNLOCK_ONE": "unlock this locked dimension",
       "VALUE": "value",
-      "WRITE_NARRATIVE": "write a narrative",
+      "WRITE_NARRATIVE": "Notes",
       "NARRATIVE_INCLUDED": "included",
       "NARRATIVE_NOT_INCLUDED": "not selected",
       "YES": "yes"

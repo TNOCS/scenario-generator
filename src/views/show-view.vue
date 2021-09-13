@@ -10,8 +10,9 @@
               </pane>
               <pane min-size="10" size="40" class="pa-2">
                 <ScenarioTextVert></ScenarioTextVert>
-                <v-btn class="float-right mr-2 mt-1" color="accent" @click="copyToClipboard" fab dark small>
+                <v-btn @click="copyToClipboard" color="accent darken-1" elevation="2" class="d-flex ma-4 ml-8 btn-right">
                   <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
+                  {{ '&nbsp;&nbsp;' + $t('APP.COPY') }}
                 </v-btn>
               </pane>
             </splitpanes>
@@ -39,8 +40,6 @@ import { ContentCategory, IContent } from '@/models';
 import { CollectionType } from '@/services/states/collection-state';
 import { capitalize } from 'lodash';
 import { render } from 'slimdown-js';
-// import ScenarioText from "../components/scenario-text.vue";
-// import NarrativeComponents from "../components/narrative-components.vue";
 
 @Component({
   components: { Splitpanes, Pane, DescriptionCard, NarrativeComponentsVert, MapCard, ScenarioTextVert },
@@ -92,7 +91,7 @@ ${table}`;
     const narrativeTxt = `## ${capitalize(this.$tc('COMP.NARRATIVE'))} (${this.$tc(
       narrative.included ? 'APP.NARRATIVE_INCLUDED' : 'APP.NARRATIVE_NOT_INCLUDED'
     )})
-    
+
 ${narrative.narrative.replace(/(#+)/g, '$1##')}`;
 
     const md = `${intro}

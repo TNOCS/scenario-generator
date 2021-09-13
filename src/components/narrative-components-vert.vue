@@ -25,11 +25,11 @@
                     <tr v-for="(id, col) in getNarrativeComponents(catName)" :key="id">
                       <td class="catname">{{ col | translateCollectionName | capitalize }}</td>
                       <td>
-                        <v-tooltip right open-delay="200">
+                        <v-tooltip right :open-delay="getTooltip(id, col) ? 200 : 10000">
                           <template v-slot:activator="{ on }">
                             <div v-on="on">{{ getCollectionVal(id, col) }}</div>
                           </template>
-                          <span>{{ getCollectionVal(id, col) }}</span>
+                          <span>{{ getTooltip(id, col) }}</span>
                         </v-tooltip>
                       </td>
                     </tr>
@@ -90,6 +90,12 @@ export default class NarrativeComponentsVert extends Vue {
     const list = this.collections && this.collections[col] && this.collections[col].list;
     const item: Partial<IContent> | undefined = list ? list.find(l => l.id === id) : undefined;
     return item && item.name ? item.name : '?';
+  }
+
+  private getTooltip(id: string, col: CollectionNames): string {
+    const list = this.collections && this.collections[col] && this.collections[col].list;
+    const item: Partial<IContent> | undefined = list ? list.find(l => l.id === id) : undefined;
+    return item && item.desc ? item.desc : '';
   }
 
   private getCollectionNames(cat: ContentCategory): CollectionNames[] {
