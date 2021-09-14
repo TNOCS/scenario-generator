@@ -75,15 +75,33 @@ const createLocalStorageFactory = () => {
       try {
         const list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
         const listItemIdx = list.findIndex(i => i.id === id);
-        if (listItemIdx >= 0) {
-          // Delete existing item
-          const listItem = list.splice(listItemIdx, 1).pop() || { id: 0 };
-          localStorage.setItem(listKey, JSON.stringify(list));
-          log(`Deleted ${listItem.id}`);
-          return list;
-        } else {
+        if (listItemIdx < 0) {
           return error(`Item not deleted: ${id}`);
         }
+        // Delete existing item
+        const listItem = list.splice(listItemIdx, 1).pop() || { id: 0 };
+        localStorage.setItem(listKey, JSON.stringify(list));
+        log(`Deleted ${listItem.id}`);
+        return list;
+      } catch (err) {
+        return isError(err) && error(err.message);
+      }
+    };
+
+    const delNarrative = (scenarioId: string, narrativeId: string) => {
+      try {
+        const list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
+        const listItemIdx = list.findIndex(i => i.id === scenarioId);
+        if (listItemIdx < 0) {
+          return error(`Scenario not found: ${scenarioId}`);
+        }
+        // Delete existing item
+        const listItem = list[listItemIdx] as unknown as IScenario;
+        const narratives = listItem.narratives.filter(i => i.id !== narrativeId);
+        listItem.narratives = narratives;
+        localStorage.setItem(listKey, JSON.stringify(list));
+        // log(`Deleted ${narrativeId}`);
+        return list;
       } catch (err) {
         return isError(err) && error(err.message);
       }
@@ -113,6 +131,7 @@ const createLocalStorageFactory = () => {
       update,
       save,
       del,
+      delNarrative,
       load,
       loadList,
       saveList,

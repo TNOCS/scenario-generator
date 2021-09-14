@@ -92,10 +92,10 @@ export const appStateMgmt = {
       },
       changeNarrative: (narrative: INarrative) => {
         log('Set narrative ' + narrative.id);
-        const temp = {} as { [key in CollectionNames]: any };
-        let fullComponents = CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), temp);
-        fullComponents = Object.assign(fullComponents, narrative.components);
-        narrative.components = fullComponents;
+        narrative.components = Object.assign(
+          CollectionNamesArr.reduce((prev, cur) => ((prev[cur] = undefined), prev), {} as { [key in CollectionNames]: any }),
+          narrative.components
+        );
         update({ app: { narrative: () => narrative } });
       },
       updateInconsistencies: (inconsistencies: Inconsistency[]) => {

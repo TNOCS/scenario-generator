@@ -46,9 +46,15 @@
     </div>
     <div class="pr-2 pl-6 pt-1 narr-selector-title">{{ $tc('COMP.NARRATIVE') | capitalize }}:</div>
     <div class="text-center narr-selector">
-      <!-- prettier-ignore -->
-      <v-select v-model="activeNarrative" :items="sortedNarratives" :item-text="narrativeName" return-object 
-        dense hide-details @change="narrativeSelected"></v-select>
+      <v-select
+        v-model="activeNarrative"
+        :items="sortedNarratives"
+        :item-text="narrativeName"
+        return-object
+        dense
+        hide-details
+        @change="narrativeSelected"
+      ></v-select>
     </div>
     <v-row no-gutters class="my-3 ml-0">
       <v-tooltip bottom>
@@ -72,7 +78,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { INarrative, IScenario } from '../models';
 import { sortBy } from 'lodash';
 
@@ -83,11 +89,6 @@ export default class AppBar extends Vue {
   private scenario: Partial<IScenario> | undefined = {};
   private activeNarrative: INarrative = {} as INarrative;
   private verticalDirection = false;
-
-  @Watch('kanbanDirVert')
-  kanbanDirVertUpdated(dir: boolean): void {
-    this.verticalDirection = dir;
-  }
 
   private narrativeName(narrative: INarrative) {
     return `${narrative.name} (${narrative.included ? '✓' : 'x'})`;

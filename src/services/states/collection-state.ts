@@ -24,6 +24,8 @@ export type CollectionActions<T extends IContent> = {
   save: (item: Partial<T>, callback?: (list: Partial<T>[]) => void) => void; // | T;
   /** Delete an item */
   del: (id: string) => void;
+  /** Delete a narrative */
+  delNarrative: (scenarioId: string, narrativeId: string) => void;
   /** Change section */
   changeSection: (sectionId: string) => void;
 };
@@ -57,14 +59,15 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
             }
           },
           saveList: async () => {
-            if (states()[collectionName] && states()[collectionName].list) {
-              const list = states()[collectionName].list;
+            const state = states();
+            if (state[collectionName] && state[collectionName].list) {
+              const list = state[collectionName].list;
               await (list && lsSvc.saveList(list as Partial<T>[]));
               us({ [collectionName]: { list } });
             }
           },
           load: async id => {
-            const current = await lsSvc.load(id);
+            const current = lsSvc.load(id);
             if (current) {
               const state = states();
               const { current: old = {} } = state[collectionName];
@@ -84,6 +87,12 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
             const list = await lsSvc.del(id);
             if (list) {
               us({ [collectionName]: { list } });
+            }
+          },
+          delNarrative: (scenarioId, narrativeId) => {
+            const list = lsSvc.delNarrative(scenarioId, narrativeId);
+            if (list) {
+              us({ [collectionName]: { list: () => list, current: () => list[0] } });
             }
           },
           changeSection: (section: string) => us({ [collectionName]: { section } }),

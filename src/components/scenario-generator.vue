@@ -375,15 +375,9 @@ export default class ScenarioGenerator extends Vue {
 
     if (!categoryNames || !categories || !narrative) return;
 
-    const singleDim = categoryNames.length === 1;
-    const intro = singleDim
-      ? `# ${capitalize(narrative.name)}`
-      : `# ${capitalize(narrative.name)}
-## ${capitalize(this.$tc('APP.DIMENSION', 2))}`;
-
     const headers = `|${capitalize(this.$tc('APP.DIMENSION'))}|${capitalize(this.$tc('APP.SELECTED'))}|`;
     const format = '|-----|-----|';
-    const dimensionTables = categoryNames
+    const content = categoryNames
       .map(categoryName => {
         const category = categories[categoryName];
         const components = narrative.components;
@@ -394,26 +388,14 @@ export default class ScenarioGenerator extends Vue {
             return component && `| ${capitalize(this.$tc(`COMP.${c.toUpperCase()}`))} | ${component.name} |`;
           })
           .join('\n');
-        const table = `
+        return `
 ${headers}
 ${format}
 ${tbody}`;
-        return `${singleDim ? '##' : '###'} ${categoryName} ${this.$tc('APP.DIMENSION')}
-${table}`;
       })
       .join('\n\n');
 
-    const narrativeTxt = `## ${capitalize(this.$tc('COMP.NARRATIVE'))} (${this.$tc(
-      narrative.included ? 'APP.NARRATIVE_INCLUDED' : 'APP.NARRATIVE_NOT_INCLUDED'
-    )})
-
-${narrative.narrative.replace(/(#+)/g, '$1##')}`;
-
-    const md = `${intro}
-
-${dimensionTables}
-
-${narrativeTxt}`;
+    const md = `${content}`;
     const html = render(md);
 
     function listener(e: ClipboardEvent) {

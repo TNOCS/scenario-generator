@@ -28,6 +28,31 @@ export default class DeleteCard extends Vue {
     super();
   }
 
+  private cancel() {
+    this.$emit('close');
+  }
+
+  private deleteItem() {
+    if (!this.activeNarrative || !this.scenario || !this.scenario.id) return;
+    const narrativeId = this.activeNarrative.id;
+    const scenarios = this.$store.states().scenarios;
+    const scenario = scenarios && scenarios.current;
+    const narratives = scenario && scenario.narratives;
+    const narrative =
+      (narratives &&
+        narratives.length &&
+        narrativeId &&
+        narratives
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .filter(n => n.id !== narrativeId)
+          .pop()) ||
+      ({ name: '' } as INarrative);
+    console.log(`Deleting ${this.activeNarrative.name}`);
+    this.$store.actions.scenarios.delNarrative(this.scenario.id, narrativeId);
+    this.$store.actions.changeNarrative(narrative);
+    this.$emit('close');
+  }
+
   async mounted(): Promise<void> {
     this.$store.states.map(a => {
       this.scenario = a.scenarios.current;
