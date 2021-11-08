@@ -66,7 +66,14 @@ export default class KanbanLists extends Vue {
   }
 
   private getCategoryRows(cat: ContentCategory) {
-    return this.rows.filter(r => this.categories[cat].includes(r));
+    const category = this.categories[cat];
+    return this.rows
+      .filter(r => category.includes(r))
+      .sort((a, b) => {
+        const aIdx = category.indexOf(a);
+        const bIdx = category.indexOf(b);
+        return aIdx > bIdx ? 1 : -1;
+      });
   }
 
   private copyToClipboard() {
