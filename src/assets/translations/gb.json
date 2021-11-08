@@ -68,12 +68,12 @@
       "COMPARTMENTSPRESENT": "compartments present",
       "CRIMINALPHASE": "criminal phase",
       "DURATION": "duration | durations",
-      "EQUIPMENT": "equipment | equipments",
+      "EQUIPMENT": "equipment | equipment",
       "EXISTINGINFRA": "existing infra | existing infras",
       "IMPACT": "impact",
       "INTENT": "bystander intent",
       "LOCATION": "location | locations",
-      "MODUSOPERANDIDURINGEXECUTION": "modus operandus | modus operandi",
+      "MODUSOPERANDIDURINGEXECUTION": "mode of operation | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "NARRATIVE": "narrative | narratives",
       "OBJECT": "object | objects",
@@ -97,7 +97,9 @@
       "TYPEOFOBJECT": "type of object | type of objects",
       "WEAPON": "weapon | weapons",
       "WEATHERBEHAVIOUR": "weather behaviour",
-      "WEATHERTYPE": "weather condition | weather conditions"
+      "WEATHERTYPE": "weather condition | weather conditions",
+      "PI": "protected interest (target) | protected interests",
+      "MEANSWEAPON": "means/weapon | means/weapons"
     },
     "UTIL": {
       "A": "a",

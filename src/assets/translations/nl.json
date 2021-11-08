@@ -90,14 +90,16 @@
       "TARGETTYPE": "doeltype | doeltypes",
       "THREATDIRECTION": "dreigingsrichting | dreigingsrichtingen",
       "ACTOR": "actor | actoren",
-      "ACTION": "actie | acties",
+      "ACTION": "moedwillige actie | moedwillige acties",
       "ACCESS": "wijze van toegang | wijze van toegang",
       "MEANS": "middel / wapen | middelen / wapens",
       "TYPEOFENVIRONMENT": "omgevingstype | omgevingstypes",
       "TYPEOFOBJECT": "objecttype | objecttypes",
       "WEAPON": "wapen | wapens",
       "WEATHERBEHAVIOUR": "weersgedrag | weersgedragingen",
-      "WEATHERTYPE": "weersconditie | weerscondities"
+      "WEATHERTYPE": "weersconditie | weerscondities",
+      "PI": "TBB-onderdeel (doelwit) | TBB-onderdelen",
+      "MEANSWEAPON": "middel/wapen | middelen/wapens"
     },
     "UTIL": {
       "A": "een",

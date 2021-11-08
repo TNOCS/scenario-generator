@@ -17,72 +17,76 @@ export type ModelUpdateFunction = Partial<IAppModel> | ((model: Partial<IAppMode
 export type UpdateStream = flyd.Stream<Partial<ModelUpdateFunction>>;
 
 export type CollectionNames =
-  | 'ThreatDirection'
-  | 'Actor'
-  | 'Action'
   | 'Access'
-  | 'Means'
-  | 'Impact'
-  | 'Duration'
-  | 'Persons'
-  | 'Motivation'
-  | 'Capabilities'
-  | 'PhysicalAngleOfAttackDuringExecution'
-  | 'ModusOperandiDuringExecution'
-  | 'BehaviourDuringPreparation'
-  | 'CriminalPhase'
-  | 'Equipment'
-  | 'TargetType'
-  | 'Responsibility'
-  | 'Location'
-  | 'TypeOfObject'
-  | 'WeatherType'
-  | 'WeatherBehaviour'
-  | 'TypeOfEnvironment'
-  | 'PeopleDensity'
-  | 'Intent'
-  | 'ExistingInfra'
-  | 'PrivacyAwareness'
-  | 'SecurityAwareness'
+  | 'Action'
+  | 'Actor'
   | 'AvailableBudget'
+  | 'BehaviourDuringPreparation'
+  | 'Capabilities'
   | 'CompartmentsPresent'
+  | 'CriminalPhase'
+  | 'Duration'
+  | 'Equipment'
+  | 'ExistingInfra'
+  | 'Impact'
+  | 'Intent'
+  | 'Location'
+  | 'Means'
+  | 'MeansWeapon'
+  | 'ModusOperandiDuringExecution'
+  | 'Motivation'
   | 'OpenCompartments'
-  | 'RelationOwnerObjectAndOwnerSecuritySystem';
+  | 'PeopleDensity'
+  | 'Persons'
+  | 'PhysicalAngleOfAttackDuringExecution'
+  | 'PI'
+  | 'PrivacyAwareness'
+  | 'RelationOwnerObjectAndOwnerSecuritySystem'
+  | 'Responsibility'
+  | 'SecurityAwareness'
+  | 'TargetType'
+  | 'ThreatDirection'
+  | 'TypeOfEnvironment'
+  | 'TypeOfObject'
+  | 'WeatherBehaviour'
+  | 'WeatherType';
 
 export type CollectionNamesPlus = CollectionNames | 'scenarios';
 
 export const CollectionNamesArr: Array<CollectionNames> = [
-  'ThreatDirection',
-  'Actor',
-  'Action',
   'Access',
-  'Means',
-  'Impact',
-  'Duration',
-  'Persons',
-  'Motivation',
-  'Capabilities',
-  'PhysicalAngleOfAttackDuringExecution',
-  'ModusOperandiDuringExecution',
-  'BehaviourDuringPreparation',
-  'CriminalPhase',
-  'Equipment',
-  'TargetType',
-  'Location',
-  'TypeOfObject',
-  'Responsibility',
-  'WeatherType',
-  'WeatherBehaviour',
-  'TypeOfEnvironment',
-  'PeopleDensity',
-  'Intent',
-  'ExistingInfra',
-  'PrivacyAwareness',
-  'SecurityAwareness',
+  'Action',
+  'Actor',
   'AvailableBudget',
+  'BehaviourDuringPreparation',
+  'Capabilities',
   'CompartmentsPresent',
+  'CriminalPhase',
+  'Duration',
+  'Equipment',
+  'ExistingInfra',
+  'Impact',
+  'Intent',
+  'Location',
+  'Means',
+  'MeansWeapon',
+  'ModusOperandiDuringExecution',
+  'Motivation',
   'OpenCompartments',
+  'PeopleDensity',
+  'Persons',
+  'PhysicalAngleOfAttackDuringExecution',
+  'PI',
+  'PrivacyAwareness',
   'RelationOwnerObjectAndOwnerSecuritySystem',
+  'Responsibility',
+  'SecurityAwareness',
+  'TargetType',
+  'ThreatDirection',
+  'TypeOfEnvironment',
+  'TypeOfObject',
+  'WeatherBehaviour',
+  'WeatherType',
 ];
 export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, 'scenarios'];
 
