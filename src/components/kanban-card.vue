@@ -18,7 +18,7 @@
             :itemid="item.id"
             :itemname="item.name"
             :itemdesc="item.desc"
-            :lockName="true"
+            :lockName="false"
             @close="closeEditMenu"
           ></EditComponentCard>
           <!-- <EditComponentCard :item="item" :itemkey="itemkey" @close="closeEditMenu"></EditComponentCard> -->
