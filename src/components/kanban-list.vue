@@ -47,7 +47,6 @@
         <v-col cols="10" class="py-1 pl-1">
           <div class="text-description px-2 hor-overflow">
             <Container orientation="horizontal" @drop="onDrop">
-              <!-- TODO Removing drag behaviour (since items are sorted on change) affects layout -->
               <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
                 <KanbanCard :item="item" :itemkey="itemkey" :is-included="includedComponents.indexOf(item.id) >= 0" />
               </Draggable>
