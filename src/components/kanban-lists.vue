@@ -126,6 +126,7 @@ ${content}`;
 
   private async init() {
     this.$store.states.map(s => {
+      this.verticalDirection = s.app.kanbanDirVert;
       this.rows.length = 0;
       CollectionNamesArr.forEach(n => {
         this.rows.push(n);

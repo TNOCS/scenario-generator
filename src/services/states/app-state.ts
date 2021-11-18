@@ -46,7 +46,7 @@ export const appStateMgmt = {
       apiService: process.env.SERVER || window.location.origin,
       route: '/',
       language: localStorage.getItem(languageStorageKey) || 'gb',
-      kanbanDirVert: localStorage.getItem(kanbanDirectionStorageKey) || false,
+      kanbanDirVert: localStorage.getItem(kanbanDirectionStorageKey) === 'true' || false,
       theme: localStorage.getItem(themeStorageKey) || 'light',
       note: '',
       narrative: {} as INarrative,
@@ -111,6 +111,7 @@ export const appStateMgmt = {
         update({ app: { drawer } });
       },
       setDirection: (directionVertical: boolean) => {
+        localStorage.setItem(kanbanDirectionStorageKey, directionVertical.toString());
         update({ app: { kanbanDirVert: directionVertical } });
       },
     };
