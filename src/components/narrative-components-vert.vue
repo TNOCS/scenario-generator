@@ -49,7 +49,6 @@ import { Component, Vue } from 'vue-property-decorator';
 import { ContentCategory, IContent, INarrative, IScenario } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
 import { CollectionsModel } from '../services/states/collection-state';
-import { pickBy } from 'lodash';
 
 @Component({
   components: {},
@@ -81,9 +80,16 @@ export default class NarrativeComponentsVert extends Vue {
   }
 
   private getNarrativeComponents(cat: ContentCategory) {
-    const names = CollectionNamesArr.filter(r => this.categories[cat].includes(r));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return pickBy(this.narrative.components, (val, key) => names.includes(key as any));
+    const category = this.categories[cat];
+    const names = CollectionNamesArr.filter(r => category.includes(r)).sort((a, b) => {
+      const aIdx = category.indexOf(a);
+      const bIdx = category.indexOf(b);
+      return aIdx > bIdx ? 1 : -1;
+    });
+    return names.reduce((acc, cur) => {
+      acc[cur] = this.narrative.components[cur];
+      return acc;
+    }, {} as Record<string, string>);
   }
 
   private getCollectionVal(id: string, col: CollectionNames): string {
