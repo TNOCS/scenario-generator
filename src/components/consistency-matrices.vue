@@ -30,7 +30,7 @@
                 </v-col>
                 <v-col xs="12" md="6" class="d-flex">
                   <div class="d-block pb-4">
-                    <span class="d-block"><v-icon class="pr-1">mdi-checkbox-blank</v-icon>{{ $t('APP.CONSISTENT') }}</span>
+                    <span class="d-block"><v-icon class="pr-1">mdi-checkbox-marked</v-icon>{{ $t('APP.CONSISTENT') }}</span>
                     <span class="d-block"
                       ><v-icon class="pr-1">mdi-checkbox-blank-outline</v-icon>{{ $t('APP.INCONSISTENT') }}</span
                     >

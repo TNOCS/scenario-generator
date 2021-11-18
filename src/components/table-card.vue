@@ -41,7 +41,7 @@
                         <v-tooltip right v-if="incons(content.id, hi.id, undefined)" open-delay="1000">
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'totally')">
-                              <v-icon>mdi-checkbox-blank</v-icon>
+                              <v-icon>mdi-checkbox-marked</v-icon>
                             </v-btn>
                           </template>
                           <span>{{ $t('APP.CONSISTENT') }}</span>
