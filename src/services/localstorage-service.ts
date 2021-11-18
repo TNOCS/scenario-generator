@@ -51,14 +51,12 @@ const createLocalStorageFactory = () => {
 
     const update = async (item: Partial<T>) => {
       try {
-        let list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
+        console.log('Updating item');
+        const list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
         const listItemIdx = list.findIndex(i => i.id === item.id);
         if (listItemIdx >= 0) {
           // Update existing item
-          const listItem = list.splice(listItemIdx, 1).pop();
-          const newItem = Object.assign(listItem, item);
-          list.push(newItem);
-          list = list.sort((a, b) => a.name.localeCompare(b.name));
+          list.splice(listItemIdx, 1, { ...list[listItemIdx], ...item });
           localStorage.setItem(listKey, JSON.stringify(list));
           return list;
         } else {
