@@ -17,13 +17,13 @@
         </v-col>
         <v-col cols="12" class="py-1 pl-1">
           <div class="text-description px-2 hor-overflow">
-            <Container orientation="vertical">
-              <div v-for="(item, id) in items" :key="id" class="min-width-card">
+            <Container orientation="vertical" @drop="onDrop">
+              <!-- <div v-for="(item, id) in items" :key="id" class="min-width-card">
                 <KanbanCard :item="item" :itemkey="itemkey" :is-included="includedComponents.indexOf(item.id) >= 0" />
-              </div>
-              <!-- <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
+              </div> -->
+              <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
                 <KanbanCard :item="item" :itemkey="itemkey" :is-included="includedComponents.indexOf(item.id) >= 0" />
-              </Draggable> -->
+              </Draggable>
             </Container>
           </div>
         </v-col>
@@ -46,7 +46,7 @@
         </v-col>
         <v-col cols="10" class="py-1 pl-1">
           <div class="text-description px-2 hor-overflow">
-            <Container orientation="horizontal">
+            <Container orientation="horizontal" @drop="onDrop">
               <!-- TODO Removing drag behaviour (since items are sorted on change) affects layout -->
               <Draggable v-for="(item, id) in items" :key="id" class="min-width-card">
                 <KanbanCard :item="item" :itemkey="itemkey" :is-included="includedComponents.indexOf(item.id) >= 0" />
@@ -120,6 +120,14 @@ export default class KanbanList extends Vue {
       this.itemkey && scenario && scenario.narratives && scenario.narratives.length
         ? scenario.narratives.filter(n => n.included).map(n => n.components[this.itemkey])
         : [];
+  }
+
+  /** Called when the KanbanCard is dropped */
+  private onDrop(dropResult: { removedIndex: number; addedIndex: number; payload: unknown; element: HTMLElement }) {
+    const { removedIndex, addedIndex } = dropResult;
+    if (removedIndex === addedIndex) return;
+    this.items.splice(addedIndex, 0, this.items.splice(removedIndex, 1)[0]);
+    this.$store.actions[this.itemkey].saveList(this.items);
   }
 
   mounted(): void {

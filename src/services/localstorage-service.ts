@@ -19,7 +19,7 @@ const isError = (err: unknown): err is Error => {
 
 const log = console.log;
 const error = console.error;
-const demoFile = demo as any as IDemo;
+const demoFile = demo as unknown as IDemo;
 
 const createLocalStorageFactory = () => {
   return <T extends IContent>(listKey: CollectionNamesPlus) => {
@@ -39,9 +39,9 @@ const createLocalStorageFactory = () => {
 
     const create = async (item: Partial<T>) => {
       try {
-        let list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
+        const list = JSON.parse(localStorage.getItem(listKey) || '[]') as T[];
         list.push(item as T);
-        list = list.sort((a, b) => a.name.localeCompare(b.name));
+        // list = list.sort((a, b) => a.name.localeCompare(b.name));
         localStorage.setItem(listKey, JSON.stringify(list));
         return list;
       } catch (err) {
