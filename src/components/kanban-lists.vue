@@ -43,7 +43,7 @@
 import { CollectionType } from '@/services/states/collection-state';
 import { capitalize, range } from 'lodash';
 import { render } from 'slimdown-js';
-import { Component, Vue, Prop } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { ContentCategory, IContent } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
 import KanbanList from './kanban-list.vue';
@@ -53,7 +53,7 @@ import { htmlTemplate, cssTable } from '../assets/html-styles';
   components: { KanbanList },
 })
 export default class KanbanLists extends Vue {
-  @Prop() public verticalDirection!: boolean;
+  public verticalDirection!: boolean;
   private rows: Array<CollectionNames> = [];
   private tab = 0;
   private categories: { [key in ContentCategory]: Array<CollectionNames> } = {} as {
@@ -137,10 +137,6 @@ ${content}`;
           : ({} as { [key in ContentCategory]: Array<CollectionNames> });
       this.categoryNames = Object.keys(this.categories || []) as ContentCategory[];
     });
-  }
-
-  private onCardDrop(id: string) {
-    console.log(`Drop ${id}`);
   }
 
   private getCardPayload(id: string) {
