@@ -1,8 +1,8 @@
 {
   "name": "scenario-generator",
   "version": "1.0.0",
-  "description": "V2018 Scenario Generator",
-  "author": "R.W. Bruining",
+  "description": "Scenario Generator for generating a threat scenario.",
+  "author": "R.W. Bruining, Erik Vullings <erik.vullings@tno.nl>",
   "scripts": {
     "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
