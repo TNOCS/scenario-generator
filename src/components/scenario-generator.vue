@@ -328,10 +328,13 @@ export default class ScenarioGenerator extends Vue {
     const inconsistencies = this.scenario && this.scenario.inconsistencies ? this.scenario.inconsistencies : [];
     const answerIds = Object.values(this.answers).filter(a => !!a);
     const inconsistenciesFound = inconsistencies.filter(i => answerIds.includes(i.ids[0]) && answerIds.includes(i.ids[1]));
-    // Always invalidate totally incompatible combinations, and invalidate 50% of partly incompatible combinations.
+    // Always invalidate totally incompatible combinations,
+    // and invalidate 85% of partly incompatible combinations (less likely = 100 - 85 = 15%).
+    console.log(inconsistenciesFound);
     const finalInconsistencyFound = inconsistenciesFound.some(
-      i => i.type === 'totally' || (i.type === 'partly' && Math.random() < 0.5)
+      i => i.type === 'totally' || (i.type === 'partly' && Math.random() > 0.15)
     );
+    console.log(finalInconsistencyFound);
     return !finalInconsistencyFound;
   }
 
