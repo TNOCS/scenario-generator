@@ -5,7 +5,7 @@ import { ContentCategory } from './content';
 export type InconsistencyType = 'partly' | 'totally';
 
 export interface Inconsistency {
-  ids: string[];
+  ids: [from: string, to: string];
   type: InconsistencyType;
 }
 
