@@ -67,6 +67,7 @@ export default class EditComponentCard extends Vue {
 
   mounted(): void {
     this.newName = this.itemname;
+    this.desc = this.itemdesc;
   }
 }
 </script>
