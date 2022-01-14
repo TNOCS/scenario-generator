@@ -19,33 +19,12 @@
                       <td>{{ $tc(`COMP.${cat.toLocaleUpperCase()}`) | capitalize }}</td>
                       <td class="more-padding">{{ content.name | capitalize }}</td>
                       <td v-for="hi in items" :key="hi.id">
-                        <!-- Partly inconsistent; combination improbable -->
-                        <v-tooltip right v-if="incons(content.id, hi.id, 'partly')" open-delay="1000">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, undefined)">
-                              <v-icon>mdi-checkerboard</v-icon>
-                            </v-btn></template
-                          >
-                          <span>{{ $t('APP.PARTLY_CONSISTENT') }}</span>
-                        </v-tooltip>
-                        <!-- Totally inconsistent; combination impossible -->
-                        <v-tooltip right v-if="incons(content.id, hi.id, 'totally')" open-delay="1000">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'partly')">
-                              <v-icon>mdi-checkbox-blank-outline</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>{{ $t('APP.INCONSISTENT') }}</span>
-                        </v-tooltip>
-                        <!-- No inconsistency; combination possible -->
-                        <v-tooltip right v-if="incons(content.id, hi.id, undefined)" open-delay="1000">
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn v-on="on" v-bind="attrs" icon @click.stop="setcons(content.id, hi.id, 'totally')">
-                              <v-icon>mdi-checkbox-marked</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>{{ $t('APP.CONSISTENT') }}</span>
-                        </v-tooltip>
+                        <TableSelectButton
+                          :contentId="content.id"
+                          :hiId="hi.id"
+                          :consType="consType(content.id, hi.id)"
+                          @changeconsistency="changeconsistency"
+                        ></TableSelectButton>
                       </td>
                     </tr>
                   </template>
@@ -64,9 +43,13 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { IContent, Inconsistency, InconsistencyType } from '../models';
 import { CollectionNames, IAppModel } from '../services/meiosis';
 import { CollectionsModel } from '../services/states/collection-state';
+import TableSelectButton from './table-select-button.vue';
+
+const findInconsistency = (fromId: string, toId: string) => (ic: Inconsistency) =>
+  ic.ids.indexOf(fromId) >= 0 && ic.ids.indexOf(toId) >= 0;
 
 @Component({
-  components: {},
+  components: { TableSelectButton },
 })
 export default class TableCard extends Vue {
   @Prop({ default: null }) public category!: CollectionNames | null;
@@ -90,31 +73,30 @@ export default class TableCard extends Vue {
     super();
   }
 
-  private incons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
-    const found = this.inconsistencies.filter(ic => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
-    if (found) {
-      return found.type === inconstistency;
-    } else {
-      return !inconstistency;
-    }
+  private consType(fromId: string, toId: string) {
+    const found = this.inconsistencies.filter(findInconsistency(fromId, toId)).pop();
+    return found ? found.type : undefined;
   }
 
-  private setcons(fromId: string, toId: string, inconstistency?: InconsistencyType) {
-    if (!inconstistency) {
+  private changeconsistency(fromId: string, toId: string, consType: InconsistencyType) {
+    console.log({ fromId, toId, consType });
+    console.time('Change consistencies');
+    if (!consType) {
       // If combination should be removed
-      const indexToDelete = this.inconsistencies.findIndex(ic => ic.ids.includes(fromId) && ic.ids.includes(toId));
+      const indexToDelete = this.inconsistencies.findIndex(findInconsistency(fromId, toId));
       if (indexToDelete >= 0) this.inconsistencies.splice(indexToDelete, 1);
     } else {
       // If combination should not be removed
-      const found = this.inconsistencies.filter(ic => ic.ids.includes(fromId) && ic.ids.includes(toId)).pop();
+      const found = this.inconsistencies.filter(findInconsistency(fromId, toId)).pop();
       if (found) {
         // If combination already exists
-        found.type = inconstistency;
+        found.type = consType;
       } else {
         // If combination not exists yet
-        this.inconsistencies.push({ ids: [fromId, toId], type: inconstistency });
+        this.inconsistencies.push({ ids: [fromId, toId], type: consType });
       }
     }
+    console.timeEnd('Change consistencies');
     this.$store.actions.updateInconsistencies(this.inconsistencies);
   }
 

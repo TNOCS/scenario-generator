@@ -59,7 +59,7 @@ import { Component, Vue, Watch } from 'vue-property-decorator';
 import { ContentCategory, IScenario } from '../models';
 import { CollectionNames, CollectionNamesArr } from '../services/meiosis';
 import { translateCollName } from '../i18n';
-import TableCard from '../components/table-card.vue';
+import TableCard from './table-card.vue';
 
 @Component({
   components: { TableCard },
