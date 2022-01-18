@@ -185,7 +185,7 @@ import { capitalize, random } from 'lodash';
 import { render } from 'slimdown-js';
 import { htmlTemplate, cssTable } from '@/assets/html-styles';
 
-const MAX_GENERATIONS = 500;
+const MAX_GENERATIONS = 5000;
 
 @Component({
   components: {},
