@@ -41,14 +41,14 @@ export default class TableSelectButton extends Vue {
       this.consistencyType === 'partly'
         ? 'mdi-checkerboard'
         : this.consistencyType === 'totally'
-        ? 'mdi-checkbox-marked'
-        : 'mdi-checkbox-blank-outline';
+        ? 'mdi-checkbox-blank-outline'
+        : 'mdi-checkbox-marked';
     this.tooltipTxt =
       this.consistencyType === 'partly'
         ? 'APP.PARTLY_CONSISTENT'
         : this.consistencyType === 'totally'
-        ? 'APP.CONSISTENT'
-        : 'APP.INCONSISTENT';
+        ? 'APP.INCONSISTENT'
+        : 'APP.CONSISTENT';
   }
 
   async mounted(): Promise<void> {
