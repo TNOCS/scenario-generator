@@ -298,7 +298,6 @@ export default class ScenarioGenerator extends Vue {
   }
 
   private generateNarrative() {
-    console.log('generate');
     let narrativeValid = false;
     let count = 0;
     while (!narrativeValid && count < MAX_GENERATIONS) {
