@@ -318,7 +318,11 @@ export default class ScenarioGenerator extends Vue {
       } else if (count == MAX_GENERATIONS) {
         console.log(`No valid scenario generated after ${count} iterations. Giving up...`);
         this.$store.actions.notify(this.$t(`APP.NO_VALID_SCENARIO`, { count: count }).toString());
-        // this.answers = oldAnswers; // {} as { [key in CollectionNames]: string };
+        const newAnswers = this.pinned.reduce((acc, cur) => {
+          acc[cur] = this.answers[cur];
+          return acc;
+        }, {} as { [key in CollectionNames]: string });
+        this.answers = newAnswers;
       }
     }
     this.generated = !this.generated;
