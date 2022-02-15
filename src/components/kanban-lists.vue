@@ -4,7 +4,7 @@
       <v-icon>mdi-clipboard-arrow-up-outline</v-icon>
       {{ '&nbsp;&nbsp;' + $t('APP.COPY') }}
     </v-btn>
-    <v-tabs v-model="tab">
+    <v-tabs id="dimensions" v-model="tab">
       <v-tabs-slider color="blue"></v-tabs-slider>
       <v-tab v-for="catName in categoryNames" :key="catName">
         {{ catName }}

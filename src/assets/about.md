@@ -1,4 +1,4 @@
-# V2018 Scenario Generator
+# Scenario Generator
 
 One of the challenges in the domain of safety and security is to stand guard against unknown threats. As we have seen in the recent past, terrorists and other criminals continuously come up with new ways to attack our society. Therefore, in order to better prepare ourselves, we have to come up with creative threat scenarios, and think outside-the-box, so to speak. This is easier said than done, as recent experiences often limit our creativity. This scenario generator is developed to remedy this situation. It generates many threat scenarios for you, and when you have found one to your liking, you can add a narrative and save it for future reference.
 
