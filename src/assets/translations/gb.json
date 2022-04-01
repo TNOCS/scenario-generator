@@ -99,7 +99,15 @@
       "WEATHERBEHAVIOUR": "weather behaviour",
       "WEATHERTYPE": "weather condition | weather conditions",
       "PI": "protected interest (target) | protected interests",
-      "MEANSWEAPON": "means/weapon | means/weapons"
+      "MEANSWEAPON": "means/weapon | means/weapons",
+      "MISSIONCONTEXT": "mission context | mission contexts",
+      "ADVERSARY": "adversary | adversaries",
+      "C2HEADQUARTERS": "C2-HQ location | C2-HQ locations",
+      "TARGET": "target | targets",
+      "DELIBERATEACTION": "deliberate action | deliberate actions",
+      "MEANS2": "means of attack | means of attack",
+      "ACCESS2": "means of access | means of access",
+      "MEANS2ACCESS": "means to access | means to access"
     },
     "UTIL": {
       "A": "a",

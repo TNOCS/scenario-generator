@@ -99,7 +99,15 @@
       "WEATHERBEHAVIOUR": "weersgedrag | weersgedragingen",
       "WEATHERTYPE": "weersconditie | weerscondities",
       "PI": "TBB: soort doelwit | TBB: soorten doelwit",
-      "MEANSWEAPON": "middel/wapen | middelen/wapens"
+      "MEANSWEAPON": "middel/wapen | middelen/wapens",
+      "MISSIONCONTEXT": "missiecontext | missiecontexts",
+      "ADVERSARY": "tegenstander | tegenstanders",
+      "C2HEADQUARTERS": "C2-HQ locatie | C2-HQ locaties",
+      "TARGET": "doelwit | doelwitten",
+      "DELIBERATEACTION": "moedwillige actie | moedwillige acties",
+      "MEANS2": "aanslagmiddel | aanslagmiddelen",
+      "ACCESS2": "wijze van binnendringen | wijze van binnendringen",
+      "MEANS2ACCESS": "middel om binnen te dringen | middel om binnen te dringen"
     },
     "UTIL": {
       "A": "een",

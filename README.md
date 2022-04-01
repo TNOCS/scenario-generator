@@ -69,6 +69,15 @@ Replace the capitalized names in the JSON below. The CATEGORY_NAME is displayed 
 - TypeOfObject: type of object | type of objects
 - WeatherBehaviour: weather behaviour
 - WeatherType: weather condition | weather conditions
+- MeansWeapon: means/weapon | means/weapons
+- MissionContext: mission context | mission contexts
+- Adversary: adversary | adversaries
+- C2HeadQuarters: C2-HQ location | C2-HQ locations
+- Target: target | targets
+- DeliberateAction: deliberate action | deliberate actions
+- Means2: means of attack | means of attack
+- Access2: means of access | means of access
+- Means2access: means to access | means to acces
 
 ```json
 {
