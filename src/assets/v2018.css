@@ -134,3 +134,12 @@ rect.event.hover {
   stroke: rgb(255, 115, 0);
   cursor: pointer;
 }
+
+.v-application .text-truncate:hover {
+  text-overflow: clip !important;
+  white-space: normal !important;
+}
+
+p.cardcontent {
+  color: white;
+}
