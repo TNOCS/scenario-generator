@@ -49,7 +49,15 @@ export type CollectionNames =
   | 'TypeOfEnvironment'
   | 'TypeOfObject'
   | 'WeatherBehaviour'
-  | 'WeatherType';
+  | 'WeatherType'
+  | 'MissionContext'
+  | 'Adversary'
+  | 'C2HeadQuarters'
+  | 'Target'
+  | 'DeliberateAction'
+  | 'Means2'
+  | 'Access2'
+  | 'Means2Access';
 
 export type CollectionNamesPlus = CollectionNames | 'scenarios';
 
@@ -87,6 +95,14 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   'TypeOfObject',
   'WeatherBehaviour',
   'WeatherType',
+  'MissionContext',
+  'Adversary',
+  'C2HeadQuarters',
+  'Target',
+  'DeliberateAction',
+  'Means2',
+  'Access2',
+  'Means2Access',
 ];
 export const CollectionNamesPlusArr: Array<CollectionNamesPlus> = [...CollectionNamesArr, 'scenarios'];
 
