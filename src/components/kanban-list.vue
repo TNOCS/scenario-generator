@@ -3,7 +3,7 @@
     <v-card-text v-if="verticalDirection">
       <v-row no-gutters>
         <v-col cols="9">
-          <span class="title text-truncate">{{ title | capitalize }}</span>
+          <div class="title text-truncate">{{ title | capitalize }}</div>
         </v-col>
         <v-col cols="3">
           <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200">
