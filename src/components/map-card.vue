@@ -42,10 +42,21 @@
         </vl-layer-tile>
 
         <vl-layer-vector :z-index="99">
-          <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
+          <!-- <vl-source-vector :features="features"> -->
+          <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties">
+            <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point>
+            <vl-style-box>
+              <vl-style-circle :radius="10">
+                <vl-style-fill :color="getIconColor(f)"></vl-style-fill>
+              </vl-style-circle>
+              <!-- <vl-style-icon :src="getIconUrl()" :scale="0.8" :anchor="[0.5, 0.5]"> </vl-style-icon> -->
+            </vl-style-box>
+          </vl-feature>
+          <!-- </vl-source-vector> -->
+        </vl-layer-vector>
+
+        <!-- <vl-layer-vector :z-index="99">
           <vl-source-vector :features="features">
-            <!-- <vl-feature v-for="(f, idx) in features" :key="`f${idx}`" :id="`f${idx}`" :properties="f.properties"> -->
-            <!-- <vl-geom-point :coordinates="f.geometry.coordinates"></vl-geom-point> -->
             <vl-style-box>
               <vl-style-circle :radius="10">
                 <vl-style-fill :color="[255, 20, 22, 0.8]"></vl-style-fill>
@@ -54,7 +65,7 @@
               <vl-style-icon :src="iconUrl" :scale="0.8" :anchor="[0.5, 0.5]"></vl-style-icon>
             </vl-style-box>
           </vl-source-vector>
-        </vl-layer-vector>
+        </vl-layer-vector> -->
 
         <vl-layer-vector :z-index="98">
           <!-- <vl-source-vector :features.sync="features"></vl-source-vector> -->
@@ -80,10 +91,11 @@
 import { pick, find, throttle, debounce } from 'lodash';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { pointToLonLat } from 'vuelayers/lib/ol-ext';
-import { Feature, FeatureCollection, Point } from 'geojson';
+import { Feature, FeatureCollection, GeoJsonProperties, Point } from 'geojson';
 import { bbox, bboxPolygon, center } from '@turf/turf';
 import { IContent, IContext, INarrative, IScenario, LocationContext, NominatimResult } from '../models';
 import { CollectionType } from '../services/states/collection-state';
+import { CollectionNames } from '@/services/meiosis';
 
 const ICON_URL = 'https://github.com/rinzeb/osm-icons/raw/master/png/osm{{ITEM}}.png';
 
@@ -146,7 +158,7 @@ export default class MapCard extends Vue {
     }
   }
 
-  private closePopup($evt: any) {
+  private closePopup() {
     this.active = null;
   }
 
@@ -163,22 +175,6 @@ export default class MapCard extends Vue {
     this.map.updateSize();
   }
 
-  private getIcon(n: INarrative): string {
-    let result = 'building';
-    if (n && n.components) {
-      const typeId = pick(n.components, 'TypeOfObject');
-      const type = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
-      const typeContext: IContext | undefined = type && type.context;
-      if (typeContext) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        if (!Object.keys(typeContext.data).pop()!.includes('levels')) {
-          result = `${Object.values(typeContext.data).pop()}`;
-        }
-      }
-    }
-    return ICON_URL.replace('{{ITEM}}', result);
-  }
-
   private zoomMap = throttle(this.zoomMapThrottled, 500, { trailing: true });
 
   private zoomMapThrottled() {
@@ -187,7 +183,14 @@ export default class MapCard extends Vue {
     if (this.features.length === 1) {
       c = this.features[0];
     } else {
-      c = center(bboxPolygon(bbox({ type: 'FeatureCollection', features: this.features } as FeatureCollection<any, any>)));
+      c = center(
+        bboxPolygon(
+          bbox({
+            type: 'FeatureCollection',
+            features: this.features.filter(f => f.properties.usedInScenario),
+          } as FeatureCollection<any, any>)
+        )
+      );
     }
     if (c && c.geometry && c.geometry.coordinates) {
       this.center = [c.geometry.coordinates[0], c.geometry.coordinates[1]];
@@ -223,6 +226,10 @@ export default class MapCard extends Vue {
       this.features.splice(0, this.features.length);
     }
     if (this.narrative && this.narrative.id) {
+      if (this.addAllLocationsToMap()) {
+        this.loading = false;
+        return;
+      }
       const locId = pick(this.narrative.components, 'Location');
       const loc: Partial<IContent> | undefined = locId && find(this.locations.list, val => val.id === locId.Location);
       const locContext: IContext | undefined = loc && loc.context;
@@ -238,6 +245,67 @@ export default class MapCard extends Vue {
       if (locContext && loc) return this.getLocationOnly(locContext, loc);
       if (typeContext && type) return this.getLocationOnly(typeContext, type);
     }
+  }
+
+  private getIcon(n: INarrative): string {
+    let result = 'building';
+    if (n && n.components) {
+      const typeId = pick(n.components, 'TypeOfObject');
+      const type = typeId && find(this.typeOfObjects.list, val => val.id === typeId.TypeOfObject);
+      const typeContext: IContext | undefined = type && type.context;
+      if (typeContext) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        if (!Object.keys(typeContext.data).pop()!.includes('levels')) {
+          result = `${Object.values(typeContext.data).pop()}`;
+        }
+      }
+    }
+    return ICON_URL.replace('{{ITEM}}', result);
+  }
+
+  // private getIconUrl() {
+  //   return 'https://raw.githubusercontent.com/openstreetmap/map-icons/master/svg/misc/landmark/building.svg';
+  //   // return 'https://github.com/rinzeb/osm-icons/raw/master/png/osmbuilding.png';
+  // }
+
+  private getIconColor(f: Feature<Point, GeoJsonProperties>) {
+    return f.properties && f.properties.usedInScenario ? [255, 0, 0, 0.6] : [255, 255, 255, 0.4];
+  }
+
+  private addAllLocationsToMap() {
+    const usedComponents = (Object.keys(this.narrative.components) as CollectionNames[]).filter(
+      cn => this.narrative.components[cn]
+    );
+    const usedComponentIds = usedComponents.map(cn => this.narrative.components[cn]).filter(name => name !== 'None');
+    const state = this.$store.states();
+    const locations = usedComponents.reduce((acc, cur) => {
+      const components = state[cur].list;
+      if (!components) return acc;
+      return [
+        ...acc,
+        ...components.filter(c => c.context && c.context.type === 'LOCATION' && c.context.data.hasOwnProperty('COORDINATES')),
+      ];
+    }, [] as Partial<IContent>[]);
+    const fc = {
+      type: 'FeatureCollection',
+      features: locations.map(loc => {
+        const context = loc.context || { data: { COORDINATES: '50,5' } };
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: (context.data.COORDINATES as string)
+              .split(',')
+              .reverse()
+              .map(c => +c),
+          },
+          properties: { ...loc, usedInScenario: usedComponentIds.indexOf(loc.id || '') >= 0 },
+        };
+      }),
+    } as FeatureCollection<Point, GeoJsonProperties>;
+    console.log(JSON.stringify(fc, null, 2));
+    this.addFeatures(fc);
+    return locations.length > 0;
   }
 
   private getLocationAndLocationTypeResults(typeContext: IContext, locContext: IContext, loc: Partial<IContent>) {
