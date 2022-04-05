@@ -158,7 +158,13 @@
 
     <v-card dense flat tile class="flex-card" style="background: transparent">
       <v-card-text class="text-description ma-0 pa-1">
-        <v-textarea filled v-model="narrativeText" :hint="$tc('COMP.NARRATIVE') | capitalize"> </v-textarea>
+        <v-textarea
+          filled
+          v-model="narrativeText"
+          :hint="$tc('COMP.NARRATIVE') | capitalize"
+          :placeholder="$tc('COMP.NARRATIVE_PLACEHOLDER')"
+        >
+        </v-textarea>
       </v-card-text>
     </v-card>
 

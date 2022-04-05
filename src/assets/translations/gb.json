@@ -77,6 +77,7 @@
       "MODUSOPERANDIDURINGEXECUTION": "mode of operation | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "NARRATIVE": "narrative | narratives",
+      "NARRATIVE_PLACEHOLDER": "Describe the context in which the incident took place, such as a description of the (geographic) location, the person or building that must be protected, the way an actor obtains information, at what time did the action take place, under what weather circumstances, how many persons were involved in the action, from which organisation, how did they obtain access, or which means/weapons were employed.",
       "OBJECT": "object | objects",
       "OPENCOMPARTMENTS": "open compartment | open compartments",
       "PEOPLEDENSITY": "person density | person densities",

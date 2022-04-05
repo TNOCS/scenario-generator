@@ -77,6 +77,7 @@
       "MODUSOPERANDIDURINGEXECUTION": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
       "NARRATIVE": "verhaallijn | verhaallijnen",
+      "NARRATIVE_PLACEHOLDER": "Beschrijf de context waarin het incident plaatsvindt, zoals een nadere beschrijving van de (geografische) locatie, de te beschermen persoon of gebouw, de wijze waarop een actor informatie verzamelt, op welk tijdstip vindt de actie plaats, onder welke weersomstandigheden, hoeveel personen zijn er betrokken bij de actie, van welke organisatie, hoe kregen ze toegang, of welke middelen/wapens werden ingezet.",
       "OBJECT": "object | objecten",
       "OPENCOMPARTMENTS": "open compartiment | open compartimenten",
       "PEOPLEDENSITY": "personendichtheid | personendichtheden",
