@@ -1,8 +1,8 @@
 import { kanbanDirectionStorageKey, themeStorageKey } from '../../utils/constants';
 import { i18n, languageStorageKey } from '../../i18n';
 import { CollectionNames, CollectionNamesArr, IAppModel, UpdateStream } from '../meiosis';
-import { INarrative, Inconsistency } from '../../models';
-import { pickBy } from 'lodash';
+import { IContent, INarrative, Inconsistency } from '../../models';
+import { CollectionType } from './collection-state';
 
 const log = console.log;
 
@@ -53,7 +53,7 @@ export const appStateMgmt = {
       drawer: false,
     },
   },
-  actions: (update, _states) => {
+  actions: (update, states) => {
     return {
       search: (isSearching: boolean, searchQuery?: string) => update({ app: { isSearching, searchQuery } }),
       changePage: (route: string) => {
@@ -71,24 +71,29 @@ export const appStateMgmt = {
         localStorage.setItem(themeStorageKey, theme);
         update({ app: { theme } });
       },
-      importState: (state: string) => {
+      importState: (importedState: string) => {
         log('Import state');
-        const newState = JSON.parse(state);
-        if (newState && newState.scenarios && newState.scenarios.current && newState.scenarios.current.categories) {
-          update({ ...newState, scenarios: { current: { categories: () => newState.scenarios.current.categories } } });
-        }
-        update(newState);
+        localStorage.clear();
+        const { app } = states();
+        const newState = Object.assign({ app }, JSON.parse(importedState));
+        update(() => newState);
       },
       exportState: () => {
         log('Export state');
-        return JSON.stringify(
-          _states.map(s =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            pickBy(s, (_, key: any) => {
-              return key != 'app';
-            })
-          )
-        );
+        const state = states();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { app, ...categories } = state;
+        const currentCategories =
+          state.scenarios.current && state.scenarios.current.categories
+            ? state.scenarios.current.categories
+            : ({} as Record<string, CollectionNames[]>);
+        const types = Object.keys(currentCategories).reduce((acc, cur) => [...acc, ...currentCategories[cur]], [
+          'scenarios',
+        ] as string[]);
+        const saveState = Object.entries(categories)
+          .filter(([key]) => types.indexOf(key) >= 0)
+          .reduce((acc, [name, category]) => ((acc[name] = category), acc), {} as Record<string, CollectionType<IContent>>);
+        return JSON.stringify(saveState);
       },
       changeNarrative: (narrative: INarrative) => {
         log('Set narrative ' + narrative.id);
