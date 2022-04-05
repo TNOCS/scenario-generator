@@ -17,7 +17,7 @@ export type CollectionActions<T extends IContent> = {
   /** Get a list of all the active (?) items */
   updateList: () => void;
   /** Save the list of all the items (after import) */
-  saveList: (list?: Partial<T>[]) => void;
+  saveList: (list?: Partial<T>[]) => Promise<void>;
   /** Select an item */
   load: (id: string) => void;
   /** Save an item */
@@ -61,9 +61,9 @@ export const collectionFactory = <T extends IContent>(collectionName: Collection
           saveList: async (updateList?: Partial<T>[]) => {
             const state = states();
             if (state[collectionName] && state[collectionName].list) {
-              const list = updateList || state[collectionName].list;
-              await (list && lsSvc.saveList(list as Partial<T>[]));
-              us({ [collectionName]: { list } });
+              const list = updateList || (state[collectionName].list as Partial<T>[]);
+              await (list && lsSvc.saveList(list));
+              us({ [collectionName]: { list: () => list } });
             }
           },
           load: async id => {
