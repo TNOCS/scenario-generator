@@ -359,8 +359,8 @@ export default class MapCard extends Vue {
   private init() {
     this.$store.states.map(s => {
       this.scenario = s.scenarios.current || {};
-      this.locations = s.Location;
-      this.typeOfObjects = s.TypeOfObject;
+      this.locations = s.Location || [];
+      this.typeOfObjects = s.TypeOfObject || [];
       this.narrative = s.app.narrative || ({} as INarrative);
       this.iconUrl = this.getIcon(s.app.narrative);
     });
