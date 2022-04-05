@@ -73,6 +73,7 @@
       "IMPACT": "impact",
       "INTENT": "bystander intent",
       "LOCATION": "location | locations",
+      "LOCATION2": "location | locations",
       "MODUSOPERANDIDURINGEXECUTION": "mode of operation | modus operandi",
       "MOTIVATION": "motivation | motivations",
       "NARRATIVE": "narrative | narratives",
@@ -106,6 +107,8 @@
       "TARGET": "target | targets",
       "DELIBERATEACTION": "deliberate action | deliberate actions",
       "MEANS2": "means of attack | means of attack",
+      "MEANS3": "means for action | means for action",
+      "MEANS4": "means for access | means for access",
       "ACCESS2": "means of access | means of access",
       "MEANS2ACCESS": "means to access | means to access"
     },

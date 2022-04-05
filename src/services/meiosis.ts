@@ -31,6 +31,7 @@ export type CollectionNames =
   | 'Impact'
   | 'Intent'
   | 'Location'
+  | 'Location2'
   | 'Means'
   | 'MeansWeapon'
   | 'ModusOperandiDuringExecution'
@@ -56,6 +57,8 @@ export type CollectionNames =
   | 'Target'
   | 'DeliberateAction'
   | 'Means2'
+  | 'Means3'
+  | 'Means4'
   | 'Access2'
   | 'Means2Access';
 
@@ -76,6 +79,7 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   'Impact',
   'Intent',
   'Location',
+  'Location2',
   'Means',
   'MeansWeapon',
   'ModusOperandiDuringExecution',
@@ -101,6 +105,8 @@ export const CollectionNamesArr: Array<CollectionNames> = [
   'Target',
   'DeliberateAction',
   'Means2',
+  'Means3',
+  'Means4',
   'Access2',
   'Means2Access',
 ];

@@ -73,6 +73,7 @@
       "IMPACT": "impact",
       "INTENT": "intentie publiek",
       "LOCATION": "TBB: locatie | TBB: locaties",
+      "LOCATION2": "locatie | locaties",
       "MODUSOPERANDIDURINGEXECUTION": "modus operandus | modus operandi",
       "MOTIVATION": "motivatie | motivaties",
       "NARRATIVE": "verhaallijn | verhaallijnen",
@@ -106,6 +107,8 @@
       "TARGET": "doelwit | doelwitten",
       "DELIBERATEACTION": "moedwillige actie | moedwillige acties",
       "MEANS2": "aanslagmiddel | aanslagmiddelen",
+      "MEANS3": "middel tbv actie | middelen tbv actie",
+      "MEANS4": "middel tbv toegang | middelen tbv toegang",
       "ACCESS2": "wijze van binnendringen | wijze van binnendringen",
       "MEANS2ACCESS": "middel om binnen te dringen | middel om binnen te dringen"
     },

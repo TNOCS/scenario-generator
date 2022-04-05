@@ -78,6 +78,8 @@ Replace the capitalized names in the JSON below. The CATEGORY_NAME is displayed 
 - Means2: means of attack | means of attack
 - Access2: means of access | means of access
 - Means2access: means to access | means to acces
+- Means3: means for action | means for action
+- Means4: means for access | means for access
 
 ```json
 {
