@@ -37,7 +37,7 @@
 import { lightFormat } from 'date-fns';
 import { Component, Vue } from 'vue-property-decorator';
 import filesaver from 'file-saver';
-import { CollectionNamesPlusArr } from '../services/meiosis';
+import { CollectionNames, CollectionNamesPlusArr } from '../services/meiosis';
 
 @Component({
   components: {},
@@ -77,10 +77,12 @@ export default class ImportExportCard extends Vue {
     try {
       this.fileJson = await this.openFiles();
       this.$store.actions.importState(this.fileJson);
-      CollectionNamesPlusArr.forEach(async n => {
+      const state = this.$store.states();
+      for (const name of Object.keys(state).filter(key => key !== 'app') as CollectionNames[]) {
         // eslint-disable-next-line no-prototype-builtins
-        if (this.$store.actions.hasOwnProperty(n)) await this.$store.actions[n].saveList();
-      });
+        if (state.hasOwnProperty(name)) await this.$store.actions[name].saveList(state[name].list);
+      }
+      console.log(JSON.stringify(state, null, 2));
     } catch (error) {
       console.warn(`No files uploaded`);
     }
