@@ -94,7 +94,7 @@ export default class KanbanList extends Vue {
 
   private async setTitle() {
     if (!this.itemkey || !this.itemkey.length) return;
-    this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 2) || this.itemkey;
+    this.title = this.$tc(`COMP.${this.itemkey.toLocaleUpperCase()}`, 1) || this.itemkey;
   }
 
   private init() {
@@ -103,6 +103,7 @@ export default class KanbanList extends Vue {
     this.$store.actions[this.itemkey].updateList();
     let scenario: Partial<IScenario> | undefined;
     this.$store.states.map(s => {
+      if (!s[this.itemkey]) return;
       this.items = s[this.itemkey].list || [];
       this.language = s.app.language;
       scenario = s.scenarios.current;
