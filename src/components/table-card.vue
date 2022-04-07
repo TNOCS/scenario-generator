@@ -79,8 +79,8 @@ export default class TableCard extends Vue {
   }
 
   private changeconsistency(fromId: string, toId: string, consType: InconsistencyType) {
-    console.log({ fromId, toId, consType });
-    console.time('Change consistencies');
+    // console.log({ fromId, toId, consType });
+    // console.time('Change consistencies');
     if (!consType) {
       // If combination should be removed
       const indexToDelete = this.inconsistencies.findIndex(findInconsistency(fromId, toId));
@@ -96,13 +96,13 @@ export default class TableCard extends Vue {
         this.inconsistencies.push({ ids: [fromId, toId], type: consType });
       }
     }
-    console.timeEnd('Change consistencies');
+    // console.timeEnd('Change consistencies');
     this.$store.actions.updateInconsistencies(this.inconsistencies);
   }
 
   private async init() {
     this.$store.states.map((s: IAppModel) => {
-      this.items = this.category ? s[this.category].list || [] : [];
+      this.items = this.category && s[this.category] ? s[this.category].list || [] : [];
       this.collections = s;
     });
   }
