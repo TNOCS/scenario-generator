@@ -12,15 +12,25 @@
           <v-card-text class="text-description ma-0 pa-2 full-height">
             <v-container fluid class="ma-0 pa-0 full-height">
               <v-row no-gutters>
-                <v-col xs="12" md="6" class="d-flex">
+                <v-col xs="12" md="8" class="d-flex">
                   <!-- <span>{{ $t("APP.SELECT_DIMENSION") | capitalize }}</span> -->
                   <span class="title pt-4">
                     <!-- {{ $t("APP.CONSISTENCIES") }} -->
-                    {{ $t('APP.COMBINATIONS') | capitalize }}
+                    {{ $t('APP.COMBINE') | capitalize }}
                   </span>
                   <span class="ml-8 mb-2">
                     <v-select
                       :label="$t('APP.SELECT_DIMENSION') | capitalize"
+                      :items="getCategoryRowsMap(cat)"
+                      v-model="selectedCategory2"
+                      class="sel-dim"
+                    >
+                    </v-select>
+                  </span>
+                  <span class="title pt-4">{{ $t('APP.AND') }}</span>
+                  <span class="ml-8 mb-2">
+                    <v-select
+                      :label="$t('APP.SELECT_DIMENSION2') | capitalize"
                       :items="getCategoryRowsMap(cat)"
                       v-model="selectedCategory"
                       class="sel-dim"
@@ -28,19 +38,20 @@
                     </v-select>
                   </span>
                 </v-col>
-                <v-col xs="12" md="6" class="d-flex">
-                  <div class="d-block pb-4">
+                <v-col xs="12" md="4" class="d-flex">
+                  <v-card class="mx-auto pa-2">
                     <span class="d-block"><v-icon class="pr-1">mdi-checkbox-marked</v-icon>{{ $t('APP.CONSISTENT') }}</span>
                     <span class="d-block"
                       ><v-icon class="pr-1">mdi-checkbox-blank-outline</v-icon>{{ $t('APP.INCONSISTENT') }}</span
                     >
                     <span class="d-block"><v-icon class="pr-1">mdi-checkerboard</v-icon>{{ $t('APP.PARTLY_CONSISTENT') }} </span>
-                  </div>
+                  </v-card>
                 </v-col>
               </v-row>
               <v-row no-gutters v-if="scenario" class="full-height-min-select">
                 <TableCard
                   :category="selectedCategory"
+                  :category2="selectedCategory2"
                   :othercategories="getCategoryRows(cat)"
                   :inconsistencies="scenario.inconsistencies"
                 />
@@ -73,6 +84,7 @@ export default class ConsistencyMatrices extends Vue {
   };
   private categoryNames: ContentCategory[] = [];
   private selectedCategory: CollectionNames | null = null;
+  private selectedCategory2: CollectionNames | null = null;
 
   constructor() {
     super();
@@ -88,16 +100,12 @@ export default class ConsistencyMatrices extends Vue {
     this.selectedCategory = Object.values(this.categories)[newTab][0];
   }
 
-  private getCategoryRows(cat: ContentCategory): string[] {
+  private getCategoryRows(cat: ContentCategory): CollectionNames[] {
     return this.rows.filter(r => this.categories[cat].includes(r));
   }
 
   private getCategoryRowsMap(cat: ContentCategory): any[] {
-    return this.rows
-      .filter(r => this.categories[cat].includes(r))
-      .map(c => {
-        return { text: translateCollName(c), value: c };
-      });
+    return this.getCategoryRows(cat).map(c => ({ text: translateCollName(c), value: c }));
   }
 
   private async init() {

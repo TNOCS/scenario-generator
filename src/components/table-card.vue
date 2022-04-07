@@ -4,7 +4,13 @@
       <v-container fluid class="ma-0 pa-0 full-height">
         <v-row no-gutters class="full-height">
           <v-col v-if="collections" class="full-height">
-            <v-simple-table dense fixed-header height="100%" class="full-height">
+            <v-simple-table
+              v-if="category && category2 && category !== category2"
+              dense
+              fixed-header
+              height="100%"
+              class="full-height"
+            >
               <template v-slot:default>
                 <thead>
                   <tr>
@@ -14,7 +20,8 @@
                   </tr>
                 </thead>
                 <tbody class="consistency-table">
-                  <template v-for="cat in otherCategoriesWithoutSelected()">
+                  <!-- <template v-for="cat in otherCategoriesWithoutSelected()"> -->
+                  <template v-for="cat in [category2]">
                     <tr v-for="content in collections[cat].list" :key="content.id">
                       <td>{{ $tc(`COMP.${cat.toLocaleUpperCase()}`) | capitalize }}</td>
                       <td class="more-padding">{{ content.name | capitalize }}</td>
@@ -53,6 +60,7 @@ const findInconsistency = (fromId: string, toId: string) => (ic: Inconsistency) 
 })
 export default class TableCard extends Vue {
   @Prop({ default: null }) public category!: CollectionNames | null;
+  @Prop({ default: null }) public category2!: CollectionNames | null;
   @Prop({ default: () => [] }) public othercategories!: CollectionNames[];
   @Prop({ default: () => [] }) public inconsistencies!: Inconsistency[];
   public items: Partial<IContent>[] = [];
@@ -66,7 +74,7 @@ export default class TableCard extends Vue {
   }
 
   private otherCategoriesWithoutSelected() {
-    return this.othercategories.filter(c => c != this.category);
+    return this.othercategories.filter(c => c !== this.category);
   }
 
   constructor() {
